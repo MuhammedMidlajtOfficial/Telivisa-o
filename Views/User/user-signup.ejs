@@ -1,0 +1,159 @@
+<%- include('../Partials/userHeader') -%>
+
+<main>
+    <section class="pb-100 ">
+        <div class="page-header breadcrumb-wrap">
+            <div class="container">
+                <div class="breadcrumb">
+                    <a href="/user" rel="nofollow">Home</a>
+                    <span></span> Signup
+                </div>
+            </div>
+        </div>
+        <div class="container pt-50">
+            <div class="row">
+                <div class="col-lg-10 m-auto">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="login_wrap widget-taber-content p-30 background-white border-radius-5">
+                                <div class="padding_eight_all bg-white">
+                                    <div class="heading_s1">
+                                        <h3 class="mb-20 ">Create an Account</h3>
+                                    </div>
+                                    <p class="mb-40 font-sm">
+                                        Your personal data will be used to support your experience throughout this website, to manage access to your account, and for other purposes described in our privacy policy
+                                    </p>
+                                    <% if( locals.emailAlreadyExist ){ %>
+                                        <div class="alert alert-danger">Email already exist</div>
+                                    <% } %>
+                                    <form method="post" action="/user/postUserSignup">
+                                        <div class="form-group">
+                                            <input type="text" id="USName" name="USName" placeholder="Username">
+                                            <div class="text-danger" id="validateName" style="display: none;">Please enter valid username</div>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="text" id="USEmail" name="USEmail" placeholder="Email">
+                                            <div class="text-danger" id="validateEmail" style="display: none;">Please enter valid email address</div>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="password" id="USPassword" name="USPassword" placeholder="Password">
+                                            <div class="text-danger" id="validatepassword" style="display: none;">Please enter valid password</div>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="password" id="USConfirmPassword" name="USConfirmPassword" placeholder="Confirm Password">
+                                            <div class="text-danger" id="checkPasswordMatch" style="display: none;">Password doesn't match</div>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="number" id="USPhnNumber" name="USPhnNumber" placeholder="Phone No.">
+                                            <div class="text-danger" id="validatephnNumber" style="display: none;">Please enter valid phone number</div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-7">
+                                                <input type="number" id="USOtp" name="USOtp" placeholder="Otp">
+                                                <div class="text-danger" id="validateOtp" style="display: none;">Please enter valid otp</div>
+                                            </div>
+                                            <div class="col-5">
+                                                <button type="submit" class="btn btn-fill-out btn-block" name="verify">verify</button>
+                                            </div>
+                                        </div>
+                                        <div class="login_footer form-group">
+                                            <div class="chek-form">
+                                                <div class="custome-checkbox">
+                                                    <input class="form-check-input" type="checkbox" name="checkbox" id="exampleCheckbox12" value="">
+                                                    <label class="form-check-label" for="exampleCheckbox12"><span>I agree to terms &amp; Policy.</span></label>
+                                                </div>
+                                            </div>
+                                            <a href="#"><i class="fi-rs-book-alt mr-5 text-muted"></i>Learn more</a>
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-fill-out btn-block hover-up" name="signup">Submit &amp; Register</button>
+                                        </div>
+                                    </form>
+                                    
+                                    
+                                    <div class="text-muted text-center">Already have an account? <a href="/user/userLogin">Login in now</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelector('form[action="/user/postUserSignup"]').addEventListener('submit', function (event) {
+            const name = document.getElementById('USName').value;
+            const email = document.getElementById('USEmail').value;
+            const password = document.getElementById('USPassword').value;
+            const confirmPassword = document.getElementById('USConfirmPassword').value;
+            const phnNumber = document.getElementById('USPhnNumber').value;
+            const otp = document.getElementById('USOtp').value;
+
+            if (name.trim() === "") {
+                document.getElementById('validateName').style.display = 'block';
+                event.preventDefault();
+            } else {
+                document.getElementById('validateName').style.display = 'none';
+            }
+
+            if (email.trim() === "" || !emailValidation(email)) {
+                document.getElementById('validateEmail').style.display = 'block';
+                event.preventDefault();
+            } else {
+                document.getElementById('validateEmail').style.display = 'none';
+            }
+
+            if (password.trim() === "" || !passwordValidation(password)) {
+                document.getElementById('validatepassword').style.display = 'block';
+                event.preventDefault();
+            } else {
+                document.getElementById('validatepassword').style.display = 'none';
+            }
+
+            if (password !== confirmPassword) {
+                document.getElementById('checkPasswordMatch').style.display = 'block';
+                event.preventDefault();
+            } else {
+                document.getElementById('checkPasswordMatch').style.display = 'none';
+            }
+
+            if (phnNumber.trim() === "" || !phnNumberValidation(phnNumber)) {
+                document.getElementById('validatephnNumber').style.display = 'block';
+                event.preventDefault();
+            } else {
+                document.getElementById('validatephnNumber').style.display = 'none';
+            }
+
+            if (otp.trim() === "") {
+                document.getElementById('validateOtp').style.display = 'block';
+                event.preventDefault();
+            } else {
+                document.getElementById('validateOtp').style.display = 'none';
+            }
+        });
+    });
+    
+function emailValidation(email) {
+    const pattern = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+    return pattern.test(email);
+}
+
+function phnNumberValidation(phnNumber) {
+    const pattern = /^(\+?91)?[1-9]\d{9}$/;
+    return pattern.test(phnNumber);
+}
+
+function passwordValidation(password){
+    const pattern = /^.{6,}$/
+    return pattern.test(password)
+}
+
+</script>
+
+
+<%- include('../Partials/userFooter') -%>
