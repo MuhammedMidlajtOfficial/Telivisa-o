@@ -153,6 +153,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="card">
                 <div class="card-body">
                     <div class="row">
@@ -169,7 +170,9 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+
                                         <% category.forEach((categ)=>{ %>
+
                                             <tr>
                                                 <td><%= categ._id %></td>
                                                 <td><b><%= categ.categoryName %></b></td>
@@ -199,10 +202,11 @@
 
                         <% if( locals.editCategory ) {%>
                             <div class="col-md-4">
-                                <form method="post" action="/admin/postAdminEditCategories?id=<%= selectedCategory._id %>">
+                                <form method="post" action="/admin/postAdminEditCategories?id=<%= selectedCategory._id %>" id="CategoryValidation">
                                     <div class="mb-3">
                                         <label for="categoryName" class="form-label">Category Name</label>
                                         <input value="<%= selectedCategory.categoryName %>" type="text" placeholder="Type here" class="form-control" id="categoryName" name="categoryName"/>
+                                        <div class="text-danger" id="validatecategoryName" style="display: none;">Please add valid category name</div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="categoryStatus" class="form-label">Status</label>
@@ -219,10 +223,14 @@
                             </div>
                         <% } else { %>
                             <div class="col-md-4">
-                                <form method="post" action="/admin/postAdminAddCategories">
+                                <form method="post" action="/admin/postAdminAddCategories" id="CategoryValidation">
                                     <div class="mb-3">
                                         <label for="categoryName" class="form-label">Category Name</label>
                                         <input type="text" placeholder="Type here" class="form-control" id="categoryName" name="categoryName" />
+                                        <div class="text-danger" id="validatecategoryName" style="display: none;">Please add valid category name</div>
+                                        <% if (locals.categoryExist ) { %>
+                                            <div class="text-danger" id="ExistCategoryName">Category name is already exist</div>
+                                        <% } %>
                                     </div>
                                     <div class="mb-3">
                                         <label for="categoryStatus" class="form-label">Status</label>
@@ -231,7 +239,6 @@
                                             <option>Inactive</option>
                                         </select>
                                     </div>
-
                                     <div class="d-grid">
                                         <button class="btn btn-primary" type="submit">Create category</button>
                                     </div>
@@ -256,6 +263,7 @@
                 </div>
             </div>
         </footer>
+
     </main>
     <script src="/adminAsset/js/vendors/jquery-3.6.0.min.js"></script>
     <script src="/adminAsset/js/vendors/bootstrap.bundle.min.js"></script>
@@ -267,5 +275,24 @@
 </body>
 
 
+<script>
+    document.addEventListener('DOMContentLoaded', function(){
+        document.querySelector('#CategoryValidation').addEventListener('submit' , function(event){
+            const existCheck = document.querySelector('.category').getAttribute('data-category')
+            console.log(existCheck);
+            const categoryName = document.getElementById('categoryName').value
+
+            if(categoryName.trim() === ""){
+                document.getElementById('validatecategoryName').style.display = "block";
+                event.preventDefault();
+            }else{
+                document.getElementById('validatecategoryName').style.display = "none";
+            }
+            
+        })
+    })
+</script>
+
 <!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-categories.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:21 GMT -->
 </html>
+

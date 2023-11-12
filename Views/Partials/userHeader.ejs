@@ -5,7 +5,7 @@
 <!-- Mirrored from wp.alithemes.com/html/evara/evara-frontend/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 15 Jul 2023 10:04:24 GMT -->
 <head>
     <meta charset="utf-8">
-    <title><%= title %></title>
+    <title>Telivisāo</title>
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -45,19 +45,19 @@
                     <div class="col-xl-3 col-lg-4">
                         <div class="header-info header-info-right">
                             <ul>
-                                <% if( changeLoginToProfile ){ %>
+                                <% if( locals.changeLoginToProfile ){ %>
                                     <li>
-                                        <i class="fi-rs-user"></i><a href="/user/userLogout">Log out</a>
+                                        <i class="fi-rs-user"></i><a href="/userLogout">Log out</a>
                                     </li>
                                     <li>
-                                        <i class="fi-rs-user"></i><a href="/user/userProfile">Profile</a>
+                                        <i class="fi-rs-user"></i><a href="/userProfile">Profile</a>
                                     </li>
                                 <% } else { %>
                                     <li>
-                                        <i class="fi-rs-user"></i><a href="/user/userLogin">Log In</a>
+                                        <i class="fi-rs-user"></i><a href="/userLogin">Log In</a>
                                     </li>
                                     <li>
-                                        <i class="fi-rs-user"></i><a href="/user/userSignup">Sign Up</a>
+                                        <i class="fi-rs-user"></i><a href="/userSignup">Sign Up</a>
                                     </li>
                                 <% } %>
                             </ul>
@@ -71,7 +71,7 @@
             <div class="container">
                 <div class="header-wrap">
                     <div class="logo logo-width-1">
-                        <a href="/user"><img src="/userAssets/imgs/theme/logo.svg" alt="logo"></a>
+                        <a href="/"><img src="/userAssets/imgs/theme/logo.svg" alt="logo"></a>
                     </div>
                     <div class="header-right">
                         <div class="search-style-2">
@@ -87,13 +87,13 @@
                         <div class="header-action-right">
                             <div class="header-action-2">
                                 <div class="header-action-icon-2">
-                                    <a href="/user/wishlist">
+                                    <a href="/wishlist">
                                         <img class="svgInject" alt="Evara" src="/userAssets/imgs/theme/icons/icon-heart.svg">
                                         <span class="pro-count blue">4</span>
                                     </a>
                                 </div>
                                 <div class="header-action-icon-2">
-                                    <a class="mini-cart-icon" href="/user/cart">
+                                    <a class="mini-cart-icon" href="/cart">
                                         <img alt="Evara" src="/userAssets/imgs/theme/icons/icon-cart.svg">
                                         <span class="pro-count blue">3</span>
                                     </a>
@@ -292,7 +292,7 @@
                             <nav>
                                 <ul>
                                     <li>
-                                        <a class="active" href="/user">Home</a>
+                                        <a class="active" href="/">Home</a>
                                     </li>
                                     <li>
                                         <a href="#">Categories <i class="fi-rs-angle-down"></i></a>
@@ -350,7 +350,7 @@
                                         <ul class="sub-menu">
                                             <li><a href="#">All Category</a></li>
                                             <li><a href="#">My Account</a></li>
-                                            <li><a href="/user/userLogin">Login</a></li>
+                                            <li><a href="/userLogin">Login</a></li>
                                             <li><a href="#">Wishlist</a></li>
                                             <li><a href="#">Cart</a></li>
                                             <li><a href="#">Contact</a></li>

@@ -194,11 +194,13 @@
                                     </div>
                                     <div class="mb-4">
                                         <label class="form-label">Category</label>
-                                        <select class="form-select" name="productCategory">
-                                            <option value="Smart Google TV" <%= product.productCategory === 'Smart Google TV' ? 'selected' : '' %>>Smart Google TV</option>
-                                            <option value="LED Smart TV" <%= product.productCategory === 'LED Smart TV' ? 'selected' : '' %>>LED Smart TV</option>
-                                            <option value="Smart Android LED TV" <%= product.productCategory === 'Smart Android LED TV' ? 'selected' : '' %>>Smart Android LED TV</option>
-                                        </select>                                
+                                            <select class="form-select" name="productCategory">
+                                                <% category.forEach((categ) => { %>
+                                                    <% if( categ.status === "Active" ) { %>
+                                                        <option value="<%= categ.categoryName %>" <%= product.productCategory === categ.categoryName ? 'selected' : '' %>><%= categ.categoryName %></option>
+                                                    <% } %>
+                                                <% }) %>
+                                            </select>                                
                                     </div>                                    
                                     <div class="mb-4">
                                         <label class="form-label">Full description</label>

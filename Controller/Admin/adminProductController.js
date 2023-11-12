@@ -1,13 +1,15 @@
 const ProductSchema = require('../../Model/ProductSchema')
-
+const categorySchema = require('../../Model/categorySchema')
 
 module.exports.getAdminProducts = async (req,res)=>{
     const product = await ProductSchema.find({})
     res.render('Admin/adminProducts',{ product })
 }
 
-module.exports.getAdminAddProduct = (req,res)=>{
-    res.render('Admin/adminAddProduct')
+module.exports.getAdminAddProduct = async (req,res)=>{
+    const category = await categorySchema.find({});
+    
+    res.render('Admin/adminAddProduct',{ category })
 }
 
 module.exports.postAdminAddProduct = async(req,res)=>{
@@ -41,7 +43,8 @@ module.exports.postAdminAddProduct = async(req,res)=>{
 module.exports.getAdminEditProduct = async (req,res)=>{
     const id = req.query.id;
     const product = await ProductSchema.findOne({ _id : id})
-    res.render('Admin/adminEditProduct', { product } )
+    const category = await categorySchema.find({});
+    res.render('Admin/adminEditProduct', { product , category} )
 }
 
 module.exports.postAdminEditProduct = async (req,res)=>{
@@ -86,6 +89,7 @@ module.exports.postAdminEditProduct = async (req,res)=>{
             }
         }
         await ProductSchema.updateOne({ _id : id} , productData)
+
         res.redirect('/admin/products')
     } catch (error) {
         console.log(error)
@@ -97,8 +101,8 @@ module.exports.getAdminDeleteProductImage = async (req,res)=>{
     imagePath = req.query.image;
     await ProductSchema.updateOne({ _id : id },{$pull:{ imageUrl:{path : imagePath }}})
     const product = await ProductSchema.findOne({ _id : id})
-    console.log(product);
-    res.render('Admin/adminEditProduct', { product } )
+    const category = await categorySchema.find({})
+    res.render('Admin/adminEditProduct', { product, category } )
 }
 
 module.exports.getAdminBlockProduct = async (req,res)=>{
@@ -111,4 +115,8 @@ module.exports.getAdminUnblockProduct = async (req,res)=>{
     const id = req.query.id;
     await ProductSchema.updateOne({ _id : id },{$set:{ productStatus : "unblock" }});
     res.redirect('/admin/products');
+}
+
+module.exports.getProductList= (req,res)=>{
+    res.render('Admin/adminProductsList');
 }

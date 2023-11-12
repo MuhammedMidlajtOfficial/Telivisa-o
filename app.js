@@ -25,9 +25,9 @@ app.set('views', path.join(__dirname, 'Views/'));
 app.use(express.static(path.join(__dirname , 'Public')) )
 
 
-app.use('/user',userRouter)
+app.use('/',userRouter)
 app.use('/admin',adminRouter)
 
 app.listen(port ,'127.0.0.1',()=>{
-    console.log('Server connected\nhttp://127.0.0.1:3000/user\nhttp://127.0.0.1:3000/admin');
+    console.log('Server connected\nhttp://127.0.0.1:3000');
 })

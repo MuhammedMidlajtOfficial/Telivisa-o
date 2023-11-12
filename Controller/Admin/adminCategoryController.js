@@ -6,14 +6,20 @@ const getAdminAddCategories = async (req,res)=>{
 }
 
 const postAdminAddCategories = async (req,res)=>{
-    const newCategory = await new categorySchema({
-        categoryName : req.body.categoryName,
-        status : req.body.categoryStatus
-    })
-    newCategory.save();
-
+    const categ = await categorySchema.findOne({ categoryName : req.body.categoryName})
     const category = await categorySchema.find({})
-    res.render('Admin/adminCategories' , { category });
+
+    if(categ){
+        res.render('Admin/adminCategories' , { category , categoryExist : true });
+    } else {
+        const newCategory = await new categorySchema({
+            categoryName : req.body.categoryName,
+            status : req.body.categoryStatus
+        })
+        newCategory.save();
+        const category = await categorySchema.find({})
+        res.render('Admin/adminCategories' , { category });
+    }
 }
 
 const getAdminEditCategories = async (req,res)=>{

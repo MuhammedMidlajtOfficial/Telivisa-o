@@ -5,7 +5,7 @@
         <div class="page-header breadcrumb-wrap">
             <div class="container">
                 <div class="breadcrumb">
-                    <a href="/user" rel="nofollow">Home</a>
+                    <a href="/" rel="nofollow">Home</a>
                     <span></span> Signup
                 </div>
             </div>
@@ -26,7 +26,7 @@
                                     <% if( locals.emailAlreadyExist ){ %>
                                         <div class="alert alert-danger">Email already exist</div>
                                     <% } %>
-                                    <form method="post" action="/user/postUserSignup">
+                                    <form method="post" action="/postUserSignup">
                                         <div class="form-group">
                                             <input type="text" id="USName" name="USName" placeholder="Username">
                                             <div class="text-danger" id="validateName" style="display: none;">Please enter valid username</div>
@@ -36,26 +36,18 @@
                                             <div class="text-danger" id="validateEmail" style="display: none;">Please enter valid email address</div>
                                         </div>
                                         <div class="form-group">
+                                            <input type="number" id="USPhnNumber" name="USPhnNumber" placeholder="Phone No.">
+                                            <div class="text-danger" id="validatephnNumber" style="display: none;">Please enter valid phone number</div>
+                                        </div>
+                                        <div class="form-group">
                                             <input type="password" id="USPassword" name="USPassword" placeholder="Password">
-                                            <div class="text-danger" id="validatepassword" style="display: none;">Please enter valid password</div>
+                                            <div class="text-danger" id="validatepassword" style="display: none;">Password must be minimum 6 characters</div>
                                         </div>
                                         <div class="form-group">
                                             <input type="password" id="USConfirmPassword" name="USConfirmPassword" placeholder="Confirm Password">
                                             <div class="text-danger" id="checkPasswordMatch" style="display: none;">Password doesn't match</div>
                                         </div>
-                                        <div class="form-group">
-                                            <input type="number" id="USPhnNumber" name="USPhnNumber" placeholder="Phone No.">
-                                            <div class="text-danger" id="validatephnNumber" style="display: none;">Please enter valid phone number</div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <div class="col-7">
-                                                <input type="number" id="USOtp" name="USOtp" placeholder="Otp">
-                                                <div class="text-danger" id="validateOtp" style="display: none;">Please enter valid otp</div>
-                                            </div>
-                                            <div class="col-5">
-                                                <button type="submit" class="btn btn-fill-out btn-block" name="verify">verify</button>
-                                            </div>
-                                        </div>
+                                        
                                         <div class="login_footer form-group">
                                             <div class="chek-form">
                                                 <div class="custome-checkbox">
@@ -71,7 +63,7 @@
                                     </form>
                                     
                                     
-                                    <div class="text-muted text-center">Already have an account? <a href="/user/userLogin">Login in now</a></div>
+                                    <div class="text-muted text-center">Already have an account? <a href="/userLogin">Login in now</a></div>
                                 </div>
                             </div>
                         </div>
@@ -86,13 +78,12 @@
 <script>
 
     document.addEventListener('DOMContentLoaded', function () {
-        document.querySelector('form[action="/user/postUserSignup"]').addEventListener('submit', function (event) {
+        document.querySelector('form[action="/postUserSignup"]').addEventListener('submit', function (event) {
             const name = document.getElementById('USName').value;
             const email = document.getElementById('USEmail').value;
             const password = document.getElementById('USPassword').value;
             const confirmPassword = document.getElementById('USConfirmPassword').value;
             const phnNumber = document.getElementById('USPhnNumber').value;
-            const otp = document.getElementById('USOtp').value;
 
             if (name.trim() === "") {
                 document.getElementById('validateName').style.display = 'block';
@@ -129,12 +120,6 @@
                 document.getElementById('validatephnNumber').style.display = 'none';
             }
 
-            if (otp.trim() === "") {
-                document.getElementById('validateOtp').style.display = 'block';
-                event.preventDefault();
-            } else {
-                document.getElementById('validateOtp').style.display = 'none';
-            }
         });
     });
     

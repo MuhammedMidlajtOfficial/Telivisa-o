@@ -194,13 +194,14 @@
                                             <div class="text-danger" id="validateProductStock" style="display: none;">Please add valid product brand</div>
                                         </div>
                                     </div>
-                                    <div class="mb-4">
+                                    <div class="form-group mb-4">
                                         <label class="form-label">Category</label>
                                         <select class="form-select" name="productCategory">
-                                            <%  %>
-                                            <option> Smart Google TV </option>
-                                            <option> LED Smart TV </option>
-                                            <option> Smart Android LED TV </option>
+                                            <% category.forEach((categ) => { %>
+                                                <% if( categ.status === "Active" ) { %>
+                                                    <option><%= categ.categoryName %></option>
+                                                <% } %>
+                                            <% }) %>
                                         </select>                                
                                     </div>
                                     <div class="mb-4">

@@ -5,7 +5,7 @@
         <div class="page-header breadcrumb-wrap">
             <div class="container">
                 <div class="breadcrumb">
-                    <a href="/user" rel="nofollow">Home</a>
+                    <a href="/" rel="nofollow">Home</a>
                     <span></span> Login
                 </div>
             </div>
@@ -22,29 +22,53 @@
                                             <h3 class="mb-30">Login</h3>
                                         </div>
                                         <% if( locals.emailDoesNotExist ){ %>
-                                            <div class="alert alert-danger">Check your email or password</div>
+                                            <div class="alert alert-danger">Please Check your email</div>
                                         <% } %>
-                                        <form method="post" action="/user/postUserLogin">
-                                            <div class="form-group">
-                                                <input type="email" id="ULEmail" name="ULEmail" placeholder="Your Email" required="true">
-                                            </div>
-                                            <div class="form-group">
-                                                <input type="password" id="ULPassword" name="ULPassword" placeholder="Password" required="true">
-                                            </div>
-                                            <div class="login_footer form-group">
-                                                <div class="chek-form">
-                                                    <div class="custome-checkbox">
-                                                        <input class="form-check-input" type="checkbox" name="checkbox" id="exampleCheckbox1" value="">
-                                                        <label class="form-check-label" for="exampleCheckbox1"><span>Remember me</span></label>
-                                                    </div>
+                                        <% if( locals.invalidOtp ){ %>
+                                            <div class="alert alert-danger">Please enter valid otp</div>
+                                        <% } %>
+
+                                        <% if( locals.UserLogin ) {%>
+                                            <form method="post" action="/postUserLogin">
+                                                <div class="form-group">
+                                                    <input type="email" value="<%= UserMail %>" id="ULEmail" name="ULEmail" placeholder="Your Email" required="true" disabled style="background-color: rgba(243, 237, 237, 0.626);">
                                                 </div>
-                                                <a class="text-muted" href="#">Forgot password?</a>
-                                            </div>
-                                            <div class="form-group">
-                                                <button type="submit" class="btn btn-fill-out btn-block hover-up" name="login">Log in</button>
-                                            </div>
-                                            <div class="text-muted text-center">Don't have an account? <a href="/user/userSignup">Sign up now</a></div>
-                                        </form>
+                                                <input value="<%= UserMail %>" name="UserMail" type="hidden">
+                                                <input value="<%= OTP %>" name="OTP" type="hidden">
+                                                <div class="form-group">
+                                                    <input type="password" id="ULOtp" name="ULOtp" placeholder="Otp" required="true">
+                                                </div>
+                                                <!-- <div class="form-group">
+                                                    <input type="password" id="ULPassword" name="ULPassword" placeholder="Password" required="true">
+                                                </div> -->
+                                                <!-- <div class="login_footer form-group">
+                                                    <div class="chek-form">
+                                                        <div class="custome-checkbox">
+                                                            <input class="form-check-input" type="checkbox" name="checkbox" id="exampleCheckbox1" value="">
+                                                            <label class="form-check-label" for="exampleCheckbox1"><span>Remember me</span></label>
+                                                        </div>
+                                                    </div>
+                                                    <a class="text-muted" href="#">Forgot password?</a>
+                                                </div> -->
+                                                <div class="form-group" style="display: flex; justify-content: center;">
+                                                    <button type="submit" class="btn btn-fill-out btn-block hover-up" name="login" style="width: 300px;">Log in</button>
+                                                </div>
+                                                <div class="text-muted text-center">Don't have an account? <a href="/userSignup">Sign up now</a></div>
+                                            </form>
+                                            <% } else { %>
+                                                <form method="post" action="/sendOtp">
+                                                    <div class="form-group">
+                                                        <input type="email" id="ULEmail" name="ULEmail" placeholder="Your Email" required="true">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <input type="password" id="ULOtp" name="ULOtp" placeholder="Otp" disabled style="background-color: rgba(243, 237, 237, 0.626);">
+                                                    </div>
+                                                    <div class="form-group" style="display: flex; justify-content: center;">
+                                                        <button type="submit" class="btn btn-fill-out btn-block hover-up" name="sendOtp" style="width: 300px;">Send otp</button>
+                                                    </div>
+                                                    <div class="text-muted text-center">Don't have an account? <a href="/userSignup">Sign up now</a></div>
+                                                </form>
+                                            <% } %>
                                     </div>
                                 </div>
                             </div>

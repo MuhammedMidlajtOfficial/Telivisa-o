@@ -9,7 +9,7 @@ module.exports.postAdminLogin = async (req,res)=>{
     if(admin){
         if(admin.password === req.body.ALPassword){
             req.session.admin = req.body.ALEmail;
-            res.render('Admin/adminDashboard')
+            res.redirect('/admin/adminDashboard')
             console.log('Admin logged in');
         }else{
             res.render('Admin/adminLogin',{ emailDoesNotExist : true })

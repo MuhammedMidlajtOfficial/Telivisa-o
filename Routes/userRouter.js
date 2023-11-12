@@ -5,7 +5,7 @@ const userController = require('../Controller/User/userController');
 
 userRouter.use('/uploads', express.static('uploads'));
 userRouter.use('/Public', express.static('Public'));
-userRouter.use('/user', express.static('Public'));
+userRouter.use('/', express.static('Public'));
 
 
 userRouter.get('/', userController.getHomePage);
@@ -16,5 +16,8 @@ userRouter.get('/userLogout', userController.getUserLogout);
 // User Signup
 userRouter.get('/userSignup', userController.getUserSignup);
 userRouter.post('/postUserSignup', userController.postUserSignup);
+// send otp
+userRouter.post('/sendOtp',userController.postSendOtp)
+
 
 module.exports = userRouter;
