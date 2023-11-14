@@ -44,8 +44,16 @@ const product = mongoose.Schema({
     productStatus :{
         type:String,
         required:true
+    },
+    productHoarding :{
+        type:String,
+        required:true
+    },
+    discount :{
+        type:Number,
+        default:0
     }
-})
+}, {timestamps: true})
 
 const ProductSchema = new mongoose.model('product',product)
 

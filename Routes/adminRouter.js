@@ -29,8 +29,14 @@ adminRouter.post('/postAdminEditProduct',auth.isAdmin,productImageUploadMulter.a
 adminRouter.get('/adminDeleteProductImage',auth.isAdmin,adminProductController.getAdminDeleteProductImage)
 adminRouter.get('/adminBlockProduct',auth.isAdmin,adminProductController.getAdminBlockProduct)
 adminRouter.get('/adminUnblockProduct',auth.isAdmin,adminProductController.getAdminUnblockProduct)
+
+
 //Product List
 adminRouter.get('/productList',auth.isAdmin,adminProductController.getProductList)
+//Product Hoarding Active & Inactive
+adminRouter.get('/adminActiveHoarding',auth.isAdmin,adminProductController.getAdminActiveHoarding)
+adminRouter.get('/adminInactiveHoarding',auth.isAdmin,adminProductController.getAdminInactiveHoarding)
+
 
 // Category View and Add 
 adminRouter.get('/getAdminCategories',auth.isAdmin,adminCategoryController.getAdminAddCategories)

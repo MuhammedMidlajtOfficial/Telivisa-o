@@ -30,7 +30,8 @@ module.exports.postAdminAddProduct = async(req,res)=>{
             productPrice : req.body.productPrice,
             productPromoPrice : req.body.productPromoPrice,
             imageUrl : imageUrlArray,
-            productStatus : req.body.productStatus
+            productStatus : req.body.productStatus,
+            productHoarding : "Inactive"
         })
     
         productData.save();
@@ -72,7 +73,8 @@ module.exports.postAdminEditProduct = async (req,res)=>{
                 productPrice : req.body.productPrice,
                 productPromoPrice : req.body.productPromoPrice,
                 imageUrl : imageArray,
-                productStatus : req.body.productStatus
+                productStatus : req.body.productStatus,
+                productHoarding : "Inactive"
             }
         }else{
             productData = {
@@ -85,7 +87,8 @@ module.exports.postAdminEditProduct = async (req,res)=>{
                 productDescription : req.body.productDescription,
                 productPrice : req.body.productPrice,
                 productPromoPrice : req.body.productPromoPrice,
-                productStatus : req.body.productStatus
+                productStatus : req.body.productStatus,
+                productHoarding : "Inactive"
             }
         }
         await ProductSchema.updateOne({ _id : id} , productData)
@@ -117,6 +120,19 @@ module.exports.getAdminUnblockProduct = async (req,res)=>{
     res.redirect('/admin/products');
 }
 
-module.exports.getProductList= (req,res)=>{
-    res.render('Admin/adminProductsList');
+module.exports.getProductList= async (req,res)=>{
+    const product = await ProductSchema.find({})
+    res.render('Admin/adminProductsList',{ product })
+}
+
+module.exports.getAdminActiveHoarding = async (req,res)=>{
+    const id = req.query.id;
+    await ProductSchema.updateOne({ _id : id },{ productHoarding : "Active" })
+    res.redirect('/admin/productList');
+}
+
+module.exports.getAdminInactiveHoarding = async (req,res)=>{
+    const id = req.query.id;
+    await ProductSchema.updateOne({ _id : id },{ productHoarding : "Inactive" })
+    res.redirect('/admin/productList');
 }

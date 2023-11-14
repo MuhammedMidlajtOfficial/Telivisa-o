@@ -5,6 +5,7 @@ const userRouter = require('./Routes/userRouter');
 const adminRouter = require('./Routes/adminRouter');
 const {v4 : uuidv4} = require('uuid');
 const session = require('express-session');
+const nocache = require('nocache')
 
 require('./DB/database')
 
@@ -16,6 +17,7 @@ app.use(session({
     resave : false,
     saveUninitialized : true
 }))
+app.use(nocache());
 
 const port = process.env.PORT || 3000
 

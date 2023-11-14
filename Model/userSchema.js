@@ -22,7 +22,7 @@ const user = new mongoose.Schema({
         type:String,
         required:true
     }
-})
+}, {timestamps: true})
 
 const userSchema = new mongoose.model('userData',user)
 

@@ -1,17 +1,21 @@
 const session = require('express-session')
 const userSchema = require('../../Model/userSchema')
 const ProductSchema = require('../../Model/ProductSchema')
+const categorySchema = require('../../Model/categorySchema')
 const sweetAlert = require('sweetalert')
 const nodemailer = require('nodemailer')
 const otpGenerator  = require('otp-generator')
 require('dotenv').config()
 
 module.exports.getHomePage = async (req,res)=>{
-    const featuredProducts = await ProductSchema.find({})
+    const category = await categorySchema.find({ status : "Active" });
+    const featuredProducts = await ProductSchema.find({ productStatus : "unblock" })
+    const newAddedProducts  = await ProductSchema.aggregate([{$match : { productStatus : "unblock" }} ,{$sort:{createdAt:1}},{$limit:8} ])
+    const popularProducts = featuredProducts.filter(product=>product.productPrice >= 50000)
     if(req.session.user){
-        res.render('User/homePage',{ featuredProducts, changeLoginToProfile : true })
+        res.render('User/homePage',{ featuredProducts, popularProducts, newAddedProducts, category, changeLoginToProfile : true })
     }else{
-        res.render('User/homePage',{ featuredProducts, changeLoginToProfile : false})
+        res.render('User/homePage',{ featuredProducts, popularProducts, newAddedProducts, category, changeLoginToProfile : false})
     }
 }
 
@@ -21,47 +25,53 @@ module.exports.userLogin = (req,res)=>{
 
 module.exports.postSendOtp = async (req,res)=>{
     try {
-        const user = await userSchema.findOne({ email : req.body.ULEmail , status : 'Active'})
+        const user = await userSchema.findOne({ email : req.body.ULEmail })
+        const blockedUser = await userSchema.findOne({ status : 'Inactive' })
+        
         if(user){
-            // Generate OTP
-            const OTP = otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false ,lowerCaseAlphabets : false });
-            const UserMail = req.body.ULEmail;
-            // Connect with smtp
-            const transporter = nodemailer.createTransport({
-              service : 'gmail',
-              host: 'smtp.gmail.com',
-              port: 587,
-              secure : false,
-              auth: {
-                  user: process.env.MY_EMAIL_ID, // Sender gmail
-                  pass: process.env.APP_PASSWORD // App password from gmail account
-              }
-            })
+            if( blockedUser ){
+                res.render('User/user-login',{ blockedUser : true , changeLoginToProfile : false})
+            }else{
+                // Generate OTP
+                const OTP = otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false ,lowerCaseAlphabets : false });
+                const UserMail = req.body.ULEmail;
+                // Connect with smtp
+                const transporter = nodemailer.createTransport({
+                  service : 'gmail',
+                  host: 'smtp.gmail.com',
+                  port: 587,
+                  secure : false,
+                  auth: {
+                      user: process.env.MY_EMAIL_ID, // Sender gmail
+                      pass: process.env.APP_PASSWORD // App password from gmail account
+                  }
+                })
 
-            const mailOptions = {
-                from: {
-                  name : 'Televisão',
-                  address : process.env.MY_EMAIL_ID
-                },  // sender address
-                to: UserMail, // list of receivers
-                subject: "Televisão login", // Subject line
-                text: "Televião login otp : " + OTP, // plain text body
-                html: "<b>Televião login otp :"+ OTP + "</b>", // html body
-            };
+                const mailOptions = {
+                    from: {
+                      name : 'Televisão',
+                      address : process.env.MY_EMAIL_ID
+                    },  // sender address
+                    to: UserMail, // list of receivers
+                    subject: "Televisão login", // Subject line
+                    text: "Televião login otp : " + OTP, // plain text body
+                    html: "<b>Televião login otp :"+ OTP + "</b>", // html body
+                };
 
-            const sendMail = async (transporter,mailOptions) => {
-              try {
-                await transporter.sendMail(mailOptions);
-                console.log('Email has been sent!');
-              } catch (error) {
-                console.log(error);
-              }
+                const sendMail = async (transporter,mailOptions) => {
+                  try {
+                    await transporter.sendMail(mailOptions);
+                    console.log('Email has been sent!');
+                  } catch (error) {
+                    console.log(error);
+                  }
+                }
+
+                sendMail(transporter,mailOptions)
+                sweetAlert('OTP has been sent!');
+
+                res.render('User/user-login',{ UserMail , OTP  , UserLogin:true})
             }
-
-            sendMail(transporter,mailOptions)
-            sweetAlert('OTP has been sent!');
-
-            res.render('User/user-login',{ UserMail , OTP  , UserLogin:true})
         }else{
             res.render('User/user-login',{ emailDoesNotExist : true , changeLoginToProfile : false})
         }

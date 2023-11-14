@@ -7,7 +7,7 @@ const admin = mongoose.Schema({
     password:{
         type:String
     }
-})
+}, {timestamps: true})
 
 const adminLoginSchema = new mongoose.model('adminLogin',admin)
 

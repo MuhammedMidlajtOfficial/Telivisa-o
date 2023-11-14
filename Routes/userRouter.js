@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path')
 const userRouter = express.Router();
 const userController = require('../Controller/User/userController');
+const userProductController = require('../Controller/User/userProductController')
 
 userRouter.use('/uploads', express.static('uploads'));
 userRouter.use('/Public', express.static('Public'));
@@ -19,5 +20,9 @@ userRouter.post('/postUserSignup', userController.postUserSignup);
 // send otp
 userRouter.post('/sendOtp',userController.postSendOtp)
 
+// All category
+userRouter.get('/allCategory',userProductController.getAllCategory)
+// View product
+userRouter.get('/viewProduct',userProductController.getViewProduct)
 
 module.exports = userRouter;

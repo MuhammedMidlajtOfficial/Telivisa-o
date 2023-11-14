@@ -27,6 +27,9 @@
                                         <% if( locals.invalidOtp ){ %>
                                             <div class="alert alert-danger">Please enter valid otp</div>
                                         <% } %>
+                                        <% if( locals.blockedUser ){ %>
+                                            <div class="alert alert-danger">User blocked by admin</div>
+                                        <% } %>
 
                                         <% if( locals.UserLogin ) {%>
                                             <form method="post" action="/postUserLogin">

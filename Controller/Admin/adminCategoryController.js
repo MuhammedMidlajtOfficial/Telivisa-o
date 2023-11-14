@@ -46,8 +46,8 @@ const getAdminBlockCategories = async (req,res)=>{
     await categorySchema.updateOne({ _id : id },{$set:{ status : 'Inactive' }})
 
     const category = await categorySchema.find({})
-    const selectedCategory = await categorySchema.findOne({ _id : id })
-    res.render('Admin/adminCategories' , { category ,  selectedCategory })
+    
+    res.render('Admin/adminCategories' , { category  })
 }
 
 const getAdminUnblockCategories = async (req,res)=>{
@@ -56,8 +56,7 @@ const getAdminUnblockCategories = async (req,res)=>{
     await categorySchema.updateOne({ _id : id },{$set:{ status : 'Active' }})
     
     const category = await categorySchema.find({})
-    const selectedCategory = await categorySchema.findOne({ _id : id })
-    res.render('Admin/adminCategories' , { category ,  selectedCategory })
+    res.render('Admin/adminCategories' , { category })
 }
 
 module.exports = {

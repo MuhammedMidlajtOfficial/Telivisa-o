@@ -1,7 +1,11 @@
 const adminLoginSchema = require('../../Model/adminLoginSchema')
 
 module.exports.getAdminLogin = (req,res)=>{
-    res.render('Admin/adminLogin')
+    if(req.session.admin){
+        res.redirect('/admin/adminDashboard')
+    }else{
+        res.render('Admin/adminLogin')
+    }
 }
 
 module.exports.postAdminLogin = async (req,res)=>{
@@ -9,6 +13,7 @@ module.exports.postAdminLogin = async (req,res)=>{
     if(admin){
         if(admin.password === req.body.ALPassword){
             req.session.admin = req.body.ALEmail;
+            
             res.redirect('/admin/adminDashboard')
             console.log('Admin logged in');
         }else{
