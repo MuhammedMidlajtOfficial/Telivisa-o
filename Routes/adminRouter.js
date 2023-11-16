@@ -21,10 +21,10 @@ adminRouter.get('/adminDashboard',auth.isAdmin,adminConstroller.getAdminDashboar
 adminRouter.get('/products',auth.isAdmin,adminProductController.getAdminProducts)
 //Product Add
 adminRouter.get('/adminAddProduct',auth.isAdmin,adminProductController.getAdminAddProduct)
-adminRouter.post('/postAdminAddProduct',auth.isAdmin,productImageUploadMulter.array('adminAddProductImage' , 4),adminProductController.postAdminAddProduct)
+adminRouter.post('/postAdminAddProduct',auth.isAdmin,productImageUploadMulter.array('adminAddProductImage'),adminProductController.postAdminAddProduct)
 // Product Edit
 adminRouter.get('/getAdminEditProduct',auth.isAdmin,adminProductController.getAdminEditProduct)
-adminRouter.post('/postAdminEditProduct',auth.isAdmin,productImageUploadMulter.array('adminAddProductImage',4),adminProductController.postAdminEditProduct)
+adminRouter.post('/postAdminEditProduct',auth.isAdmin,productImageUploadMulter.array('adminAddProductImage'),adminProductController.postAdminEditProduct)
 //Product Delete and Block 
 adminRouter.get('/adminDeleteProductImage',auth.isAdmin,adminProductController.getAdminDeleteProductImage)
 adminRouter.get('/adminBlockProduct',auth.isAdmin,adminProductController.getAdminBlockProduct)

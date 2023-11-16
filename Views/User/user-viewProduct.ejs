@@ -20,6 +20,7 @@
                     <div class="col-lg-12">
                         <div class="product-detail accordion-detail">
                             <div class="row mb-50">
+
                                 <div class="col-md-6 col-sm-12 col-xs-12">
                                     <div class="detail-gallery">
                                         <!-- MAIN SLIDES -->
@@ -39,6 +40,7 @@
                                     </div>
                                     <!-- End Gallery -->
                                 </div>
+
                                 <div class="col-md-6 col-sm-12 col-xs-12">
                                     <div class="detail-info">
                                         <h2 class="title-detail"><%= productDetails.productName %></h2>
@@ -69,20 +71,22 @@
                                         <div class="detail-extralink">
                                             <div class="product-extra-link2">
                                                 <button type="submit" class="button button-add-to-cart">Add to cart</button>
-                                                <a aria-label="Add To Wishlist" class="action-btn hover-up" href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
+                                                <a aria-label="Add To Wishlist" class="action-btn hover-up" href="/addToWishlist?id=<%= productDetails._id %>"><i class="fi-rs-heart"></i></a>
                                             </div>
                                         </div>
                                         <ul class="product-meta font-xs color-grey mt-50">
                                             <% if( productDetails.productStock === 0 || productDetails.productHoarding === "Active" ){ %>
                                                 <li>Availability:<span class="in-stock text-danger ml-5">Out of stock</span></li>
                                             <% } else { %>
-                                                <li>Availability:<span class="in-stock text-success ml-5"><%= productDetails.productStock %> items</span></li>
+                                                <li>Availability:<span class="in-stock text-brand ml-5"><%= productDetails.productStock %> items</span></li>
                                             <% } %>
                                         </ul>
                                     </div>
                                     <!-- Detail Info -->
                                 </div>
+
                             </div>
+                            <!-- Description -->
                             <div class="row">
                                 <div class="col-lg-10 m-auto entry-main-content">
                                     <h2 class="section-title style-1 mb-30">Description</h2>
@@ -120,6 +124,7 @@
                                     </table>
                                 </div>
                             </div>
+                            <!-- Related products -->
                             <div class="row mt-60">
                                 <div class="col-12">
                                     <h3 class="section-title style-1 mb-30">Related products</h3>
@@ -136,9 +141,7 @@
                                                             </a>
                                                         </div>
                                                         <div class="product-action-1">
-                                                            <a aria-label="Quick view" class="action-btn small hover-up" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="fi-rs-search"></i></a>
-                                                            <a aria-label="Add To Wishlist" class="action-btn small hover-up" href="shop-wishlist.html" tabindex="0"><i class="fi-rs-heart"></i></a>
-                                                            <a aria-label="Compare" class="action-btn small hover-up" href="shop-compare.html" tabindex="0"><i class="fi-rs-shuffle"></i></a>
+                                                            <a aria-label="Add To Wishlist" class="action-btn small hover-up" href="/addToWishlist?id=<%= product._id %>" tabindex="0"><i class="fi-rs-heart"></i></a>
                                                         </div>
                                                         
                                                     </div>
@@ -146,7 +149,6 @@
                                                         <h2><a href="/viewProduct?id=<%= product._id %>" tabindex="0"><%= product.productName %></a></h2>
                                                         <div class="product-price">
                                                             <span>₹ <%= product.productPrice %></span>
-                                                            <span class="old-price">₹ <%= product.productPromoPrice %></span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -155,6 +157,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="banner-img banner-big wow fadeIn f-none animated mt-50">
                                 <img class="border-radius-10" src="../../Public/userAssets/imgs/banner/banner-4.png" alt="">
                                 <div class="banner-text">

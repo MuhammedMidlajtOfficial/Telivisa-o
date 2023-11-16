@@ -2,9 +2,10 @@ const session = require('express-session')
 const userSchema = require('../../Model/userSchema')
 const ProductSchema = require('../../Model/ProductSchema')
 const categorySchema = require('../../Model/categorySchema')
-const sweetAlert = require('sweetalert')
+const swal = require('sweetalert')
 const nodemailer = require('nodemailer')
 const otpGenerator  = require('otp-generator')
+
 require('dotenv').config()
 
 module.exports.getHomePage = async (req,res)=>{
@@ -68,9 +69,9 @@ module.exports.postSendOtp = async (req,res)=>{
                 }
 
                 sendMail(transporter,mailOptions)
-                sweetAlert('OTP has been sent!');
+                
 
-                res.render('User/user-login',{ UserMail , OTP  , UserLogin:true})
+                res.render('User/user-login',{ UserMail, OTP, UserLogin:true})
             }
         }else{
             res.render('User/user-login',{ emailDoesNotExist : true , changeLoginToProfile : false})

@@ -1,5 +1,7 @@
 const ProductSchema = require('../../Model/ProductSchema')
 const categorySchema = require('../../Model/categorySchema')
+const fs = require('fs')
+const sharp = require('sharp')
 
 module.exports.getAdminProducts = async (req,res)=>{
     const product = await ProductSchema.find({})
@@ -16,9 +18,18 @@ module.exports.postAdminAddProduct = async(req,res)=>{
     try {
         const imageArr = req.files;
         let imageUrlArray = [];
-        imageArr.forEach(element => {
-            imageUrlArray.push(element);
-        });
+        
+        for (let i = 0; i < imageArr.length; i++) {
+            const croppedImage = await sharp(imageArr[i].path)
+              .resize({ width : 1024 , height:700})
+              .toBuffer();
+      
+            const filename = `cropped_${imageArr[i].filename}`;
+            const filePath = `Public/uploads/${filename}`;
+            await sharp(croppedImage).toFile(filePath);
+            imageUrlArray.push({path:filePath})
+        }
+        
         const productData = await new ProductSchema({
             productName : req.body.productName,
             productBrand : req.body.productBrand,
@@ -51,13 +62,21 @@ module.exports.getAdminEditProduct = async (req,res)=>{
 module.exports.postAdminEditProduct = async (req,res)=>{
     try {
         const id = req.query.id;
+        const imageArr = req.files;
         let imageArray = await ProductSchema.findOne({ _id : id })
         imageArray = imageArray.imageUrl
-
-        if(req.files.length){
-            req.files.forEach((elem)=>{
-                imageArray.push(elem)
-            })
+        
+        if(imageArr.length){
+            for (let i = 0; i < imageArr.length; i++) {
+                const croppedImage = await sharp(imageArr[i].path)
+                  .resize({ width : 1024 , height:700})
+                  .toBuffer();
+          
+                const filename = `cropped_${imageArr[i].filename}`;
+                const filePath = `Public/uploads/${filename}`;
+                await sharp(croppedImage).toFile(filePath);
+                imageArray.push({path:filePath})
+            }
         }
 
         let productData;
@@ -101,7 +120,7 @@ module.exports.postAdminEditProduct = async (req,res)=>{
 
 module.exports.getAdminDeleteProductImage = async (req,res)=>{
     const id = req.query.id;
-    imagePath = req.query.image;
+    const imagePath = req.query.image;
     await ProductSchema.updateOne({ _id : id },{$pull:{ imageUrl:{path : imagePath }}})
     const product = await ProductSchema.findOne({ _id : id})
     const category = await categorySchema.find({})

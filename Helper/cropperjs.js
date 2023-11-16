@@ -1,0 +1,2 @@
+const cropperjs = require('cropperjs')
+
