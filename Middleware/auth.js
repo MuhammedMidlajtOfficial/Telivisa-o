@@ -9,10 +9,10 @@ module.exports.isAdmin = (req,res,next)=>{
 }
 
 module.exports.isUser = (req,res,next)=>{
-    if(req.session.user){
-        next()
-    }else{
+    if(!req.session.user){
         res.redirect('/userLogin')
+    }else{
+        next()
     }
 }
 

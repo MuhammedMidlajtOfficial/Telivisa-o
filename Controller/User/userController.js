@@ -21,18 +21,23 @@ module.exports.getHomePage = async (req,res)=>{
 }
 
 module.exports.userLogin = (req,res)=>{
-    res.render('User/user-login')
+    if(req.session.user){
+        res.redirect('/')
+    }else{
+        res.render('User/user-login')
+    }
 }
 
 module.exports.postSendOtp = async (req,res)=>{
     try {
-        const user = await userSchema.findOne({ email : req.body.ULEmail })
-        const blockedUser = await userSchema.findOne({ status : 'Inactive' })
-        
+        const email = req.body.ULEmail
+        const user = await userSchema.findOne({ email })
         if(user){
-            if( blockedUser ){
+            if( user.status === 'Inctive' ){
                 res.render('User/user-login',{ blockedUser : true , changeLoginToProfile : false})
-            }else{
+            }else if( user.password !== req.body.ULPassword ){
+                res.render('User/user-login',{ invalidPassword : true , changeLoginToProfile : false})
+            } else {
                 // Generate OTP
                 const OTP = otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false ,lowerCaseAlphabets : false });
                 const UserMail = req.body.ULEmail;
@@ -70,8 +75,7 @@ module.exports.postSendOtp = async (req,res)=>{
 
                 sendMail(transporter,mailOptions)
                 
-
-                res.render('User/user-login',{ UserMail, OTP, UserLogin:true})
+                res.render('User/user-verifyOTP',{ OTP, email, otpSent:true})
             }
         }else{
             res.render('User/user-login',{ emailDoesNotExist : true , changeLoginToProfile : false})
@@ -82,11 +86,62 @@ module.exports.postSendOtp = async (req,res)=>{
     }
 }
 
-module.exports.postUserLogin = async(req,res)=>{
+module.exports.getResendOtp = async (req,res)=>{
+    try {
+        const email = req.query.email;
+        const user = await userSchema.findOne({email})
+        
+        if( user.status === 'Inctive' ){
+            res.render('User/user-login',{ blockedUser : true , changeLoginToProfile : false})
+        } else {
+            // Generate OTP
+            const OTP = otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false ,lowerCaseAlphabets : false });
+            // Connect with smtp
+            const transporter = nodemailer.createTransport({
+              service : 'gmail',
+              host: 'smtp.gmail.com',
+              port: 587,
+              secure : false,
+              auth: {
+                  user: process.env.MY_EMAIL_ID, // Sender gmail
+                  pass: process.env.APP_PASSWORD // App password from gmail account
+              }
+            })
+
+            const mailOptions = {
+                from: {
+                  name : 'Televisão',
+                  address : process.env.MY_EMAIL_ID
+                },  // sender address
+                to: email, // list of receivers
+                subject: "Televisão login", // Subject line
+                text: "Televião login otp : " + OTP, // plain text body
+                html: "<b>Televião login otp :"+ OTP + "</b>", // html body
+            };
+
+            const sendMail = async (transporter,mailOptions) => {
+              try {
+                await transporter.sendMail(mailOptions);
+                console.log('Email has been sent!');
+              } catch (error) {
+                console.log(error);
+              }
+            }
+
+            sendMail(transporter,mailOptions)
+            
+            res.render('User/user-verifyOTP',{ OTP, email, otpSent:true})
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+module.exports.postVerifyOtp = async(req,res)=>{
     try {
         const OTP = req.body.OTP;
         if(OTP === req.body.ULOtp){
-            req.session.user = req.body.UserMail;
+            req.session.user = req.body.email;
             console.log(req.session.user,'LoggedIn');
             res.redirect('/')
         }else{
@@ -111,7 +166,11 @@ module.exports.getUserLogout = (req,res)=>{
 }
 
 module.exports.getUserSignup = (req,res)=>{
-    res.render('User/user-signup',{ changeLoginToProfile : false})
+    if(req.session.user){
+        res.redirect('/')
+    }else{
+        res.render('User/user-signup',{ changeLoginToProfile : false})
+    }
 }
 
 module.exports.postUserSignup = async (req,res)=>{
@@ -135,3 +194,80 @@ module.exports.postUserSignup = async (req,res)=>{
     }
 }
 
+module.exports.getForgotPassword = (req,res)=>{
+    res.render('User/user-forgotPassword')
+}
+
+module.exports.postSendResetPassword = async (req,res)=>{
+    try {
+        const email = req.body.ULEmail
+        const user = await userSchema.findOne({ email })
+        if(user){
+            if( user.status === 'Inctive' ){
+                res.render('User/user-login',{ blockedUser : true , changeLoginToProfile : false})
+            } else {
+                // Generate OTP
+                const OTP = otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false ,lowerCaseAlphabets : false });
+                // Connect with smtp
+                const transporter = nodemailer.createTransport({
+                  service : 'gmail',
+                  host: 'smtp.gmail.com',
+                  port: 587,
+                  secure : false,
+                  auth: {
+                      user: process.env.MY_EMAIL_ID, // Sender gmail
+                      pass: process.env.APP_PASSWORD // App password from gmail account
+                  }
+                })
+
+                const mailOptions = {
+                    from: {
+                      name : 'Televisão',
+                      address : process.env.MY_EMAIL_ID
+                    },  // sender address
+                    to: email, // list of receivers
+                    subject: "Televisão login", // Subject line
+                    text: "Televião login otp : " + OTP, // plain text body
+                    html: "<b>Televião login otp :"+ OTP + "</b>", // html body
+                };
+
+                const sendMail = async (transporter,mailOptions) => {
+                  try {
+                    await transporter.sendMail(mailOptions);
+                    console.log('Email has been sent!');
+                  } catch (error) {
+                    console.log(error);
+                  }
+                }
+
+                sendMail(transporter,mailOptions)
+                
+                res.render('User/user-forgotOTP',{ OTP, email })
+            }
+        }else{
+            res.render('User/user-forgotPassword',{ emailDoesNotExist : true , changeLoginToProfile : false})
+        }
+        
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+module.exports.postVerifyResetOtp = (req,res)=>{
+    const OTP = req.body.OTP
+    const email = req.body.email;
+
+    if(req.body.ULOtp === OTP){
+        res.render('User/user-resetPassword',{ email })
+    }else{
+        res.render('User/user-forgotPassword',{ invalidOTP : true })
+    }
+}
+
+module.exports.postResetUserPassword = async (req,res)=>{
+    const email = req.body.email
+    console.log(ema);
+    const newPassword = req.body.resetPassword
+    const result = await userSchema.updateOne({ email },{ password : newPassword })
+    res.render('User/user-login' ,{ passwordChanged:true })
+}

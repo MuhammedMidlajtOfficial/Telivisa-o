@@ -25,7 +25,7 @@ adminRouter.post('/postAdminAddProduct',auth.isAdmin,productImageUploadMulter.ar
 // Product Edit
 adminRouter.get('/getAdminEditProduct',auth.isAdmin,adminProductController.getAdminEditProduct)
 adminRouter.post('/postAdminEditProduct',auth.isAdmin,productImageUploadMulter.array('adminAddProductImage'),adminProductController.postAdminEditProduct)
-//Product Delete and Block 
+//Product Delete(image) and Block 
 adminRouter.get('/adminDeleteProductImage',auth.isAdmin,adminProductController.getAdminDeleteProductImage)
 adminRouter.get('/adminBlockProduct',auth.isAdmin,adminProductController.getAdminBlockProduct)
 adminRouter.get('/adminUnblockProduct',auth.isAdmin,adminProductController.getAdminUnblockProduct)
