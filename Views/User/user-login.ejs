@@ -31,14 +31,11 @@
                                         <% if( locals.blockedUser ){ %>
                                             <div class="alert alert-danger">User blocked by admin</div>
                                         <% } %>
-                                        <% if( locals.invalidOtp ){ %>
-                                            <div class="alert alert-danger">OTP is incorrect , <span class="text-brand">Please send OTP again</span></div>
-                                        <% } %>
                                         <% if( locals.passwordChanged ){ %>
                                             <div class="alert alert-success">Password changed successfully</div>
                                         <% } %>
 
-                                        <form method="post" action="/sendOtp">
+                                        <form method="post" action="/postUserLogin">
                                             <div class="form-group">
                                                 <input type="email" id="ULEmail" name="ULEmail" placeholder="Your Email" required="true">
                                             </div>
@@ -56,7 +53,7 @@
                                                 <a class="text-muted" href="/forgotPassword">Forgot password?</a>
                                             </div>
                                             <div class="form-group" style="display: flex; justify-content: center;">
-                                                <button type="submit" class="btn btn-fill-out btn-block hover-up" name="login" style="width: 300px;">Send OTP</button>
+                                                <button type="submit" class="btn btn-fill-out btn-block hover-up" name="login" style="width: 300px;">Login</button>
                                             </div>
                                             <div class="text-muted text-center">Don't have an account? <a href="/userSignup">Sign up now</a></div>
                                         </form> 

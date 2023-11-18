@@ -32,8 +32,9 @@
                                             <div class="text-danger" id="validateName" style="display: none;">Please enter valid username</div>
                                         </div>
                                         <div class="form-group">
-                                            <input type="text" id="USEmail" name="USEmail" placeholder="Email">
-                                            <div class="text-danger" id="validateEmail" style="display: none;">Please enter valid email address</div>
+                                            <input type="text" style="display: none;" id="email" name="email" value="<%= email %>">
+                                            <input type="text" id="USEmail" value="<%= email %>" name="USEmail" placeholder="Email" disabled style="background-color: rgb(211, 206, 199);">
+                                            <!-- <div class="text-danger" id="validateEmail" style="display: none;">Please enter valid email address</div> -->
                                         </div>
                                         <div class="form-group">
                                             <input type="number" id="USPhnNumber" name="USPhnNumber" placeholder="Phone No.">
@@ -92,12 +93,12 @@
                 document.getElementById('validateName').style.display = 'none';
             }
 
-            if (email.trim() === "" || !emailValidation(email)) {
-                document.getElementById('validateEmail').style.display = 'block';
-                event.preventDefault();
-            } else {
-                document.getElementById('validateEmail').style.display = 'none';
-            }
+            // if (email.trim() === "" || !emailValidation(email)) {
+            //     document.getElementById('validateEmail').style.display = 'block';
+            //     event.preventDefault();
+            // } else {
+            //     document.getElementById('validateEmail').style.display = 'none';
+            // }
 
             if (password.trim() === "" || !passwordValidation(password)) {
                 document.getElementById('validatepassword').style.display = 'block';

@@ -11,14 +11,12 @@
                             <div class="heading_s1">
                                 <h3 class="mb-20 ">Verify OTP</h3>
                             </div>
-                            <% if(locals.otpSent){ %>
-                                <div class="alert alert-success">An OTP have been shared to your email </div>
-                            <% } %>
+                            <div class="alert alert-success">An OTP have been shared to your email </div>
                             <form method="post" action="/verifyOtp">
                                 <input type="text" value="<%= OTP %>" name="OTP" style="display: none;">
                                 <input type="text" value="<%= email %>" name="email" style="display: none;">
                                 <div class="form-group">
-                                    <input type="password" id="ULOtp" name="ULOtp" placeholder="Otp">
+                                    <input type="password" id="USOtp" name="USOtp" placeholder="Otp">
                                     <span class="form-group text-danger" id="timer" style="display: flex; justify-content: flex-end;">01:00</span>
                                 </div>
                                 <div class="form-group" style="display: flex; justify-content: center;">

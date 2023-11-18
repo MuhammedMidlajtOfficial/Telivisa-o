@@ -1,0 +1,47 @@
+<%- include('../Partials/userHeader')  -%>
+
+
+    <main class="main">
+        <section class="pt-100 pb-100">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-10 m-auto">
+                        <div class="row">
+                            <div class="col-lg-3"></div>
+                            <div class="col-lg-6">
+                                <div class="login_wrap widget-taber-content p-30 background-white border-radius-10 mb-md-5 mb-lg-0 mb-sm-5">
+                                    <div class="padding_eight_all bg-white">
+                                        <div class="heading_s1">
+                                            <h3 class="mb-30">Email authentication</h3>
+                                        </div>
+                                        <% if( locals.emailAlreadyExist ){ %>
+                                            <div class="alert alert-danger">Email already exist</div>
+                                        <% } %>
+                                        <% if( locals.invalidOtp ){ %>
+                                            <div class="alert alert-danger">OTP is incorrect , <span class="text-brand">Please send OTP again</span></div>
+                                        <% } %>
+
+                                        <form method="post" action="/sendOtp">
+                                            <div class="form-group">
+                                                <input type="email" id="USEmail" name="USEmail" placeholder="Your Email" required="true">
+                                            </div>
+
+                                            <div class="form-group" style="display: flex; justify-content: center;">
+                                                <button type="submit" class="btn btn-fill-out btn-block hover-up" name="login" style="width: 300px;">Send OTP</button>
+                                            </div>
+                                            <div class="text-muted text-center">Have an account? <a href="/userLogin">Log in now</a></div>
+                                        </form> 
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+
+
+<%- include('../Partials/userFooter')  -%>

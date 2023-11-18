@@ -6,10 +6,14 @@ const getAdminAddCategories = async (req,res)=>{
 }
 
 const postAdminAddCategories = async (req,res)=>{
-    const categ = await categorySchema.findOne({ categoryName : req.body.categoryName})
     const category = await categorySchema.find({})
-
-    if(categ){
+    let existCateg;
+    category.forEach(categ => {
+        if(categ.categoryName.toLowerCase() === req.body.categoryName.toLowerCase()){
+            existCateg = true;
+        }
+    });
+    if(existCateg){
         res.render('Admin/adminCategories' , { category , categoryExist : true });
     } else {
         const newCategory = await new categorySchema({
@@ -42,9 +46,7 @@ const postAdminEditCategories = async (req,res)=>{
 
 const getAdminBlockCategories = async (req,res)=>{
     const id = req.query.id;
-    
     await categorySchema.updateOne({ _id : id },{$set:{ status : 'Inactive' }})
-
     const category = await categorySchema.find({})
     
     res.render('Admin/adminCategories' , { category  })
@@ -52,7 +54,6 @@ const getAdminBlockCategories = async (req,res)=>{
 
 const getAdminUnblockCategories = async (req,res)=>{
     const id = req.query.id;
-    
     await categorySchema.updateOne({ _id : id },{$set:{ status : 'Active' }})
     
     const category = await categorySchema.find({})

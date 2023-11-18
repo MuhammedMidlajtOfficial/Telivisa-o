@@ -16,7 +16,10 @@ userRouter.get('/', auth.isUserBlocked, userController.getHomePage);
 
 // User Login & Logout
 userRouter.get('/userLogin', userController.userLogin);
+userRouter.post('/postUserLogin', userController.postUserLogin)
 userRouter.get('/userLogout', userController.getUserLogout);
+
+
 // User Signup
 userRouter.get('/userSignup', userController.getUserSignup);
 userRouter.post('/postUserSignup', userController.postUserSignup);
