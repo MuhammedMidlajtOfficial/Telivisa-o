@@ -1,0 +1,260 @@
+<%- include('../Partials/userHeader') -%>
+
+<main>
+    <section class="pb-100 ">
+        <div class="container pt-50">
+            <div class="row">
+                <div class="col-lg-10 m-auto">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="login_wrap widget-taber-content p-30 background-white border-radius-5">
+                                <div class="padding_eight_all bg-white">
+                                    
+                                    <!-- Edit address -->
+
+                                    <% if( locals.editAddress ) {%>
+                                        <div class="heading_s1">
+                                            <h3 class="mb-20 text-brand">Edit address</h3>
+                                        </div>
+                                        <p class="mb-40 font-sm">Your address will be used for orders throughout this website</p>
+                                            <form method="post" action="/postEditAddress">
+                                                <input type="text" name="addressId" value="<%= addressId %>" style="display: none;">
+                                                <div class="form-group">
+                                                    <label for="name" class="text-brand">Full name</label>
+                                                    <input type="text" id="name" name="name" placeholder="Type here..." value="<%= existAddress.name %>">
+                                                    <div class="text-danger" id="validateName" style="display: none;">Please enter valid name</div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="phnNumber" class="text-brand">Phone No.</label>
+                                                    <input type="number" id="phnNumber" name="phnNumber" placeholder="Type here..." value="<%= existAddress.phnNumber %>">
+                                                    <div class="text-danger" id="validatephnNumber" style="display: none;">Please enter valid phone number</div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="alterPhnNumber" class="text-brand">Alter Phone No.</label>
+                                                    <input type="number" id="alterPhnNumber" name="alterPhnNumber" placeholder="Type here..." value="<%= existAddress.alterPhnNumber %>">
+                                                    <div class="text-danger" id="validateAlterPhnNumber" style="display: none;">Please enter valid phone number</div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="street" class="text-brand">Street address</label>
+                                                    <input type="text" id="street" name="street" placeholder="Type here..." value="<%= existAddress.street %>">
+                                                    <div class="text-danger" id="validateStreetAddress" style="display: none;">Please enter valid street address</div>
+                                                </div>
+                                                <div class="form-group" >
+                                                    <label for="city" class="text-brand">City/Town</label>
+                                                    <input type="text" id="city" name="city" placeholder="Type here..." value="<%= existAddress.city %>">
+                                                    <div class="text-danger" id="validateCityName" style="display: none;">Please enter valid city name</div>
+                                                </div>
+                                                <div class="form-group" >
+                                                    <label for="state" class="text-brand">State</label>
+                                                    <input type="text" id="state" name="state" placeholder="Type here..." value="<%= existAddress.state %>">
+                                                    <div class="text-danger" id="validateState" style="display: none;">Please enter valid state name</div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="pinCode" class="text-brand">PIN CODE</label>
+                                                    <input type="number" id="pinCode" name="pinCode" placeholder="Type here..." value="<%= existAddress.pinCode %>">
+                                                    <div class="text-danger" id="validatePinCode" style="display: none;">Please enter valid pin number</div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <button type="submit" class="btn btn-fill-out btn-block hover-up">Edit</button>
+                                                </div>
+                                            </form>
+                                    <% } else {%>
+
+                                    <!-- ADD address -->
+
+                                        <div class="heading_s1">
+                                            <h3 class="mb-20 ">Add an address</h3>
+                                        </div>
+                                        <p class="mb-40 font-sm">Your address will be used for orders throughout this website</p>
+                                        
+                                        <form method="post" action="/postAddAddress">
+                                            <div class="form-group">
+                                                <input type="text" id="name" name="name" placeholder="Full name ">
+                                                <div class="text-danger" id="validateName" style="display: none;">Please enter valid name</div>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="number" id="phnNumber" name="phnNumber" placeholder="Phone No.">
+                                                <div class="text-danger" id="validatephnNumber" style="display: none;">Please enter valid phone number</div>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="number" id="alterPhnNumber" name="alterPhnNumber" placeholder="Alter Phone No.">
+                                                <div class="text-danger" id="validateAlterPhnNumber" style="display: none;">Please enter valid phone number</div>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="text" id="street" name="street" placeholder="Street address">
+                                                <div class="text-danger" id="validateStreetAddress" style="display: none;">Please enter valid phone number</div>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="text" id="city" name="city" placeholder="City/Town">
+                                                <div class="text-danger" id="validatephnNumber" style="display: none;">Please enter valid phone number</div>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="text" id="state" name="state" placeholder="State">
+                                                <div class="text-danger" id="validateState" style="display: none;">Please enter valid state name</div>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="number" id="pinCode" name="pinCode" placeholder="PIN CODE">
+                                                <div class="text-danger" id="validatePinCode" style="display: none;">Please enter valid pin number</div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <button type="submit" class="btn btn-fill-out btn-block hover-up">ADD</button>
+                                            </div>
+                                        </form>
+                                    <% } %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+
+<script>
+
+    // Edit Address
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelector('form[action="/postEditAddress"]').addEventListener('submit', function (event) {
+            const name = document.getElementById('name').value;
+            const phnNumber = document.getElementById('phnNumber').value;
+            const alterPhnNumber = document.getElementById('alterPhnNumber').value;
+            const street = document.getElementById('street').value;
+            const city = document.getElementById('city').value;
+            const state = document.getElementById('state').value;
+            const pinCode = document.getElementById('pinCode').value;
+
+            if (name.trim() === "") {
+                document.getElementById('validateName').style.display = 'block';
+                event.preventDefault();
+            } else {
+                document.getElementById('validateName').style.display = 'none';
+            }
+
+            if (phnNumber.trim() === "" || !phnNumberValidation(phnNumber)) {
+                document.getElementById('validatephnNumber').style.display = 'block';
+                event.preventDefault();
+            } else {
+                document.getElementById('validatephnNumber').style.display = 'none';
+            }
+
+            if (alterPhnNumber.trim() === "" || !phnNumberValidation(phnNumber)) {
+                document.getElementById('validateAlterPhnNumber').style.display = 'block';
+                event.preventDefault();
+            } else {
+                document.getElementById('validateAlterPhnNumber').style.display = 'none';
+            }
+
+            if (street.trim() === "") {
+                document.getElementById('validateStreetAddress').style.display = 'block';
+                event.preventDefault();
+            } else {
+                document.getElementById('validateStreetAddress').style.display = 'none';
+            }
+
+            if (city.trim() === "") {
+                document.getElementById('validateCityName').style.display = 'block';
+                event.preventDefault();
+            } else {
+                document.getElementById('validateCityName').style.display = 'none';
+            }
+
+            if (state.trim() === "") {
+                document.getElementById('validateState').style.display = 'block';
+                event.preventDefault();
+            } else {
+                document.getElementById('validateState').style.display = 'none';
+            }
+
+            if (pinCode.trim() === "" || !pinCodeValidation(pinCode)) {
+                document.getElementById('validatepassword').style.display = 'block';
+                event.preventDefault();
+            } else {
+                document.getElementById('validatepassword').style.display = 'none';
+            }
+            
+
+        });
+    });
+
+    // Add Address
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelector('form[action="/postEditAddress"]').addEventListener('submit', function (event) {
+            const name = document.getElementById('name').value;
+            const phnNumber = document.getElementById('phnNumber').value;
+            const alterPhnNumber = document.getElementById('alterPhnNumber').value;
+            const street = document.getElementById('street').value;
+            const city = document.getElementById('city').value;
+            const state = document.getElementById('state').value;
+            const pinCode = document.getElementById('pinCode').value;
+
+            if (name.trim() === "") {
+                document.getElementById('validateName').style.display = 'block';
+                event.preventDefault();
+            } else {
+                document.getElementById('validateName').style.display = 'none';
+            }
+
+            if (phnNumber.trim() === "" || !phnNumberValidation(phnNumber)) {
+                document.getElementById('validatephnNumber').style.display = 'block';
+                event.preventDefault();
+            } else {
+                document.getElementById('validatephnNumber').style.display = 'none';
+            }
+
+            if (alterPhnNumber.trim() === "" || !phnNumberValidation(phnNumber)) {
+                document.getElementById('validateAlterPhnNumber').style.display = 'block';
+                event.preventDefault();
+            } else {
+                document.getElementById('validateAlterPhnNumber').style.display = 'none';
+            }
+
+            if (street.trim() === "") {
+                document.getElementById('validateStreetAddress').style.display = 'block';
+                event.preventDefault();
+            } else {
+                document.getElementById('validateStreetAddress').style.display = 'none';
+            }
+
+            if (city.trim() === "") {
+                document.getElementById('validateCityName').style.display = 'block';
+                event.preventDefault();
+            } else {
+                document.getElementById('validateCityName').style.display = 'none';
+            }
+
+            if (state.trim() === "") {
+                document.getElementById('validateState').style.display = 'block';
+                event.preventDefault();
+            } else {
+                document.getElementById('validateState').style.display = 'none';
+            }
+
+            if (pinCode.trim() === "" || !pinCodeValidation(pinCode)) {
+                document.getElementById('validatepassword').style.display = 'block';
+                event.preventDefault();
+            } else {
+                document.getElementById('validatepassword').style.display = 'none';
+            }
+            
+
+        });
+    });
+
+function phnNumberValidation(phnNumber) {
+    const pattern = /^(\+?91)?[6-9]\d{9}$/;
+    return pattern.test(phnNumber);
+}
+
+function pinCodeValidation(pinCode){
+    const pattern = /^.{6,6}$/
+    return pattern.test(pinCode)
+}
+
+</script>
+
+
+<%- include('../Partials/userFooter') -%>

@@ -20,8 +20,11 @@ module.exports.isUserBlocked = async (req,res,next)=>{
     const userExist = await userSchema.findOne({ email : req.session.user})
     if(userExist){
         if (userExist.status === 'Inactive') {
-            res.render('User/user-login',{ blockedUser:true , changeLoginToProfile:false })
+            res.redirect('/userLogout')
+        }else{
+            next()
         }
+    }else{
+        next()
     }
-    next()
 }

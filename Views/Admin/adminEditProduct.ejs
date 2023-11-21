@@ -260,7 +260,7 @@
                             </div> <!-- card end// -->
                             <% product.imageUrl.forEach((image)=> { %>
                             <div class="row">
-                                <img class="col-lg-10 me-0" src="<%= image.path %>" alt="product image"></img>
+                                <img class="col-lg-10 me-0" src="<%= image?.path %>" alt="product image"></img>
                                 <div class="btn btn-danger col-lg-1" style="height: 40px; width: 40px;">
                                     <a href="/admin/adminDeleteProductImage?id=<%= product._id %>&image=<%= image.path %>" style="text-decoration: none; color: white;">X</a>
                                 </div>

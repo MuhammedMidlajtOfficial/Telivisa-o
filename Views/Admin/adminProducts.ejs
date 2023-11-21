@@ -153,8 +153,6 @@
                     <p>Create and show products</p>
                 </div>
                 <div>
-                    <!-- <a href="#" class="btn btn-light rounded font-md">Export</a> -->
-                    <!-- <a href="#" class="btn btn-light rounded  font-md">Import</a> -->
                     <a href="/admin/adminAddProduct" class="btn btn-primary btn-sm rounded">Create new</a>
                 </div>
             </div>
@@ -196,13 +194,13 @@
                                         <div class="row mx-0">
                                             <% if( product[i].productStatus === "block" ) { %>
                                                 <div class="btn-primary col-lg-2 mt-1" style="border-radius: 3px; width: 65px; height: 25px; display: flex; align-items: center; justify-content: center;">
-                                                    <a href="/admin/adminUnblockProduct?id=<%= product[i]._id %>" style=" color: rgb(244, 239, 239); text-decoration: none;">
+                                                    <a data-userid= '<%= product[i]._id %>' class="unBlockConfirmation" style=" color: rgb(244, 239, 239); text-decoration: none;">
                                                         Unblock
                                                     </a>
                                                 </div>
                                             <% } else if(product[i].productStatus === "unblock" ) { %>
                                                 <div class="btn-danger col-lg-2 mt-1" style="border-radius: 3px; width: 60px; height: 25px; display: flex; align-items: center; justify-content: center;">
-                                                    <a href="/admin/adminBlockProduct?id=<%= product[i]._id %>" style=" color: rgb(244, 239, 239); text-decoration: none;">
+                                                    <a data-userid= '<%= product[i]._id %>' class="blockConfirmation" style=" color: rgb(244, 239, 239); text-decoration: none;">
                                                         Block
                                                     </a>
                                                 </div>
@@ -264,6 +262,55 @@
     <script src="/adminAsset/js/main.js" type="text/javascript"></script>
 </body>
 
+<script>
+
+
+      
+//  confirmation
+    function deleteConfirmation(){
+        return confirm("Are you sure?");
+    }
+
+// Block confirmation
+    document.addEventListener("DOMContentLoaded", function () {
+        const blockButton = document.querySelectorAll('.blockConfirmation');
+
+        blockButton.forEach((elem)=>{
+            elem.addEventListener('click',()=>{
+                const queryValue = deleteConfirmation();
+                const userId = elem.dataset.userid;
+
+                if(queryValue){
+                  const url = "/admin/adminBlockProduct?id="+userId+"&confirmation=" + encodeURIComponent(queryValue);
+                  elem.href = url;
+                }else{
+                  console.log('Confirmation : false');
+                }
+            })
+        })
+    })
+
+// Unblock confirmation
+    document.addEventListener("DOMContentLoaded", function () {
+        const blockButton = document.querySelectorAll('.unBlockConfirmation');
+
+        blockButton.forEach((elem)=>{
+            elem.addEventListener('click',()=>{
+                const queryValue = deleteConfirmation();
+                const userId = elem.dataset.userid;
+
+                if(queryValue){
+                  const url = "/admin/adminUnblockProduct?id="+userId+"&confirmation=" + encodeURIComponent(queryValue);
+                  elem.href = url;
+                }else{
+                  console.log('Confirmation : false');
+                }
+            })
+        })
+    })
+
+
+</script>
 
 <!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-products-grid-2.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:21 GMT -->
 </html>

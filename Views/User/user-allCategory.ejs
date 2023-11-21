@@ -27,14 +27,14 @@
                                             <span><i class="fi-rs-apps-sort"></i>Sort by:</span>
                                         </div>
                                         <div class="sort-by-dropdown-wrap">
-                                            <span> Random <i class="fi-rs-angle-small-down"></i></span>
+                                            <span> <%= locals.sortOrder %> <i class="fi-rs-angle-small-down"></i></span>
                                         </div>
                                     </div>
                                     <div class="sort-by-dropdown">
                                         <ul>
-                                            <li><a class="active" href="#">Random</a></li>
-                                            <li><a href="#">Price: Low to High</a></li>
-                                            <li><a href="#">Price: High to Low</a></li>
+                                            <li><a class="<%= locals.sortOrder === 'default' ? 'active' : '' %>" href="?price=default">Default</a></li>
+                                            <li><a class="<%= locals.sortOrder === 'lowToHigh' ? 'active' : '' %>" href="?price=lowToHigh">Price: Low to High</a></li>
+                                            <li><a class="<%= locals.sortOrder === 'highToLow' ? 'active' : '' %>" href="?price=highToLow">Price: High to Low</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -92,19 +92,20 @@
                     <!-- sidebar -->
                     <!-- sidebar -->
                     <div class="col-lg-3 primary-sidebar sticky-sidebar">
+                        <!-- Poular Brands -->
                         <div class="widget-category mb-30">
                             <h5 class="section-title style-1 mb-30 wow fadeIn animated">Poular Brands</h5>
                             <ul class="categories">
-                                <li><a href="">SAMSUNG</a></li>
-                                <li><a href="">LG</a></li>
-                                <li><a href="">ACER</a></li>
-                                <li><a href="">VU</a></li>
-                                <li><a href="">SONY</a></li>
-                                <li><a href="">TCL</a></li>
+                                <li><a href="/allCategory?brand=SAMSUNG">SAMSUNG</a></li>
+                                <li><a href="/allCategory?brand=LG">LG</a></li>
+                                <li><a href="/allCategory?brand=ACER">ACER</a></li>
+                                <li><a href="/allCategory?brand=VU">VU</a></li>
+                                <li><a href="/allCategory?brand=SONY">SONY</a></li>
+                                <li><a href="/allCategory?brand=TCL">TCL</a></li>
                             </ul>
                         </div>
                         <!-- Fillter By Price -->
-                        <div class="sidebar-widget price_range range mb-30">
+                        <form method="post" action="/fillter" class="sidebar-widget price_range range mb-30">
                             <div class="widget-header position-relative mb-20 pb-10">
                                 <h5 class="widget-title mb-10">Fill by price</h5>
                                 <div class="bt-1 border-color-1"></div>
@@ -113,55 +114,46 @@
                                 <div class="price-filter-inner">
                                     <div id="slider-range"></div>
                                     <div class="price_slider_amount">
-                                        <div class="label-input">
-                                            <span>Range:</span><input type="text" id="amount" name="price" placeholder="Add Your Price" />
+                                        <div class="label-input form-group">
+                                            <span>Range:</span><input type="text" id="amount" name="priceRange" placeholder="Add Your Price" />
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="list-group">
                                 <div class="list-group-item mb-10 mt-10">
-                                    <label class="fw-900">Category</label>
-                                    <div class="custome-checkbox">
-                                        <% category.forEach((categ)=>{ %>
-                                            <input class="form-check-input" type="checkbox" name="<%= categ.categoryName %>" id="<%= categ.categoryName %>" value="">
-                                            <label class="form-check-label" for="<%= categ.categoryName %>"><span><%= categ.categoryName %></span></label>
-                                            <br>
-                                        <% }) %>    
-                                        
-                                    </div>
                                     <label class="fw-900">Size</label>
                                     <div class="custome-checkbox">
-                                        <input class="form-check-input" type="checkbox" name="55Inches" id="55Inches" value="">
-                                        <label class="form-check-label" for="55Inches"><span>55 Inches</span></label>
+                                        <input class="form-check-input" type="checkbox" name="inches55" id="inches55" value="55 inches">
+                                        <label class="form-check-label" for="inches55"><span>55 Inches</span></label>
                                         <br>
-                                        <input class="form-check-input" type="checkbox" name="65Inches" id="65Inches" value="">
-                                        <label class="form-check-label" for="65Inches"><span>65 Inches</span></label>
+                                        <input class="form-check-input" type="checkbox" name="inche65" id="inches65" value="65 inches">
+                                        <label class="form-check-label" for="inches65"><span>65 Inches</span></label>
                                         <br>
-                                        <input class="form-check-input" type="checkbox" name="75Inches" id="75Inches" value="">
-                                        <label class="form-check-label" for="75Inches"><span>75 Inches</span></label>
+                                        <input class="form-check-input" type="checkbox" name="inches75" id="inches75" value="75 inches">
+                                        <label class="form-check-label" for="inches75"><span>75 Inches</span></label>
                                         <br>
-                                        <input class="form-check-input" type="checkbox" name="85Inches" id="85Inches" value="">
-                                        <label class="form-check-label" for="85Inches"><span>85 Inches</span></label>
+                                        <input class="form-check-input" type="checkbox" name="inches85" id="inches85" value="85 inches">
+                                        <label class="form-check-label" for="inches85"><span>85 Inches</span></label>
                                     </div>
                                     <label class="fw-900 mt-15">Resolution</label>
                                     <div class="custome-checkbox">
-                                        <input class="form-check-input" type="checkbox" name="720p" id="720p" value="">
+                                        <input class="form-check-input" type="checkbox" name="720p" id="720p" value="720p">
                                         <label class="form-check-label" for="720p"><span>720p</span></label>
                                         <br>
-                                        <input class="form-check-input" type="checkbox" name="1080p" id="1080p" value="">
+                                        <input class="form-check-input" type="checkbox" name="1080p" id="1080p" value="1080p">
                                         <label class="form-check-label" for="1080p"><span>1080p</span></label>
                                         <br>
-                                        <input class="form-check-input" type="checkbox" name="4K" id="4K" value="">
+                                        <input class="form-check-input" type="checkbox" name="4K" id="4K" value="4K">
                                         <label class="form-check-label" for="4K"><span>4K</span></label>
                                         <br>
-                                        <input class="form-check-input" type="checkbox" name="8K" id="8K" value="">
+                                        <input class="form-check-input" type="checkbox" name="8K" id="8K" value="8K">
                                         <label class="form-check-label" for="8K"><span>8K</span></label>
                                     </div>
                                 </div>
                             </div>
-                            <a href="" class="btn btn-sm btn-default"><i class="fi-rs-filter mr-5"></i> Fillter</a>
-                        </div>
+                            <button type="submit" class="btn btn-sm btn-default"><i class="fi-rs-filter mr-5"></i> Fillter</button>
+                        </form>
                         <!-- Product sidebar Widget -->
                         <div class="sidebar-widget product-sidebar  mb-30 p-30 bg-grey border-radius-10">
                             <div class="widget-header position-relative mb-20 pb-10">
@@ -180,14 +172,7 @@
                                 </div>
                             <% }) %>
                         </div>
-                        <div class="banner-img wow fadeIn mb-45 animated d-lg-block d-none">
-                            <img src="../../Public/userAssets/imgs/banner/banner-11.jpg" alt="">
-                            <div class="banner-text">
-                                <span>Women Zone</span>
-                                <h4>Save 17% on <br>Office Dress</h4>
-                                <a href="shop-grid-right.html">Shop Now <i class="fi-rs-arrow-right"></i></a>
-                            </div>
-                        </div>
+                        
                     </div>
                 </div>
             </div>

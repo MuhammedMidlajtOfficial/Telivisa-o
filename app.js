@@ -26,7 +26,6 @@ app.set('views', path.join(__dirname, 'Views/'));
 //load static files
 app.use(express.static(path.join(__dirname , 'Public')) )
 
-
 app.use('/',userRouter)
 app.use('/admin',adminRouter)
 

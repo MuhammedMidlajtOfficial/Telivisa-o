@@ -17,6 +17,7 @@ adminRouter.get('/adminLogout',adminConstroller.getadminLogout)
 //Admin dashboard
 adminRouter.get('/adminDashboard',auth.isAdmin,adminConstroller.getAdminDashboard)
 
+
 // View product
 adminRouter.get('/products',auth.isAdmin,adminProductController.getAdminProducts)
 //Product Add
@@ -47,6 +48,7 @@ adminRouter.post('/postAdminEditCategories',auth.isAdmin,adminCategoryController
 // Category Block and Unblock
 adminRouter.get('/adminBlockCategories',auth.isAdmin,adminCategoryController.getAdminBlockCategories)
 adminRouter.get('/adminUnblockCategories',auth.isAdmin,adminCategoryController.getAdminUnblockCategories)
+
 
 // User View
 adminRouter.get('/adminUser',auth.isAdmin,adminUserController.getAdminUser)

@@ -229,11 +229,11 @@
                                     <td style="display: flex; justify-content: flex-end;">
                                         <% if(product.productHoarding === "Inactive") {%>
                                             <button class="btn btn-danger col-lg-6" style="width: 70px; align-items: center; display: flex; justify-content: center;">
-                                                <a href="/admin/adminActiveHoarding?id=<%= product._id %>" style="text-decoration: none; color: aliceblue;">Active</a>
+                                                <a data-userid="<%= product._id %>" class="blockConfirmation" style="text-decoration: none; color: aliceblue;">Active</a>
                                             </button>
                                         <% } else if(product.productHoarding === "Active") { %>
                                             <button class="btn btn-success col-lg-6" style="width: 70px; align-items: center; display: flex; justify-content: center;">
-                                                <a href="/admin/adminInactiveHoarding?id=<%= product._id %>" style="text-decoration: none; color: aliceblue;">Inactive</a>
+                                                <a data-userid="<%= product._id %>" class="unBlockConfirmation" style="text-decoration: none; color: aliceblue;">Inactive</a>
                                             </button>
                                         <% } %>
                                     </td>
@@ -282,6 +282,50 @@
     <script src="/adminAsset/js/main.js" type="text/javascript"></script>
 </body>
 
+<script>
+    //  confirmation
+    function deleteConfirmation(){
+        return confirm("Are you sure?");
+    }
+
+// Block confirmation
+    document.addEventListener("DOMContentLoaded", function () {
+        const blockButton = document.querySelectorAll('.blockConfirmation');
+
+        blockButton.forEach((elem)=>{
+            elem.addEventListener('click',()=>{
+                const queryValue = deleteConfirmation();
+                const userId = elem.dataset.userid;
+
+                if(queryValue){
+                  const url = "/admin/adminActiveHoarding?id="+userId+"&confirmation=" + encodeURIComponent(queryValue);
+                  elem.href = url;
+                }else{
+                  console.log('Confirmation : false');
+                }
+            })
+        })
+    })
+
+// Unblock confirmation
+    document.addEventListener("DOMContentLoaded", function () {
+        const blockButton = document.querySelectorAll('.unBlockConfirmation');
+
+        blockButton.forEach((elem)=>{
+            elem.addEventListener('click',()=>{
+                const queryValue = deleteConfirmation();
+                const userId = elem.dataset.userid;
+
+                if(queryValue){
+                  const url = "/admin/adminInactiveHoarding?id="+userId+"&confirmation=" + encodeURIComponent(queryValue);
+                  elem.href = url;
+                }else{
+                  console.log('Confirmation : false');
+                }
+            })
+        })
+    })
+</script>
 
 <!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-products-list.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:12 GMT -->
 </html>

@@ -34,6 +34,9 @@
                                         <% if( locals.passwordChanged ){ %>
                                             <div class="alert alert-success">Password changed successfully</div>
                                         <% } %>
+                                        <% if( locals.userLoggedout ){ %>
+                                            <div class="alert alert-success text-danger">User logged out successfully</div>
+                                        <% } %>
 
                                         <form method="post" action="/postUserLogin">
                                             <div class="form-group">

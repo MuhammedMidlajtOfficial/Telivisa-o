@@ -119,12 +119,23 @@ module.exports.postAdminEditProduct = async (req,res)=>{
 }
 
 module.exports.getAdminDeleteProductImage = async (req,res)=>{
-    const id = req.query.id;
-    const imagePath = req.query.image;
-    await ProductSchema.updateOne({ _id : id },{$pull:{ imageUrl:{path : imagePath }}})
-    const product = await ProductSchema.findOne({ _id : id})
-    const category = await categorySchema.find({})
-    res.render('Admin/adminEditProduct', { product, category } )
+    try {
+        const id = req.query.id;
+        const imagePath = req.query.image;
+        const existProduct = await ProductSchema.findOne({ _id : id})
+
+        if(existProduct.imageUrl.length > 1){
+            await ProductSchema.updateOne({ _id : id },{$pull:{ imageUrl:{path : imagePath }}})
+
+            fs.unlinkSync(imagePath);
+            console.log('image successfully deleted from Public/uploads' );
+        }
+        const product = await ProductSchema.findOne({ _id : id})
+        const category = await categorySchema.find({})
+        res.render('Admin/adminEditProduct', { product, category } )
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 module.exports.getAdminBlockProduct = async (req,res)=>{

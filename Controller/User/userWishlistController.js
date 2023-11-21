@@ -2,7 +2,7 @@ const ProductSchema = require('../../Model/ProductSchema')
 const wishlistSchema = require('../../Model/wishlistSchema')
 const userSchema = require('../../Model/userSchema')
 
-module.exports.getWishlist = async (req,res)=>{
+module.exports.getWishlist = async (req,res,next)=>{
     try {
         const user = await userSchema.findOne({ email : req.session.user })
         const wishlistProducts = await wishlistSchema.findOne(
@@ -15,11 +15,13 @@ module.exports.getWishlist = async (req,res)=>{
         res.render('User/user-wishlist',{ products, changeLoginToProfile:true })
     } catch (error) {
         console.log(error);
+        next('There is an error occured , can\'t get wishlist')
     }
 }
 
-module.exports.getAddToWishlist = async (req,res)=>{
-    const ProductId = req.query.id;
+module.exports.getAddToWishlist = async (req,res,next)=>{
+    try {
+        const ProductId = req.query.id;
     const user = await userSchema.findOne({ email : req.session.user })
     const existingUser = await wishlistSchema.findOne({ customerId : user._id })
 
@@ -46,9 +48,13 @@ module.exports.getAddToWishlist = async (req,res)=>{
         await wishlist.save();
         res.redirect('/')
     }
+    } catch (error) {
+        console.log(error);
+        next('There is an error occured , can\'t add product to wishlist')
+    }
 }
 
-module.exports.getWishlistDelete = async (req,res)=>{
+module.exports.getWishlistDelete = async (req,res,next)=>{
     try {
         const productId = req.query.id;
         const user = await userSchema.findOne({ email : req.session.user})
@@ -57,5 +63,6 @@ module.exports.getWishlistDelete = async (req,res)=>{
         res.redirect('/wishlist')
     } catch (error) {
         console.log(error);
+        next('There is an error occured , can\'t delete product from wishlist')
     }
 }
