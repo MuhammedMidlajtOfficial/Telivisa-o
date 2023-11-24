@@ -4,6 +4,7 @@ const adminConstroller = require('../Controller/Admin/adminController')
 const adminProductController = require('../Controller/Admin/adminProductController')
 const adminCategoryController = require('../Controller/Admin/adminCategoryController')
 const adminUserController = require('../Controller/Admin/adminUserController')
+const adminOrderController = require('../Controller/Admin/adminOrderController')
 const productImageUploadMulter = require('../Middleware/multerMiddleware')
 const auth = require('../Middleware/auth')
 
@@ -55,6 +56,15 @@ adminRouter.get('/adminUser',auth.isAdmin,adminUserController.getAdminUser)
 // User Block & Unblock
 adminRouter.get('/adminBlockUser',auth.isAdmin,adminUserController.getAdminBlockUser)
 adminRouter.get('/adminUnblockUser',auth.isAdmin,adminUserController.getAdminUnblockUser)
+
+
+
+// Order View
+adminRouter.get('/adminOrders', auth.isAdmin, adminOrderController.getAdminOrders)
+// Sigle Order View
+adminRouter.get('/adminViewOrder', auth.isAdmin, adminOrderController.getAdminViewOrder )
+// Change Status
+adminRouter.post('/adminUpdateOrderStatus', auth.isAdmin, adminOrderController.postAdminUpdateOrderStatus)
 
 
 module.exports = adminRouter;

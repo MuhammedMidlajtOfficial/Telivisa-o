@@ -1,0 +1,216 @@
+﻿<%- include('../Partials/userHeader')  -%>
+
+
+
+    <main class="main">
+        <div class="page-header breadcrumb-wrap">
+            <div class="container">
+                <div class="breadcrumb">
+                    <a href="/" rel="nofollow">Home</a>
+                    <span></span>Cart
+                </div>
+            </div>
+        </div>
+        <section class="mt-50 mb-50">
+            <div class="container">
+                <!-- Alert -->
+                <div class="text-danger" id="qtyGtZero" style="font-size: large; display: none;">Quantity must be greater than zero</div>
+                
+                <div class="row">
+                    <div class="col-12">
+                        <div class="table-responsive">
+                            <% if(cart?.products.length) {%>
+                            <table class="table shopping-summery text-center clean">
+                                <thead>
+                                    <tr class="main-heading">
+                                        <th scope="col">Image</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col">Quantity</th>
+                                        <th scope="col">Subtotal</th>
+                                        <th scope="col">Remove</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                        <% cart.products.forEach((product)=>{ %>
+                                            <tr>
+                                                <td class="image product-thumbnail"><img src="<%= product.productId.imageUrl[0].path %>" alt="#"></td>
+                                                <td class="product-des product-name">
+                                                    <h5 class="product-name"><a href="/viewProduct?id=<%= product.productId._id %>"><%= product.productId.productName %></a></h5>
+                                                    <p class="text-xs"><%= product.productId.productBrand %> | <%= product.productId.productSize %> | <%= product.productId.productResolution %> | <%= product.productId.productCategory %> </p>
+                                                </td>
+                                                <td class="price" data-title="Price"><span>₹</span><span class="productPrice"><%= product.productId.productPrice %></span></td>
+                                                <td class="text-center" data-title="Stock">
+                                                    <!-- <div class="detail-qty border radius  m-auto"> -->
+                                                        <a data-productId="<%= product.productId._id %>" class="qty-down"><i class="fi-rs-angle-small-down"></i></a>
+                                                            <span class=""><%= product.quantity %></span>
+                                                        <a data-productId="<%= product.productId._id %>" class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
+                                                    <!-- </div> -->
+                                                </td>
+                                                <td class="text-right" data-title="Cart">
+                                                    <span>₹</span><span id="Subtotal" class="price-Span"><%= product.productId.productPrice * product.quantity %></span>
+                                                </td>
+                                                <td class="action" data-title="Remove"><a href="/deleteCartProduct?id=<%= product.productId._id %>" class="text-muted"><i class="fi-rs-trash text-danger"></i></a></td>
+                                            </tr>
+                                        <% }) %>
+                                    </tbody>
+                                </table>
+                                <% }else{ %>
+                                    <div class="text-danger" style="font-size: 20px;"> <h3 class="text-warning">Checkout page is waiting for you.....!</h3><br> Please add any products. Otherwise you can't go to checkout page</div>
+                                <% } %>
+                        </div>
+                        <div class="divider center_icon mt-20 mb-50"><i class="fi-rs-fingerprint"></i></div>
+                        <div class="row mb-50">
+                            <div class="col-lg-6 col-md-12">
+                                <div class="border p-md-4 p-30 border-radius cart-totals">
+                                    <div class="heading_s1 mb-3">
+                                        <h4>Cart Totals</h4>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="cart_total_label">Shipping</td>
+                                                    <td class="cart_total_amount"> <i class="ti-gift mr-5"></i> Free Shipping</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="cart_total_label">Total</td>
+                                                    <td class="cart_total_amount"><strong><span class="font-xl fw-900 text-brand" id="Total"></span></strong></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <a class="btn" href="/"><i class="fi-rs-shopping-bag mr-10"></i>Continue Shopping</a>
+                                    <a href="/userCheckout" class="btn "> <i class="fi-rs-box-alt mr-10"></i> Proceed To CheckOut</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function(){
+        function grandTotal(){
+            let grandTotal = 0;
+            document.querySelectorAll('#Subtotal').forEach((elem)=>{
+                grandTotal =Number(grandTotal) + Number(elem.textContent)
+            })
+            console.log(grandTotal);
+            document.getElementById('Total').innerHTML = grandTotal
+        }
+        grandTotal();
+
+
+        // Cart Quantity Decrease
+        document.querySelectorAll('.qty-down').forEach((down)=>{
+            down.addEventListener('click',function(event){
+
+                event.preventDefault();
+
+                const productId = down.getAttribute('data-productId')
+
+                const quantitySpan = document.querySelector(`[data-productId="${productId}"] + span`);
+                let currentQuantity = parseInt(quantitySpan.textContent);
+
+                // Ensure the quantity does not go below 0
+                if (currentQuantity > 1) {
+                    
+
+                    fetch(`/decreaseCartQuantity?id=${productId}`,{
+                        method: "get",
+                        headers: {
+                          "Content-Type": "application/json",
+                        },
+                    })
+
+                    .then((response)=>{
+                        if(!response.ok){
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        return response.json()
+                    })
+
+                    .then((data)=>{
+                        console.log("quatity updated", data);
+
+                        // SubTotal
+                        const subTotal = data
+                        console.log("subtotal==  "+subTotal);
+
+                        const quantitySpan = down.nextElementSibling;
+                        quantitySpan.textContent =data.updatedQty;
+
+                        // update subtotal value
+                        const row = down.closest('tr')
+                        const priceSpan = row.querySelector('.price-Span')
+                        priceSpan.textContent = data.subTotal;
+                        // -end SubTotal
+
+                        grandTotal();
+                    })
+                    .catch((err)=>{
+                        console.log(err);
+                    })
+                }else{
+                    document.getElementById('qtyGtZero').style.display = 'block'
+                }
+            })
+        })
+        
+        // Cart Quantity Increase
+        document.querySelectorAll('.qty-up').forEach((down)=>{
+            down.addEventListener('click',function(event){
+
+                event.preventDefault();
+                
+                // Qnty zero block alert 
+                document.getElementById('qtyGtZero').style.display = 'none'
+                
+                const productId = down.getAttribute('data-productId')
+                console.log(productId);
+
+                fetch(`/increaseCartQuantity?id=${productId}`,{
+                    method: "get",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                })
+
+                .then((response)=>{
+                    if(!response.ok){
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json()
+                })
+
+                .then((data)=>{
+                    console.log("quatity updated", data);
+
+                    // SubTotal
+                    const subTotal = data
+                    console.log("subtotal==  "+subTotal);
+
+                    const quantitySpan = down.previousElementSibling;
+                    quantitySpan.textContent = data.updatedQty;
+                    // update subtotal value
+                    const row = down.closest('tr')
+                    const priceSpan = row.querySelector('.price-Span')
+                    priceSpan.textContent = data.subTotal;
+                    // -end SubTotal
+
+                    grandTotal();
+                })
+                .catch((err)=>{
+                    console.log(err);
+                })
+            })
+        })
+    })
+        
+
+</script>
+<%- include('../Partials/userFooter')  -%>

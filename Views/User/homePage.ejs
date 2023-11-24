@@ -141,7 +141,7 @@
                 </div>
             </div>
         </section>
-
+        <!-- Featured Popular New  -->
         <section class="product-tabs section-padding position-relative wow fadeIn animated">
             <div class="bg-square"></div>
             <div class="container">
@@ -175,7 +175,7 @@
                                             </div>
                                             <div class="product-action-1">
                                                 <!-- <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="fi-rs-eye"></i></a> -->
-                                                <a aria-label="Add To Wishlist" class="action-btn hover-up" href="/addToWishlist?id=<%= product._id %>"><i class="fi-rs-heart"></i></a>
+                                                <a aria-label="Add To Wishlist" class="action-btn hover-up addToWishlis" href="/addToWishlist?id=<%= product._id %>"><i class="fi-rs-heart"></i></a>
                                             </div>
                                             <div class="product-badges product-badges-position product-badges-mrg">
                                                 <span class="hot">Featured</span>
@@ -197,13 +197,13 @@
                                                 <span class="save-price  font-md color3 ml-15 text-danger" style="font-size: small;"><%=Math.round(100-((product.productPrice /product.productPromoPrice)*100))%>% off</span>
                                             </div>
                                             <div class="product-action-1 show">
-                                                <a aria-label="Add To Cart" class="action-btn hover-up" href="shop-cart.html"><i class="fi-rs-shopping-bag-add"></i></a>
+                                                <a aria-label="Add To Cart" class="action-btn hover-up addToCart" data-productId="<%= product._id %>" ><i class="fi-rs-shopping-bag-add"></i></a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             <% }) %>
-                        </div>
+                        </div>  
                         <!--End product-grid-4-->
                     </div>
                     <!--Popular-->
@@ -1478,5 +1478,79 @@
 
     </main>
     
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function(){
+
+            // Add to cart
+            document.querySelectorAll('.addToCart').forEach((element)=>{
+                element.addEventListener('click', function(event){
+                  
+                    event.preventDefault();
+                    const productId = element.getAttribute('data-productId');
+                    fetch(`addToCart?id=${productId}`)
+                    
+                    .then((response)=>{
+                        if(!response.ok){
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        return response.json()
+                    })
+
+                    .then((data)=>{
+                        console.log("Added to cart:", data);
+                        Swal.fire({
+                            position : 'top-center',
+                            icon : 'success',
+                            title : 'Added to cart',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                    })
+
+                    .catch((err)=>{
+                        console.log(err);
+                    })
+
+                })
+            })
+
+            // Add to wishlist 
+            document.querySelectorAll('.addToCart').forEach((element)=>{
+                element.addEventListener('click', function(event){
+                  
+                    event.preventDefault();
+                    const productId = element.getAttribute('data-productId');
+                    fetch(`/addToCart?id=${productId}`)
+                    
+                    .then((response)=>{
+                        if(!response.ok){
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        return response.json()
+                    })
+
+                    .then((data)=>{
+                        console.log("Added to cart:", data);
+                        Swal.fire({
+                            position : 'top-center',
+                            icon : 'success',
+                            title : 'Added to cart',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                    })
+
+                    .catch((err)=>{
+                        console.log(err);
+                    })
+
+                })
+            })
+
+
+        })
+    </script>
 
 <%- include('../Partials/userFooter')  -%>

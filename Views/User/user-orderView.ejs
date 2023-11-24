@@ -1,0 +1,230 @@
+<%- include('../Partials/userHeader')  -%>
+
+
+
+    <main class="main">
+        <div class="page-header breadcrumb-wrap">
+            <div class="container">
+                <div class="breadcrumb">
+                    <a href="/">Home</a>
+                    <span></span><a href="/userProfile">Profile</a>
+                    <span></span>Order view
+                </div>
+            </div>
+        </div>
+        <section class="mt-50 mb-50">
+            <div class="container">
+                <div class="row">
+                    <!-- Address -->
+                    <div class="col-md-12 ">
+                        <div class="order_review">
+                            <div class="mb-20">
+                                <H3 class="text-brand" style="text-align: center; font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">Order view</H3>
+                            </div>
+                            <div class="OrderDetails row">
+                                <!-- Left -->
+                                <div class="col-lg-6">
+                                    <% order.products.forEach((product)=>{ %>
+                                        <div class="productDetails order_review row mb-10">
+                                            <div class="img col-lg-5" style="margin-right: 10px;">
+                                                <img src="<%= product.productId.imageUrl[0].path %>" width="200px"  alt="">
+                                            </div>
+                                            <div class="details col-lg-6 text-brand" style="font-size:15px; text-align: center; display: flex; justify-content: center; flex-direction: column;">
+                                                <div style="line-height: 1.1;" class="mb-10">
+                                                    <span style="font-size:23px; font-weight: bold;"><%= product.productId.productName %></span><br>
+                                                    <%= product.productId.productBrand %> | <%= product.productId.productSize %> | <%= product.productId.productResolution %><br>
+                                                </div>
+                                                <div class="">
+                                                    <span class="text-danger"><span style="color: rgb(47, 71, 44); font-weight: bold; font-size: 20px;">Price :</span> ₹<%= product.productPrice %> </span> <br>
+                                                    <span class="text-danger"><span style="color: rgb(47, 71, 44); font-weight: bold; font-size: 20px;">Quantity :</span> <%= product.quantity %> </span> <br>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <% }) %>
+                                </div>
+                                <!-- Right -->
+                                <div class="col-lg-6">
+                                    <!-- Payment details -->
+                                    <div class="order_review mb-10">
+                                        <div class="address">
+                                            <div class="text-brand mb-10" style=" font-size: 20px; font-weight: bold;"><u>Shipping details</u></div>
+                                            <div>
+                                                <span style="font-size: 17px; color: rgb(47, 71, 44); font-weight: bold;"><%= order.address.name %></span><br>
+                                                <span><%= order.address.street %></span><br>
+                                                <span><%= order.address.city %></span><br>
+                                                <span><%= order.address.state %></span><br>
+                                                <span><%= order.address.pinCode %></span><br>
+                                                <span><span>Email : </span><%= order.address.email %></span><br>
+                                                <span><span>Phn No  : </span><%= order.address.phnNumber %> , <%= order.address.alterPhnNumber %></span><br>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Order Details -->
+                                    <div class="order_review">
+                                        <div class="OrderDetails">
+                                            <div class="text-brand mb-10" style=" font-size: 20px; font-weight: bold;"><u>Order details</u></div>
+                                            <div style=" font-size: 15px;">
+                                                <div class="row">
+                                                    <div class="col-lg-3">Total amount</div>
+                                                    <div class="col-lg-1">:</div>
+                                                    <div class="col-lg-6 text-danger">₹<%= order.totalAmount %></div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-3">Ordered date</div>
+                                                    <div class="col-lg-1">:</div>
+                                                    <div class="col-lg-6"><%= order.createdAt.toLocaleDateString('en-US') %></div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-3">Order status</div>
+                                                    <div class="col-lg-1">:</div>
+                                                    <div class="col-lg-6 text-danger"><%= order.orderStatus %></div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-3">Payment status</div>
+                                                    <div class="col-lg-1">:</div>
+                                                    <div class="col-lg-6 text-warning"><%= order.paymentStatus %></div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-3">Payment method</div>
+                                                    <div class="col-lg-1">:</div>
+                                                    <div class="col-lg-6"><%= order.paymentMethod %></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- // Return & cancel button -->
+                                    <div class="mt-10">
+                                        <% if( order.orderStatus === 'Delivered' ) {%>
+                                            <a><div class="btn mx-5 returnBtn updateBtn" data-orderId="<%= order._id %>" style="background-color: rgb(219, 177, 27); border: none;">Return product</div></a>
+                                        <% }else if( order.orderStatus !== 'Cancelled' && order.orderStatus !== 'Returned'){ %>
+                                            <a ><div class="btn mx-5 cancelBtn updateBtn" data-orderId="<%= order._id %>" style="background-color: rgb(204, 44, 44); border: none;">Cancel Order</div></a>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+
+    <script>
+
+        function Confirmation(){
+            return confirm("Are you sure?");
+        }
+
+        document.addEventListener('DOMContentLoaded',function(){
+
+            //Cancel order
+            const canclBtn = document.querySelector('.cancelBtn')
+            if(canclBtn){
+                canclBtn.addEventListener('click',function(event){
+
+                    // Confirmation
+                    const queryValue = Confirmation();
+                    if(!queryValue){
+                        event.preventDefault();
+                    }else{
+                        event.preventDefault();
+    
+                        const orderId = document.querySelector('.cancelBtn').getAttribute('data-orderId')
+                        console.log(orderId);
+                        if (orderId !== null){
+                            fetch(`/cancelOrder?id=${orderId}`,{
+                                method : 'get',
+                                headers : {
+                                    "Content-Type": "application/json"
+                                },
+                            })
+            
+                            .then((response)=>{
+                                if(!response.ok){
+                                    throw new Error(`HTTP error! Status: ${response.status}`);
+                                }
+                                return response.json();
+                            })
+            
+                            .then((data)=>{
+                                console.log('Status updated',data);
+            
+                                Swal.fire({
+                                    position : 'top-center',
+                                    icon : 'success',
+                                    title : 'Order cancelled successfullly',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                })
+                                
+                                setTimeout(()=>{
+                                    window.location.href = `/orderView?orderId=${orderId}`
+                                },1500)
+                            })
+    
+                            .catch((err)=>{
+                                console.log(err);
+                            })
+                        }
+                    }
+                })
+            }
+
+
+            // Return Order
+            const returnBtn = document.querySelector('.returnBtn')
+            if (returnBtn) {
+                returnBtn.addEventListener('click', function(event) {
+
+                // Confirmation
+                const queryValue = Confirmation();
+                if(!queryValue){
+                    event.preventDefault();
+                }else{
+                    event.preventDefault();
+    
+                    const orderId = document.querySelector('.returnBtn').getAttribute('data-orderId')
+                    console.log(orderId);
+                    if (orderId !== null){
+                        fetch(`/returnOrder?id=${orderId}`,{
+                            method : 'get',
+                            headers : {
+                                "Content-Type": "application/json"
+                            },
+                        })
+                    
+                        .then((response)=>{
+                            if(!response.ok){
+                                throw new Error(`HTTP error! Status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                    
+                        .then((data)=>{
+                            console.log('Status updated',data);
+                        
+                            Swal.fire({
+                                position : 'top-center',
+                                icon : 'success',
+                                title : 'Order returned successfullly',
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+    
+                            setTimeout(()=>{
+                                window.location.href = `/orderView?orderId=${orderId}`
+                            },1500)
+                        })
+    
+                        .catch((err)=>{
+                                console.log(err);
+                            })
+                        }
+                    }
+                })
+            }
+        })
+    </script>
+<%- include('../Partials/userFooter')  -%>

@@ -22,32 +22,33 @@ module.exports.getWishlist = async (req,res,next)=>{
 module.exports.getAddToWishlist = async (req,res,next)=>{
     try {
         const ProductId = req.query.id;
-    const user = await userSchema.findOne({ email : req.session.user })
-    const existingUser = await wishlistSchema.findOne({ customerId : user._id })
+        const user = await userSchema.findOne({ email : req.session.user })
+        const existingUser = await wishlistSchema.findOne({ customerId : user._id })
 
-    if(existingUser){
-        const existingProduct = existingUser.wishlistProducts.find((product)=>{
-            return product.productId.toString() === ProductId
-        })
-        if (existingProduct) {
-            console.log("Product already exist in wish list");
-            res.redirect('/')
-        }else{
-            try {
-                const result = await wishlistSchema.updateOne({ customerId : user._id },{$push:{ wishlistProducts:{productId : ProductId }}})
+        if(existingUser){
+            const existingProduct = existingUser.wishlistProducts.find((product)=>{
+                return product.productId.toString() === ProductId
+            })
+            
+            if (existingProduct) {
+                console.log("Product already exist in wish list");
                 res.redirect('/')
-            } catch (error) {
-                console.log(error);
+            }else{
+                try {
+                    const result = await wishlistSchema.updateOne({ customerId : user._id },{$push:{ wishlistProducts:{productId : ProductId }}})
+                    res.redirect('/')
+                } catch (error) {
+                    console.log(error);
+                }
             }
+        }else{
+            const wishlist = await new wishlistSchema( {
+                customerId : user._id,
+                wishlistProducts : [{ productId : ProductId }]
+            })
+            await wishlist.save();
+            res.status(200).json('Added to wishlist')
         }
-    }else{
-        const wishlist = await new wishlistSchema( {
-            customerId : user._id,
-            wishlistProducts : [{ productId : ProductId }]
-        })
-        await wishlist.save();
-        res.redirect('/')
-    }
     } catch (error) {
         console.log(error);
         next('There is an error occured , can\'t add product to wishlist')

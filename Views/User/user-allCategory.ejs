@@ -67,7 +67,7 @@
                                             </div>
                                             <p class="mt-15" style="width: 70ch; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;"><%= product.productDescription %></p>
                                             <div class="product-action-1 show">
-                                                <a aria-label="Buy now" class="action-btn" href="shop-cart.html"><i class="fi-rs-shopping-bag-add"></i>Add to Cart</a>
+                                                <a aria-label="Buy now" data-productId="<%= product._id %>" class="action-btn addToCart"><i class="fi-rs-shopping-bag-add"></i>Add to Cart</a>
                                             </div>
                                         </div>
                                     </a>
@@ -180,5 +180,39 @@
     </main>
     
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function(){
+             document.querySelectorAll('.addToCart').forEach((element)=>{
+                element.addEventListener('click', function(event){
+                  
+                    event.preventDefault();
+                    const productId = element.getAttribute('data-productId');
+                    fetch(`addToCart?id=${productId}`)
+                    
+                    .then((response)=>{
+                        if(!response.ok){
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        return response.json()
+                    })
 
+                    .then((data)=>{
+                        console.log("Added to cart:", data);
+                        Swal.fire({
+                            position : 'top-center',
+                            icon : 'success',
+                            title : 'Added to cart',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                    })
+
+                    .catch((err)=>{
+                        console.log(err);
+                    })
+
+                })
+            })
+        })
+    </script>
 <%- include('../Partials/userFooter')  -%>

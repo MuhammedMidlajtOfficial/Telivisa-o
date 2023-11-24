@@ -1,0 +1,234 @@
+﻿<%- include('../Partials/userHeader')  -%>
+
+
+    <main class="main">
+        <div class="page-header breadcrumb-wrap">
+            <div class="container">
+                <div class="breadcrumb">
+                    <a href="/" rel="nofollow">Home</a>
+                    <span></span> <a href="/cartt">Cart</a>
+                    <span></span> Checkout
+                </div>
+            </div>
+        </div>
+        <section class="mt-50 mb-50">
+            <div class="container">
+                <div class="row">
+                    <!-- Address -->
+                    <div class="col-md-6 ">
+                        <div class="order_review">
+                            <div class="col-lg-8 mb-20">
+                                <h4 class="text-brand">Your Address</h4>
+                            </div>
+                            <div class="row">
+                                <% if( addressObj ){%>
+                                    <% if( addressObj.address.length > 0) {%>
+                                        <% addressObj.address.forEach((addr, index)=>{ %> 
+                                            <div class="col-lg-6">
+                                                <!-- <form action=""> -->
+                                                    <div class="card mb-10">
+                                                        <div class="card-header">
+                                                            <input type="radio" class="selectAddress" id="selectAddress" data-addressId="<%= addr._id %>" style="height:20px; width:20px; vertical-align: middle; margin-right: 10px;" name="selectAddress" <%= index == 0 ? 'checked' : '' %>/>
+                                                            <span class="mb-0">Address</span>
+                                                        </div>
+                                                        <div class="text-danger" id="addressValidation" style="display: none;">Please select an address</div>
+                                                        <div class="card-body">
+                                                            <label for="selectAddress">
+                                                                <address>
+                                                                    <%= addr.name %><br>
+                                                                    <%= addr.street %><br>
+                                                                    <%= addr.city %><br>
+                                                                    <%= addr.state %><br>
+                                                                    <%= addr.pinCode %><br>
+                                                                    Phone No : <%= addr.phnNumber %><br>
+                                                                    Alter Phone No : <%= addr.alterPhnNumber %><br>
+                                                                    Email : <%= addr.email %><br>
+                                                                </address>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                <!-- </form> -->
+                                            </div>
+                                        <% }) %>
+                                    <% } else { %>
+                                        <p class="mb-20 text-danger"><span style="font-size: large; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">Please add address.</span> Otherwise you can't place your orders</p>
+                                        <button class="btn btn-brand" style=" cursor: pointer; width: 200px;">
+                                            <a href="/addAddress?fromCheckout=fromCheckout" style="text-decoration: none; color: white; ">Add address</a>
+                                        </button>
+                                    <% } %>
+                                <% } else { %>
+                                    <p class="mb-20 text-danger"><span style="font-size: large; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">Please add address.</span> Otherwise you can't place your orders</p>
+                                    <button class="btn btn-brand" style=" cursor: pointer; width: 200px;">
+                                        <a href="/addAddress?fromCheckout=fromCheckout" style="text-decoration: none; color: white; ">Add address</a>
+                                    </button>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- CheckOut products -->
+                    <div class="col-md-6">
+                        <div class="order_review">
+                            <div class="mb-20">
+                                <h4 class="text-brand">Your Orders</h4>
+                            </div>
+                            <div class="table-responsive order_table text-center">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="2">Product</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% cart.products.forEach((product)=>{ %>
+                                            <tr>
+                                                <td class="image product-thumbnail"><img src="<%= product.productId.imageUrl[0].path %>" alt="#"></td>
+                                                <td>
+                                                    <h5><a href="/viewProduct?id=<%= product.productId._id %>"><%= product.productId.productName %></a></h5> <span class="product-qty">x <%= product.quantity %></span>
+                                                </td>
+                                                <td>₹<span id="Subtotal"><%= product.productId.productPrice * product.quantity %></span></td>
+                                            </tr>
+                                        <% }) %>
+                                        
+                                        
+                                        <tr>
+                                            <th>Shipping</th>
+                                            <td colspan="2"><em>Free Shipping</em></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Total</th>
+                                            <td colspan="2" class="product-subtotal"><span class="font-xl text-brand fw-900">₹</span><span class="font-xl text-brand fw-900" id="Total"></span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="bt-1 border-color-1 mt-30 mb-30"></div>
+                            <!-- Apply coupon -->
+                            <div class="row mb-20">
+                                <div class="col-lg-12">
+                                    <div class="toggle_info">
+                                        <span><i class="fi-rs-label mr-10"></i><span class="text-muted">Have a coupon?</span> <a href="#coupon" data-bs-toggle="collapse" class="collapsed" aria-expanded="false">Click here to enter your code</a></span>
+                                    </div>
+                                    <div class="panel-collapse collapse coupon_form " id="coupon">
+                                        <div class="panel-body">
+                                            <p class="mb-30 font-sm">If you have a coupon code, please apply it below.</p>
+                                            <form method="post">
+                                                <div class="form-group">
+                                                    <input type="text" id="couponCode" placeholder="Enter Coupon Code...">
+                                                </div>
+                                                <div class="form-group">
+                                                    <button class="btn  btn-md" name="login">Apply Coupon</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Payment -->
+                            <div class="payment_method col-lg-6">
+                                <div class="mb-20">
+                                    <h5>Payment</h5>
+                                </div>
+                                <div class="payment_option">
+                                    <div class="custome-radio">
+                                        <input type="radio" id="paymentMethod" checked name="paymentMethod" data-paymentMethod="Cash on delivery" style="height:20px; width:20px; vertical-align: middle; margin-right: 10px;"/>
+                                        <label for="paymentMethod" class="text-brand mb-10" style="font-size: large; font-weight: bold;">Cash on delivery</label><br>
+                                        <input type="radio" id="paymentMethod" name="paymentMethod" data-paymentMethod="Online payment" style="height:20px; width:20px; vertical-align: middle; margin-right: 10px;"/>
+                                        <label for="paymentMethod" class="text-brand mb-10" style="font-size: large; font-weight: bold;">Online payment</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="" id="placeOrder" class="btn btn-fill-out btn-block mt-30">Place Order</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+   
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        
+        // Grand Total
+        let grandTotal = 0;
+        document.querySelectorAll('#Subtotal').forEach((elem)=>{
+            grandTotal =Number(grandTotal) + Number(elem.textContent)
+        })
+        document.getElementById('Total').innerHTML = grandTotal
+        // -end Grand Total
+
+        document.getElementById('placeOrder').addEventListener('click', function(event) {
+            event.preventDefault();
+
+            // Find Address 
+            let selectedAddressId;
+            const checkedAddress = document.querySelector('.selectAddress:checked');
+            if (checkedAddress) {
+                selectedAddressId = checkedAddress.getAttribute('data-addressId');
+            }else{
+                event.preventDefault();
+                Swal.fire({
+                    position:'top-center',
+                    icon : 'error',
+                    title : 'Please select address',
+                    showConfirmButton : false,
+                    timer : 1500
+                })
+            }
+            // Find Payment Method 
+            let selectedPaymentMethod;
+            const PaymentMethod = document.querySelector('#paymentMethod:checked')
+            if(PaymentMethod){
+                selectedPaymentMethod = PaymentMethod.getAttribute('data-paymentMethod')
+            }else{
+                event.preventDefault();
+                Swal.fire({
+                    position:'top-center',
+                    icon : 'error',
+                    title : 'Please select payment method',
+                    showConfirmButton : false,
+                    timer : 1500
+                })
+            }
+            // Find Coupon code
+            let couponCode = document.getElementById('couponCode').textContent
+
+            fetch(`/placeOrder?addressId=${selectedAddressId}&paymentMethod=${selectedPaymentMethod}&couponCode=${couponCode}&totalAmount=${grandTotal}`,{
+                method : 'get',
+                headers : {
+                    "Content-Type":"application/json",
+                },
+            })
+
+            .then((response)=>{
+                if(!response.ok){
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json()
+            })
+
+            .then((data)=>{
+                console.log('Order placed successfully',data);
+
+                Swal.fire({
+                    position:"top-center",
+                    icon : 'success',
+                    title : 'Order placer successfully',
+                    showConfirmButton : false,
+                    timer : 1500
+                })
+
+                setTimeout(()=>{
+                    window.location.href = '/confirmedOrder'
+                },1500)
+
+            })
+
+            .catch((err)=>{
+                console.log(err);
+            })
+        });
+    });
+</script>
+
+<%- include('../Partials/userFooter')  -%>

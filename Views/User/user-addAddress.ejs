@@ -69,33 +69,34 @@
                                         <p class="mb-40 font-sm">Your address will be used for orders throughout this website</p>
                                         
                                         <form method="post" action="/postAddAddress">
+                                            <input type="text" name="fromCheckout" value="<%= locals.fromCheckout %>" style="display: none;">
                                             <div class="form-group">
-                                                <input type="text" id="name" name="name" placeholder="Full name ">
-                                                <div class="text-danger" id="validateName" style="display: none;">Please enter valid name</div>
+                                                <input type="text" id="addName" name="addName" placeholder="Full name ">
+                                                <div class="text-danger" id="validateAddName" style="display: none;">Please enter valid name</div>
                                             </div>
                                             <div class="form-group">
-                                                <input type="number" id="phnNumber" name="phnNumber" placeholder="Phone No.">
-                                                <div class="text-danger" id="validatephnNumber" style="display: none;">Please enter valid phone number</div>
+                                                <input type="number" id="addPhnNumber" name="addPhnNumber" placeholder="Phone No.">
+                                                <div class="text-danger" id="validateAddphnNumber" style="display: none;">Please enter valid phone number</div>
                                             </div>
                                             <div class="form-group">
-                                                <input type="number" id="alterPhnNumber" name="alterPhnNumber" placeholder="Alter Phone No.">
-                                                <div class="text-danger" id="validateAlterPhnNumber" style="display: none;">Please enter valid phone number</div>
+                                                <input type="number" id="addAlterPhnNumber" name="addAlterPhnNumber" placeholder="Alter Phone No.">
+                                                <div class="text-danger" id="validateAddAlterPhnNumber" style="display: none;">Please enter valid phone number</div>
                                             </div>
                                             <div class="form-group">
-                                                <input type="text" id="street" name="street" placeholder="Street address">
-                                                <div class="text-danger" id="validateStreetAddress" style="display: none;">Please enter valid phone number</div>
+                                                <input type="text" id="addStreet" name="addStreet" placeholder="Street address">
+                                                <div class="text-danger" id="validateAddStreetAddress" style="display: none;">Please enter valid phone number</div>
                                             </div>
                                             <div class="form-group">
-                                                <input type="text" id="city" name="city" placeholder="City/Town">
-                                                <div class="text-danger" id="validatephnNumber" style="display: none;">Please enter valid phone number</div>
+                                                <input type="text" id="addCity" name="addCity" placeholder="City/Town">
+                                                <div class="text-danger" id="validateAddCityName" style="display: none;">Please enter valid city name</div>
                                             </div>
                                             <div class="form-group">
-                                                <input type="text" id="state" name="state" placeholder="State">
-                                                <div class="text-danger" id="validateState" style="display: none;">Please enter valid state name</div>
+                                                <input type="text" id="addState" name="addState" placeholder="State">
+                                                <div class="text-danger" id="validateAddState" style="display: none;">Please enter valid state name</div>
                                             </div>
                                             <div class="form-group">
-                                                <input type="number" id="pinCode" name="pinCode" placeholder="PIN CODE">
-                                                <div class="text-danger" id="validatePinCode" style="display: none;">Please enter valid pin number</div>
+                                                <input type="number" id="addPinCode" name="addPinCode" placeholder="PIN CODE">
+                                                <div class="text-danger" id="validateAddPinCode" style="display: none;">Please enter valid pin number</div>
                                             </div>
 
                                             <div class="form-group">
@@ -141,7 +142,7 @@
                 document.getElementById('validatephnNumber').style.display = 'none';
             }
 
-            if (alterPhnNumber.trim() === "" || !phnNumberValidation(phnNumber)) {
+            if (alterPhnNumber.trim() === "" || !phnNumberValidation(alterPhnNumber)) {
                 document.getElementById('validateAlterPhnNumber').style.display = 'block';
                 event.preventDefault();
             } else {
@@ -170,88 +171,84 @@
             }
 
             if (pinCode.trim() === "" || !pinCodeValidation(pinCode)) {
-                document.getElementById('validatepassword').style.display = 'block';
+                document.getElementById('validatePinCode').style.display = 'block';
                 event.preventDefault();
             } else {
-                document.getElementById('validatepassword').style.display = 'none';
+                document.getElementById('validatePinCode').style.display = 'none';
             }
             
 
         });
     });
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelector('form[action="/postAddAddress"]').addEventListener('submit', function (event) {
+        const name = document.getElementById('addName').value;
+        const phnNumber = document.getElementById('addPhnNumber').value;
+        const alterPhnNumber = document.getElementById('addAlterPhnNumber').value;
+        const street = document.getElementById('addStreet').value;
+        const city = document.getElementById('addCity').value;
+        const state = document.getElementById('addState').value;
+        const pinCode = document.getElementById('addPinCode').value;
 
-    // Add Address
-    document.addEventListener('DOMContentLoaded', function () {
-        document.querySelector('form[action="/postEditAddress"]').addEventListener('submit', function (event) {
-            const name = document.getElementById('name').value;
-            const phnNumber = document.getElementById('phnNumber').value;
-            const alterPhnNumber = document.getElementById('alterPhnNumber').value;
-            const street = document.getElementById('street').value;
-            const city = document.getElementById('city').value;
-            const state = document.getElementById('state').value;
-            const pinCode = document.getElementById('pinCode').value;
+        if (name.trim() === "") {
+            document.getElementById('validateAddName').style.display = 'block';
+            event.preventDefault();
+        } else {
+            document.getElementById('validateAddName').style.display = 'none';
+        }
 
-            if (name.trim() === "") {
-                document.getElementById('validateName').style.display = 'block';
-                event.preventDefault();
-            } else {
-                document.getElementById('validateName').style.display = 'none';
-            }
+        if (phnNumber.trim() === "" || !phnNumberValidation(phnNumber)) {
+            document.getElementById('validateAddphnNumber').style.display = 'block';
+            event.preventDefault();
+        } else {
+            document.getElementById('validateAddphnNumber').style.display = 'none';
+        }
 
-            if (phnNumber.trim() === "" || !phnNumberValidation(phnNumber)) {
-                document.getElementById('validatephnNumber').style.display = 'block';
-                event.preventDefault();
-            } else {
-                document.getElementById('validatephnNumber').style.display = 'none';
-            }
+        if (alterPhnNumber.trim() === "" || !phnNumberValidation(alterPhnNumber)) {
+            document.getElementById('validateAddAlterPhnNumber').style.display = 'block';
+            event.preventDefault();
+        } else {
+            document.getElementById('validateAddAlterPhnNumber').style.display = 'none';
+        }
 
-            if (alterPhnNumber.trim() === "" || !phnNumberValidation(phnNumber)) {
-                document.getElementById('validateAlterPhnNumber').style.display = 'block';
-                event.preventDefault();
-            } else {
-                document.getElementById('validateAlterPhnNumber').style.display = 'none';
-            }
+        if (street.trim() === "") {
+            document.getElementById('validateAddStreetAddress').style.display = 'block';
+            event.preventDefault();
+        } else {
+            document.getElementById('validateAddStreetAddress').style.display = 'none';
+        }
 
-            if (street.trim() === "") {
-                document.getElementById('validateStreetAddress').style.display = 'block';
-                event.preventDefault();
-            } else {
-                document.getElementById('validateStreetAddress').style.display = 'none';
-            }
+        if (city.trim() === "") {
+            document.getElementById('validateAddCityName').style.display = 'block';
+            event.preventDefault();
+        } else {
+            document.getElementById('validateAddCityName').style.display = 'none';
+        }
 
-            if (city.trim() === "") {
-                document.getElementById('validateCityName').style.display = 'block';
-                event.preventDefault();
-            } else {
-                document.getElementById('validateCityName').style.display = 'none';
-            }
+        if (state.trim() === "") {
+            document.getElementById('validateAddState').style.display = 'block';
+            event.preventDefault();
+        } else {
+            document.getElementById('validateAddState').style.display = 'none';
+        }
 
-            if (state.trim() === "") {
-                document.getElementById('validateState').style.display = 'block';
-                event.preventDefault();
-            } else {
-                document.getElementById('validateState').style.display = 'none';
-            }
-
-            if (pinCode.trim() === "" || !pinCodeValidation(pinCode)) {
-                document.getElementById('validatepassword').style.display = 'block';
-                event.preventDefault();
-            } else {
-                document.getElementById('validatepassword').style.display = 'none';
-            }
-            
-
-        });
+        if (pinCode.trim() === "" || !pinCodeValidation(pinCode)) {
+            document.getElementById('validateAddPinCode').style.display = 'block';
+            event.preventDefault();
+        } else {
+            document.getElementById('validateAddPinCode').style.display = 'none';
+        }
     });
+});
 
 function phnNumberValidation(phnNumber) {
     const pattern = /^(\+?91)?[6-9]\d{9}$/;
     return pattern.test(phnNumber);
 }
 
-function pinCodeValidation(pinCode){
-    const pattern = /^.{6,6}$/
-    return pattern.test(pinCode)
+function pinCodeValidation(pinCode) {
+    const pattern = /^\d{6}$/;
+    return pattern.test(pinCode);
 }
 
 </script>

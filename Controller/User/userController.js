@@ -283,7 +283,6 @@ module.exports.postVerifyResetOtp = (req,res)=>{
 module.exports.postResetUserPassword = async (req,res,next)=>{
     try {
         const email = req.body.email
-        console.log(ema);
         const newPassword = req.body.resetPassword
         const result = await userSchema.updateOne({ email },{ password : newPassword })
         res.render('User/user-login' ,{ passwordChanged:true })

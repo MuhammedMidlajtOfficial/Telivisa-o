@@ -10,17 +10,17 @@ module.exports.getAllCategory = async (req,res,next)=>{
         // Filter
         if(popularBrand){
             const products = await ProductSchema.find({ productStatus : "unblock" , productBrand : popularBrand })
-            res.render('User/user-allCategory',{ products, newAddedProducts ,sortOrder })
+            res.render('User/user-allCategory',{ products, newAddedProducts ,sortOrder,  })
         }else{
             if(sortOrder === "lowToHigh"){
                 const products = await ProductSchema.find({ productStatus : "unblock" }).sort({productPrice:1})
-                res.render('User/user-allCategory',{ products, newAddedProducts, sortOrder })
+                res.render('User/user-allCategory',{ products, newAddedProducts, sortOrder,  })
             }else if(sortOrder === "highToLow"){
                 const products = await ProductSchema.find({ productStatus : "unblock" }).sort({productPrice:-1})
-                res.render('User/user-allCategory',{ products, newAddedProducts, sortOrder })
+                res.render('User/user-allCategory',{ products, newAddedProducts, sortOrder,  })
             }else{
                 const products = await ProductSchema.find({ productStatus : "unblock" })
-                res.render('User/user-allCategory',{ products, newAddedProducts, sortOrder })
+                res.render('User/user-allCategory',{ products, newAddedProducts, sortOrder,  })
             }
         }
     } catch (error) {
