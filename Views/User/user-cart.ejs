@@ -15,6 +15,7 @@
             <div class="container">
                 <!-- Alert -->
                 <div class="text-danger" id="qtyGtZero" style="font-size: large; display: none;">Quantity must be greater than zero</div>
+                <div class="text-danger" id="outofStock" style="font-size: large;"></div>
                 
                 <div class="row">
                     <div class="col-12">
@@ -99,7 +100,6 @@
             document.querySelectorAll('#Subtotal').forEach((elem)=>{
                 grandTotal =Number(grandTotal) + Number(elem.textContent)
             })
-            console.log(grandTotal);
             document.getElementById('Total').innerHTML = grandTotal
         }
         grandTotal();
@@ -108,6 +108,7 @@
         // Cart Quantity Decrease
         document.querySelectorAll('.qty-down').forEach((down)=>{
             down.addEventListener('click',function(event){
+                document.getElementById('outofStock').style.display = 'none'
 
                 event.preventDefault();
 
@@ -164,6 +165,7 @@
         // Cart Quantity Increase
         document.querySelectorAll('.qty-up').forEach((down)=>{
             down.addEventListener('click',function(event){
+                document.getElementById('outofStock').style.display = 'block'
 
                 event.preventDefault();
                 
@@ -188,21 +190,26 @@
                 })
 
                 .then((data)=>{
-                    console.log("quatity updated", data);
-
-                    // SubTotal
-                    const subTotal = data
-                    console.log("subtotal==  "+subTotal);
-
-                    const quantitySpan = down.previousElementSibling;
-                    quantitySpan.textContent = data.updatedQty;
-                    // update subtotal value
-                    const row = down.closest('tr')
-                    const priceSpan = row.querySelector('.price-Span')
-                    priceSpan.textContent = data.subTotal;
-                    // -end SubTotal
-
-                    grandTotal();
+                    console.log(data);
+                    if(data.currentQty > 0){
+                        document.getElementById('outofStock').innerHTML = `${data.currentProduct} has only ${data.currentQty} stocks left. Please keep your product stock below or equal to ${data.currentQty}`
+                    }else{
+                        console.log("quatity updated", data);
+    
+                        // SubTotal
+                        const subTotal = data
+                        console.log("subtotal==  "+subTotal);
+    
+                        const quantitySpan = down.previousElementSibling;
+                        quantitySpan.textContent = data.updatedQty;
+                        // update subtotal value
+                        const row = down.closest('tr')
+                        const priceSpan = row.querySelector('.price-Span')
+                        priceSpan.textContent = data.subTotal;
+                        // -end SubTotal
+    
+                        grandTotal();
+                    }
                 })
                 .catch((err)=>{
                     console.log(err);

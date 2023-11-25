@@ -1,6 +1,7 @@
 const cartSchema = require('../../Model/cartSchema');
 const userSchema = require('../../Model/userSchema');
-const wishlistSchema = require('../../Model/wishlistSchema')
+const wishlistSchema = require('../../Model/wishlistSchema');
+const productSchema = require('../../Model/ProductSchema')
 
 module.exports.getCart = async (req,res,next)=>{
     try {
@@ -154,7 +155,6 @@ module.exports.getDecreaseCartQuantity = async (req,res,next)=>{
     }
 }
 
-
 module.exports.getIncreaseCartQuantity = async (req,res,next)=>{
     try {
         const productId = req.query.id;
@@ -165,6 +165,8 @@ module.exports.getIncreaseCartQuantity = async (req,res,next)=>{
             model : "product"
         })
 
+        const product = await productSchema.findOne({ _id : productId })
+        
 
         let existingProduct;
         if (cart) {
@@ -176,12 +178,19 @@ module.exports.getIncreaseCartQuantity = async (req,res,next)=>{
         }
 
         existingProduct.quantity += 1 ;
-        const updatedQty=existingProduct.quantity;
-        await cart.save()
 
-        const subTotal = +existingProduct.productId.productPrice * existingProduct.quantity
-
-        res.status(200).json({subTotal, updatedQty});
+        const currentQty = product.productStock;
+        const currentProduct = product.productName;
+        if(currentQty >= existingProduct.quantity){
+            const updatedQty=existingProduct.quantity;
+            await cart.save()
+    
+            const subTotal = +existingProduct.productId.productPrice * existingProduct.quantity
+            res.status(200).json({subTotal, updatedQty});
+        }else{
+            res.status(200).json({ currentQty, currentProduct })
+        }
+        
     } catch (error) {
         console.log(error);
         next('There is an error occured, Cant\'t increment quantity of product from cart')

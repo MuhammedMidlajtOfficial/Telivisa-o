@@ -32,14 +32,10 @@ module.exports.getAddToWishlist = async (req,res,next)=>{
             
             if (existingProduct) {
                 console.log("Product already exist in wish list");
-                res.redirect('/')
-            }else{
-                try {
-                    const result = await wishlistSchema.updateOne({ customerId : user._id },{$push:{ wishlistProducts:{productId : ProductId }}})
-                    res.redirect('/')
-                } catch (error) {
-                    console.log(error);
-                }
+                 res.status(200).json({productExist:true})
+            }else{  
+                await wishlistSchema.updateOne({ customerId : user._id },{$push:{ wishlistProducts:{productId : ProductId }}})
+                res.status(200).json('Added to wishlist')
             }
         }else{
             const wishlist = await new wishlistSchema( {
@@ -47,7 +43,7 @@ module.exports.getAddToWishlist = async (req,res,next)=>{
                 wishlistProducts : [{ productId : ProductId }]
             })
             await wishlist.save();
-            res.status(200).json('Added to wishlist')
+            res.status(200).json({data:'Added to wishlist'})
         }
     } catch (error) {
         console.log(error);
