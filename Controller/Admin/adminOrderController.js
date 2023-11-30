@@ -32,7 +32,7 @@ module.exports.postAdminUpdateOrderStatus = async (req,res) => {
         const orderStatus = req.body.productStatus;
         if(orderStatus === 'Delivered'){
             const deliveredAt = Date.now()
-            await orderSchema.updateOne({ _id : orderId},{ orderStatus ,deliveredAt })
+            await orderSchema.updateOne({ _id : orderId},{ orderStatus , paymentStatus : "Success",deliveredAt })
 
         }
         await orderSchema.updateOne({ _id : orderId},{ orderStatus })

@@ -249,10 +249,11 @@
         });
     });
 
-    function razorpayPayment(order){
+    async function razorpayPayment (order){
+        const orderAmount = await order.amount*100;
         var options = {
             "key": "rzp_test_tHloNTsl1Mok5y",
-            "amount": order.amount*100,
+            "amount": orderAmount,
             "currency": "INR",
             "name": "Televisão",
             "description": "Test Transaction",

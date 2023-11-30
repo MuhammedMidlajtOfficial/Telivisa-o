@@ -52,7 +52,6 @@ module.exports.getPlaceOrder = async (req,res,next)=>{
             if(popCart.products[i].productId._id.toString() === cart.products[i].productId.toString() ){
                 const productId = cart.products[i].productId;
                 const productDetails = await productSchema.findOne({ _id : productId })
-                console.log(productDetails);
                 if(cart.products[i].quantity <= productDetails.productStock ){
                     productsArr.push({
                         productId : cart.products[i].productId,

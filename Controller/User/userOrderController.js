@@ -41,7 +41,9 @@ module.exports.getCancelOrder = async (req,res,next)=>{
         })
 
         if(order.paymentStatus === 'Success'){
-            await walletSchema.updateOne({ userId : user._id },{ $inc :{ amount : order.totalAmount } })
+            const userId = user._id.toString()
+            await walletSchema.updateOne({ userId },{ $inc :{ amount : order.totalAmount } })
+            await orderSchema.updateOne({ _id : id },{ paymentStatus : 'Refunded' })
         }
         res.status(200).json('Order cancelled')
     } catch (error) {
@@ -53,6 +55,7 @@ module.exports.getCancelOrder = async (req,res,next)=>{
 module.exports.getReturnOrder = async (req,res,next)=>{
     try {
         const id = req.query.id;
+        const user = await userSchema.findOne({ email : req.session.user })
         await orderSchema.updateOne({ _id : id },{ orderStatus : 'Returned' })
         const order = await orderSchema.findOne({ _id : id })
         order.products.forEach( async (product)=>{
@@ -67,7 +70,8 @@ module.exports.getReturnOrder = async (req,res,next)=>{
         })
 
         if(order.paymentStatus === 'Success'){
-            await walletSchema.updateOne({ userId : user._id },{ $inc :{ amount : order.totalAmount } })
+            const userId = user._id
+            await walletSchema.updateOne({ userId },{ $inc :{ amount : order.totalAmount } })
             await orderSchema.updateOne({ _id : id },{ paymentStatus : 'Refunded' })
         }
         res.status(200).json('Order Returned')

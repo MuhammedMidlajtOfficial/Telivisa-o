@@ -35,7 +35,9 @@ module.exports.postUserLogin = async (req,res,next)=>{
     try {
         const email = req.body.ULEmail
         const user = await userSchema.findOne({ email })
-        if( user?.status === 'Inactive' ){
+        if(!user){
+            res.render('User/user-login',{ emailDoesNotExist : true })
+        }else if( user?.status === 'Inactive' ){
             res.render('User/user-login',{ blockedUser : true })
         }else if( user.password !== req.body.ULPassword ){
             res.render('User/user-login',{ invalidPassword : true })
@@ -201,9 +203,10 @@ module.exports.postUserSignup = async (req,res,next)=>{
                 status : "Active"
             })        
             await userData.save();
-
+            const user = await userSchema.findOne({ email : req.body.email })
+            const userId = user._id
             let wallet = new walletSchema({
-                userId : req.body.email,
+                userId,
                 amount : 0,
             })
             await wallet.save()

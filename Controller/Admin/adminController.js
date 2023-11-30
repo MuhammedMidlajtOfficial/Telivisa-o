@@ -45,14 +45,14 @@ module.exports.getadminLogout = (req,res)=>{
 
 module.exports.getAdminDashboard = async (req,res)=>{
     try {
-        const total = await orderSchema.aggregate([{ $match : {} },{ $group :{ _id: null , total: { $sum: '$totalAmount' } }}]);
+        const total = await orderSchema.aggregate([{ $match : { paymentStatus : "Success" } },{ $group :{ _id: null , total: { $sum: '$totalAmount' } }}]);
         const revenue = total[0].total;
-        const orders = await orderSchema.find({ orderStatus: "Delivered" }).count()
+        const orders = await orderSchema.find({ orderStatus : "Delivered" }).count()
         const product = await productSchema.find({}).count()
         const latestOrders = await orderSchema.find({}).sort({ createdAt: -1 }).limit(5)
         const users = await userSchema.find({}).sort({ createdAt: -1 }).limit(4)
         const monthlyOrders = await orderSchema.aggregate([
-            { $match: { createdAt: { $exists: true }}},
+            { $match: { createdAt: { $exists: true },paymentStatus : "Success"} },
             { $project: { 
                 yearMonth: { $dateToString: { format: '%m/%Y', date: '$createdAt' }},
                 totalAmount: '$totalAmount' }},
@@ -60,7 +60,7 @@ module.exports.getAdminDashboard = async (req,res)=>{
             { $sort: { _id: -1 }}
         ]);
 
-        const totalSales = await orderSchema.find({});
+        const totalSales = await orderSchema.find({ paymentStatus : "Success" });
         const { yearlySales, monthlySales, weeklySales } = generateChart(totalSales);
         res.render('Admin/adminDashboard',
             {   revenue, 

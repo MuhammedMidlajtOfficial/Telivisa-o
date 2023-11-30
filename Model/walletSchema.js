@@ -2,12 +2,12 @@ const mongoose = require('mongoose')
 
 const wallet = mongoose.Schema({
     userId :{
-        type : String,
-        required:true
+        type : mongoose.Schema.Types.ObjectId,
+        ref : 'userSchema'
     },
     amount :{
         type:Number,
-        default:0
+        required:true
     }
 })
 

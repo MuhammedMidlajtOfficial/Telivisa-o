@@ -5,12 +5,9 @@ var instance = new Razorpay({
     key_secret: process.env.RAZORPAY_KEY_SECRET 
 })
 
-
-
-
 module.exports.generateRazorpay = function(orderId, totalAmount){
     return new Promise((resolve,reject)=>{
-
+        
         var options = {
             amount: totalAmount,  // amount in the smallest currency unit
             currency: "INR",
