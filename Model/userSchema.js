@@ -18,6 +18,10 @@ const user = new mongoose.Schema({
         type:String,
         required:true
     },
+    referralCode :{
+        type:String,
+        required:true
+    },
     status:{
         type:String,
         required:true,

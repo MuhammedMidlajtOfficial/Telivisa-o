@@ -96,7 +96,7 @@
                                     <div class="mt-10">
                                         <% if( order.orderStatus === 'Delivered' ) {%>
                                             <a><div class="btn mx-5 returnBtn updateBtn" data-orderId="<%= order._id %>" style="background-color: rgb(219, 177, 27); border: none;">Return product</div></a>
-                                        <% }else if( order.orderStatus !== 'Cancelled' && order.orderStatus !== 'Returned'){ %>
+                                        <% }else if( order.orderStatus !== 'Cancelled' && order.orderStatus !== 'Returned' && order.orderStatus !== 'Failed'){ %>
                                             <a ><div class="btn mx-5 cancelBtn updateBtn" data-orderId="<%= order._id %>" style="background-color: rgb(204, 44, 44); border: none;">Cancel Order</div></a>
                                         <% } %>
                                     </div>

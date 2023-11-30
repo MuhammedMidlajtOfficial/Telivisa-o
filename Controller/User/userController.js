@@ -2,11 +2,9 @@ const session = require('express-session')
 const userSchema = require('../../Model/userSchema')
 const ProductSchema = require('../../Model/ProductSchema')
 const categorySchema = require('../../Model/categorySchema')
-const swal = require('sweetalert')
+const walletSchema = require('../../Model/walletSchema')
 const nodemailer = require('nodemailer')
 const otpGenerator  = require('otp-generator')
-
-require('dotenv').config()
 
 module.exports.getHomePage = async (req,res,next)=>{
     try {
@@ -193,14 +191,24 @@ module.exports.postUserSignup = async (req,res,next)=>{
        if(data){
             res.render('User/user-signup',{ emailAlreadyExist:true , changeLoginToProfile : false})
        } else {
+            const referralCode = otpGenerator.generate(6, { specialChars: false });
             let userData = new userSchema({
                 name : req.body.USName,
-                email :req.body.email,
+                email : req.body.email,
                 phnNumber : req.body.USPhnNumber,
                 password : req.body.USPassword,
+                referralCode,
                 status : "Active"
             })        
             await userData.save();
+
+            let wallet = new walletSchema({
+                userId : req.body.email,
+                amount : 0,
+            })
+            await wallet.save()
+
+            
             res.redirect('/userLogin')
        }
     } catch (error) {

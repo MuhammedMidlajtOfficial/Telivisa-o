@@ -4,14 +4,22 @@ const fs = require('fs')
 const sharp = require('sharp')
 
 module.exports.getAdminProducts = async (req,res)=>{
-    const product = await ProductSchema.find({})
-    res.render('Admin/adminProducts',{ product })
+    try{
+        const product = await ProductSchema.find({})
+        res.render('Admin/adminProducts',{ product })
+    }catch (error) {
+        console.log(error);
+    }
 }
 
 module.exports.getAdminAddProduct = async (req,res)=>{
-    const category = await categorySchema.find({});
-    
-    res.render('Admin/adminAddProduct',{ category })
+    try{
+        const category = await categorySchema.find({});
+        
+        res.render('Admin/adminAddProduct',{ category })
+    }catch (error) {
+        console.log(error);
+    }
 }
 
 module.exports.postAdminAddProduct = async(req,res)=>{
@@ -53,10 +61,14 @@ module.exports.postAdminAddProduct = async(req,res)=>{
 }
 
 module.exports.getAdminEditProduct = async (req,res)=>{
-    const id = req.query.id;
-    const product = await ProductSchema.findOne({ _id : id})
-    const category = await categorySchema.find({});
-    res.render('Admin/adminEditProduct', { product , category} )
+    try{
+        const id = req.query.id;
+        const product = await ProductSchema.findOne({ _id : id})
+        const category = await categorySchema.find({});
+        res.render('Admin/adminEditProduct', { product , category} )
+    }catch (error) {
+        console.log(error);
+    }
 }
 
 module.exports.postAdminEditProduct = async (req,res)=>{
@@ -139,30 +151,50 @@ module.exports.getAdminDeleteProductImage = async (req,res)=>{
 }
 
 module.exports.getAdminBlockProduct = async (req,res)=>{
-    const id = req.query.id;
-    console.log(await ProductSchema.updateOne({ _id : id },{$set:{ productStatus : "block" }}));
-    res.redirect('/admin/products');
+    try{
+        const id = req.query.id;
+        console.log(await ProductSchema.updateOne({ _id : id },{$set:{ productStatus : "block" }}));
+        res.redirect('/admin/products');
+    }catch (error) {
+        console.log(error);
+    }
 }
 
 module.exports.getAdminUnblockProduct = async (req,res)=>{
-    const id = req.query.id;
-    await ProductSchema.updateOne({ _id : id },{$set:{ productStatus : "unblock" }});
-    res.redirect('/admin/products');
+    try{
+        const id = req.query.id;
+        await ProductSchema.updateOne({ _id : id },{$set:{ productStatus : "unblock" }});
+        res.redirect('/admin/products');
+    }catch (error) {
+        console.log(error);
+    }
 }
 
 module.exports.getProductList= async (req,res)=>{
-    const product = await ProductSchema.find({})
-    res.render('Admin/adminProductsList',{ product })
+    try{
+        const product = await ProductSchema.find({})
+        res.render('Admin/adminProductsList',{ product })
+    }catch (error) {
+        console.log(error);
+    }
 }
 
 module.exports.getAdminActiveHoarding = async (req,res)=>{
-    const id = req.query.id;
-    await ProductSchema.updateOne({ _id : id },{ productHoarding : "Active" })
-    res.redirect('/admin/productList');
+    try{
+        const id = req.query.id;
+        await ProductSchema.updateOne({ _id : id },{ productHoarding : "Active" })
+        res.redirect('/admin/productList');
+    }catch (error) {
+        console.log(error);
+    }
 }
 
 module.exports.getAdminInactiveHoarding = async (req,res)=>{
-    const id = req.query.id;
-    await ProductSchema.updateOne({ _id : id },{ productHoarding : "Inactive" })
-    res.redirect('/admin/productList');
+    try{
+        const id = req.query.id;
+        await ProductSchema.updateOne({ _id : id },{ productHoarding : "Inactive" })
+        res.redirect('/admin/productList');
+    }catch (error) {
+        console.log(error);
+    }
 }

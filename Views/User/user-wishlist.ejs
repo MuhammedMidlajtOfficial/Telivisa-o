@@ -68,17 +68,28 @@
                     })
 
                     .then((data)=>{
-                        console.log("Added to cart:", data);
-                        Swal.fire({
-                            position : 'top-center',
-                            icon : 'success',
-                            title : 'Added to cart',
-                            showConfirmButton: false,
-                            timer: 1500
-                        })
-                        setTimeout(()=>{
-                            window.location.href = '/wishlist';
-                        },1000)
+                        if(data.outOfStock){
+                            console.log("out of stock:", data);
+                            Swal.fire({
+                                position : 'top-center',
+                                icon : 'error',
+                                title : 'out of stock',
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                        }else{
+                            console.log("Added to cart:", data);
+                            Swal.fire({
+                                position : 'top-center',
+                                icon : 'success',
+                                title : 'Added to cart',
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                            setTimeout(()=>{
+                                window.location.href = '/wishlist';
+                            },1000)
+                        }
                     })
 
                     .catch((err)=>{

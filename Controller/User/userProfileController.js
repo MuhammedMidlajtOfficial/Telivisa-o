@@ -2,6 +2,7 @@ const userSchema = require('../../Model/userSchema')
 const addressSchema = require('../../Model/addressSchema');
 const ProductSchema = require('../../Model/ProductSchema');
 const orderSchema = require('../../Model/orderSchema')
+const walletSchema = require('../../Model/walletSchema')
 
 module.exports.getUserProfile = async (req,res,next)=>{
     try {
@@ -9,8 +10,9 @@ module.exports.getUserProfile = async (req,res,next)=>{
         const user = await userSchema.findOne({ email })
         const userId = user._id
         const addressObj = await addressSchema.findOne({ userId })
-        const orders = await orderSchema.find({ userId })
-        res.render('User/user-profile',{ user, addressObj, orders, changeLoginToProfile:true })
+        const orders = await orderSchema.find({ userId }).sort({ createdAt:-1 })
+        const wallet = await walletSchema.findOne({ userId })
+        res.render('User/user-profile',{ user, addressObj, orders, wallet, changeLoginToProfile:true })
     } catch (error) {
         console.log(error);
         next('There is an error occured, Cant\'t get user profile')

@@ -145,7 +145,9 @@
             </div>
         </section>
     </main>
-   
+
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         
@@ -208,20 +210,37 @@
             })
 
             .then((data)=>{
-                console.log('Order placed successfully',data);
-
-                Swal.fire({
-                    position:"top-center",
-                    icon : 'success',
-                    title : 'Order placer successfully',
-                    showConfirmButton : false,
-                    timer : 1500
-                })
-
-                setTimeout(()=>{
-                    window.location.href = '/confirmedOrder'
-                },1500)
-
+                if(data.outOfStock){
+                    console.log('Out of stock');
+                    Swal.fire({
+                        position:"top-center",
+                        icon : 'error',
+                        title : 'Out of stock',
+                        showConfirmButton : false,
+                        timer : 1500
+                    })
+                    setTimeout(()=>{
+                        window.location.href = '/cart'
+                    },1500)
+                }else{
+                    if(data.codSuccess){
+                        console.log('Order placed successfully');
+                        Swal.fire({
+                            position:"top-center",
+                            icon : 'success',
+                            title : 'Order placer successfully',
+                            showConfirmButton : false,
+                            timer : 1500
+                        })
+        
+                        setTimeout(()=>{
+                            window.location.href = '/confirmedOrder'
+                        },1500)
+                    }else{
+                        const order = data.order;
+                        razorpayPayment(order)
+                    }
+                }
             })
 
             .catch((err)=>{
@@ -229,6 +248,80 @@
             })
         });
     });
+
+    function razorpayPayment(order){
+        var options = {
+            "key": "rzp_test_tHloNTsl1Mok5y",
+            "amount": order.amount*100,
+            "currency": "INR",
+            "name": "Televisão",
+            "description": "Test Transaction",
+            "image": "https://example.com/your_logo",
+            "order_id": order.id,
+            "handler": function (response){
+                const paymentId = response.razorpay_payment_id;
+                const orderId = response.razorpay_order_id;
+                const signature = response.razorpay_signature;
+                verifyPayment(paymentId,order)
+            },
+            "prefill": {
+                "name": "Gaurav Kumar",
+                "email": "gaurav.kumar@example.com",
+                "contact": "9000090000"
+            },
+            "notes": {
+                "address": "Razorpay Corporate Office"
+            },
+            "theme": {
+                "color": "#1d6b0f"
+            }
+        };
+        var rzp1 = new Razorpay(options);
+        rzp1.on('payment.failed', function (response){
+            console.log(response.error.code);
+            console.log(response.error.description);
+            console.log(response.error.source);
+            console.log(response.error.step);
+            console.log(response.error.reason);
+            console.log(response.error.metadata.order_id);
+            console.log(response.error.metadata.payment_id);
+        });
+        rzp1.open();
+    }
+
+    function verifyPayment(paymentId,order){
+        const orderId = order.receipt
+        fetch(`/verifyPayment?paymentId=${paymentId}&orderId=${orderId}`,{
+            method : 'get',
+            headers : {
+                "Content-Type":"application/json",
+            }
+        })
+        .then((response)=>{
+            if(!response.ok){
+                throw new error(`HTTP error! Status: ${response.status}`)
+            }
+            return response.json()
+        })
+        .then((data)=>{
+            console.log(data);
+
+            Swal.fire({
+                position:"top-center",
+                icon : 'success',
+                title : 'Order placer successfully',
+                showConfirmButton : false,
+                timer : 1500
+            })
+
+            setTimeout(()=>{
+                window.location.href = '/confirmedOrder'
+            },1500)
+        })
+        .catch((err)=>{
+            console.log(err);
+        })
+    }
 </script>
 
 <%- include('../Partials/userFooter')  -%>

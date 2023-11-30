@@ -25,37 +25,45 @@ module.exports.getAddToCart = async (req,res,next)=>{
     try {
         const productId = req.query.id
         const user = await userSchema.findOne({ email : req.session.user })
-        const userId = user._id
-        let cart = await cartSchema.findOne({ userId })
-        if(!cart){
-            cart = new cartSchema({
-                userId : user._id,
-                products : [{
-                    productId : productId,
-                    quantity : 1
-                }]
-            })
+        const product = await productSchema.findOne({ _id : productId })
+        if(!user){
+            res.status(500)
         }else{
-            let existingProduct;
-            if (cart) {
-                 cart.products.forEach(element => { 
-                   if(element.productId.toString() == productId.toString()){
-                        existingProduct = element
-                   }
-                });            
-            }
-            if(existingProduct){
-                existingProduct.quantity += 1 ;
+            if(product.productStock <= 0 ){
+                res.status(200).json({ outOfStock:true })
             }else{
-                cart.products.push({
-                    productId : productId,
-                    quantity : 1
-                })
+                const userId = user._id;
+                let cart = await cartSchema.findOne({ userId })
+                if(!cart){
+                    cart = new cartSchema({
+                        userId : user._id,
+                        products : [{
+                            productId : productId,
+                            quantity : 1
+                        }]
+                    })
+                }else{
+                    let existingProduct;
+                    if (cart) {
+                         cart.products.forEach(element => { 
+                           if(element.productId.toString() == productId.toString()){
+                                existingProduct = element
+                           }
+                        });            
+                    }
+                    if(existingProduct){
+                        existingProduct.quantity += 1 ;
+                    }else{
+                        cart.products.push({
+                            productId : productId,
+                            quantity : 1
+                        })
+                    }
+                }
+                await cart.save()
+                res.status(200).json('Product successfully added to cart')
             }
-            
         }
-        await cart.save()
-        res.status(200).json('Product successfully added to cart')
     } catch (error) {
         console.log(error);
         next('There is an error occured, Cant\'t add product to cart')
@@ -67,40 +75,45 @@ module.exports.getAddToCartFromWhilshlist = async (req,res,next)=>{
         const productId = req.query.id
         const user = await userSchema.findOne({ email : req.session.user })
         const userId = user._id
+        const product = await productSchema.findOne({ _id : productId })
         let cart = await cartSchema.findOne({ userId })
-        if(!cart){
-            cart = new cartSchema({
-                userId : user._id,
-                products : [{
-                    productId : productId,
-                    quantity : 1
-                }]
-            })
+        if(product.productStock <= product.productStock > 0){
+            res.status(200).json({ outOfStock : true })
         }else{
-            let existingProduct;
-            if (cart) {
-                 cart.products.forEach(element => { 
-                   if(element.productId.toString() == productId.toString()){
-                        existingProduct = element
-                   }
-                });            
-            }
-            if(existingProduct){
-                existingProduct.quantity += 1 ;
-            }else{
-                cart.products.push({
-                    productId : productId,
-                    quantity : 1
+            if(!cart){
+                cart = new cartSchema({
+                    userId : user._id,
+                    products : [{
+                        productId : productId,
+                        quantity : 1
+                    }]
                 })
+            }else{
+                let existingProduct;
+                if (cart) {
+                     cart.products.forEach(element => { 
+                       if(element.productId.toString() == productId.toString()){
+                            existingProduct = element
+                       }
+                    });            
+                }
+                if(existingProduct){
+                    existingProduct.quantity += 1 ;
+                }else{
+                    cart.products.push({
+                        productId : productId,
+                        quantity : 1
+                    })
+                }
+    
+                const user = await userSchema.findOne({ email : req.session.user})
+                await wishlistSchema.updateOne({ customerId : user._id },
+                { $pull:{ wishlistProducts :{ productId : productId}} })
+    
             }
-
-            const user = await userSchema.findOne({ email : req.session.user})
-            await wishlistSchema.updateOne({ customerId : user._id },
-            { $pull:{ wishlistProducts :{ productId : productId}} })
-
+            await cart.save()
+            res.status(200).json('Product successfully added to cart')
         }
-        await cart.save()
-        res.status(200).json('Product successfully added to cart')
     } catch (error) {
         console.log(error);
         next('There is an error occured, Cant\'t add product to cart')

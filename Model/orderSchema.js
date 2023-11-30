@@ -40,7 +40,10 @@ const order = mongoose.Schema({
     },
     paymentStatus :{
         type : String,
-        default : 'Pending'
+        required:true
+    },
+    deliveredAt :{
+        type:Date
     }
 },{ timestamps : true })
 

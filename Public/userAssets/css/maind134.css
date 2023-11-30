@@ -1970,6 +1970,7 @@ label {
 .carausel-6-columns-cover .carausel-6-columns .card-1 {
   margin-right: 12px;
   margin-left: 12px;
+  height: 180px;
 }
 
 .carausel-6-columns-cover .product-img {
@@ -9220,6 +9221,15 @@ span.fi-rs-apps {
 #hover-product-image:hover{
   opacity: 0;
   visibility: hidden !important;
+}
+
+.card-1-figure .card-1-figure > a > img{
+  max-height: 500px;
+      width: 100%;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      object-fit: cover;
 }
 /* custom */
 /* custom */

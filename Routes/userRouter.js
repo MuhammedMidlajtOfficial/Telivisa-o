@@ -98,8 +98,8 @@ userRouter.get('/userCheckout', auth.isUserBlocked, auth.isUser, userCheckoutCon
 userRouter.get('/placeOrder', auth.isUserBlocked, auth.isUser, userCheckoutController.getPlaceOrder)
 // Confirmed Order
 userRouter.get('/confirmedOrder', auth.isUserBlocked, auth.isUser, userCheckoutController.getConfirmedOrder )
-
-
+// Verify Payment
+userRouter.get('/verifyPayment', userCheckoutController.getVerifyPayment)
 
 
 userRouter.use(errorHandler)
