@@ -5,6 +5,7 @@ const adminProductController = require('../Controller/Admin/adminProductControll
 const adminCategoryController = require('../Controller/Admin/adminCategoryController')
 const adminUserController = require('../Controller/Admin/adminUserController')
 const adminOrderController = require('../Controller/Admin/adminOrderController')
+const reportController = require('../Controller/Admin/reportController')
 const productImageUploadMulter = require('../Middleware/multerMiddleware')
 const auth = require('../Middleware/auth')
 
@@ -65,6 +66,10 @@ adminRouter.get('/adminOrders', auth.isAdmin, adminOrderController.getAdminOrder
 adminRouter.get('/adminViewOrder', auth.isAdmin, adminOrderController.getAdminViewOrder )
 // Change Status
 adminRouter.post('/adminUpdateOrderStatus', auth.isAdmin, adminOrderController.postAdminUpdateOrderStatus)
+
+
+adminRouter.get('/salesReport', auth.isAdmin, reportController.getSalesReport)
+adminRouter.post('/filterReport', auth.isAdmin, reportController.getFilterReport)
 
 
 module.exports = adminRouter;

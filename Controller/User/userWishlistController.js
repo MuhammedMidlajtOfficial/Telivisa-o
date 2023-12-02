@@ -5,13 +5,24 @@ const userSchema = require('../../Model/userSchema')
 module.exports.getWishlist = async (req,res,next)=>{
     try {
         const user = await userSchema.findOne({ email : req.session.user })
+        const wishlistExist = await wishlistSchema.findOne({ customerId : user._id })
+        let products;
+        
+        if (!wishlistExist) {
+            const wishlist = await new wishlistSchema( {
+                customerId : user._id,
+                wishlistProducts : [{ }]
+            })
+            await wishlist.save();
+        }
         const wishlistProducts = await wishlistSchema.findOne(
             { customerId : user._id })
             .populate({
                 path:'wishlistProducts.productId',
                 model:'product'
             })
-        const products = wishlistProducts.wishlistProducts
+        products = wishlistProducts.wishlistProducts
+        
         res.render('User/user-wishlist',{ products, changeLoginToProfile:true })
     } catch (error) {
         console.log(error);

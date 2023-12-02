@@ -1,5 +1,5 @@
 const categorySchema = require('../../Model/categorySchema')
-
+    
 const getAdminAddCategories = async (req,res)=>{
     try {
         const category = await categorySchema.find({})

@@ -18,7 +18,7 @@ module.exports.getCart = async (req,res,next)=>{
     } catch (error) {
         console.log(error);
         next('There is an error occured, Cant\'t open cart')
-    }
+    } 
 }
 
 module.exports.getAddToCart = async (req,res,next)=>{

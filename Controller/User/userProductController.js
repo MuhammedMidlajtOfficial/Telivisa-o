@@ -9,19 +9,19 @@ module.exports.getAllCategory = async (req,res,next)=>{
 
         // Filter
         if(popularBrand){
-            const products = await ProductSchema.find({ productStatus : "unblock" , productBrand : popularBrand })
+            const products = await ProductSchema.find({ productStatus : "unblock" , productBrand : popularBrand }).sort({productPrice:1})
             res.render('User/user-allCategory',{ products, newAddedProducts ,sortOrder,  })
         }else{
-            if(sortOrder === "lowToHigh"){
+            // if(sortOrder === "lowToHigh"){
+            //     const products = await ProductSchema.find({ productStatus : "unblock" }).sort({productPrice:1})
+            //     res.render('User/user-allCategory',{ products, newAddedProducts, sortOrder,  })
+            // }else if(sortOrder === "highToLow"){
+            //     const products = await ProductSchema.find({ productStatus : "unblock" }).sort({productPrice:-1})
+            //     res.render('User/user-allCategory',{ products, newAddedProducts, sortOrder,  })
+            // }else{
                 const products = await ProductSchema.find({ productStatus : "unblock" }).sort({productPrice:1})
                 res.render('User/user-allCategory',{ products, newAddedProducts, sortOrder,  })
-            }else if(sortOrder === "highToLow"){
-                const products = await ProductSchema.find({ productStatus : "unblock" }).sort({productPrice:-1})
-                res.render('User/user-allCategory',{ products, newAddedProducts, sortOrder,  })
-            }else{
-                const products = await ProductSchema.find({ productStatus : "unblock" })
-                res.render('User/user-allCategory',{ products, newAddedProducts, sortOrder,  })
-            }
+            // }
         }
     } catch (error) {
         console.log(error);
@@ -48,6 +48,7 @@ module.exports.postFillter = async (req,res,next)=>{
     const minPrice = priceRange[0].slice(1)
     const maxPrice = priceRange[1].slice(1)
     const checked = req.body
+    console.log(checked);
     let obj = Object.values(checked)
     obj.splice(0,1)
     let size = []
@@ -59,16 +60,22 @@ module.exports.postFillter = async (req,res,next)=>{
             resolution.push(element)
         }
     });
-    let product;
+    let products;
     if(size.length > 0 && resolution.length > 0 ){
-        products = await ProductSchema.find({ productSize:{ $in : size }, productResolution :{ $in : resolution }, productPrice: { $gte: minPrice, $lte: maxPrice } }) 
+        products = await ProductSchema.find({ productSize:{ $in : size }, productResolution :{ $in : resolution }, productPrice: { $gte: minPrice, $lte: maxPrice } }).sort({ productPrice:1 }) 
     } else if (resolution.length > 0){
-        products = await ProductSchema.find({ productResolution :{ $in : resolution }, productPrice: { $gte: minPrice, $lte: maxPrice } }) 
+        products = await ProductSchema.find({ productResolution :{ $in : resolution }, productPrice: { $gte: minPrice, $lte: maxPrice } }).sort({ productPrice:1 })
     }else if(size.length > 0){
-        products = await ProductSchema.find({ productSize:{ $in : size }, productPrice: { $gte: minPrice, $lte: maxPrice } }) 
+        products = await ProductSchema.find({ productSize:{ $in : size }, productPrice: { $gte: minPrice, $lte: maxPrice } }).sort({ productPrice:1 })
     }else{
-        products = await ProductSchema.find({ productPrice: { $gte: minPrice, $lte: maxPrice } }) 
+        products = await ProductSchema.find({ productPrice: { $gte: minPrice, $lte: maxPrice } }).sort({ productPrice:1 })
     }
+
+    // Sort By Price
+    if(checked.sort === "highToLow"){
+        products.sort((a, b) => b.productPrice - a.productPrice);
+    }
+    
     const newAddedProducts  = await ProductSchema.aggregate([{$match : { productStatus : "unblock" }} ,{$sort:{createdAt:1}},{$limit:3} ])
     res.render('User/user-allCategory',{ products, newAddedProducts })
 }
