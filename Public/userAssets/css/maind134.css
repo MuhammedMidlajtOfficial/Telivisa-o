@@ -31,6 +31,7 @@ TABLE CONTENT
 ***/
 @import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;0,900;1,300;1,400;1,700;1,900&amp;display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Spartan:wght@300;400;500;600;700&amp;display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@600&display=swap'); /* font-family: 'Reem Kufi Fun', sans-serif; */
 /*import vendors*/
 @import url(vendors/normalize.css);
 @import url(vendors/bootstrap.min.css);
@@ -9230,6 +9231,21 @@ span.fi-rs-apps {
       margin-left: auto;
       margin-right: auto;
       object-fit: cover;
+}
+
+.popularBrandsCard{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f2fbf5;
+  height: 158px;
+  width: 175px;
+}
+
+.popularBrands{
+  font-family: 'Reem Kufi Fun', sans-serif;
+  font-size: 30px;
+  font-weight: bold;
 }
 /* custom */
 /* custom */

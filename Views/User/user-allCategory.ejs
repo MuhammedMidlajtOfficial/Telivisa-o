@@ -20,25 +20,6 @@
                             <div class="totall-product">
                                 <p> We found <strong class="text-brand"><%= products.length %></strong> items for you!</p>
                             </div>
-                            <div class="sort-by-product-area">
-                                <div class="sort-by-cover">
-                                    <div class="sort-by-product-wrap">
-                                        <div class="sort-by">
-                                            <span><i class="fi-rs-apps-sort"></i>Sort by:</span>
-                                        </div>
-                                        <div class="sort-by-dropdown-wrap">
-                                            <span> <%= locals.sortOrder %> <i class="fi-rs-angle-small-down"></i></span>
-                                        </div>
-                                    </div>
-                                    <div class="sort-by-dropdown">
-                                        <ul>
-                                            <li><a class="<%= locals.sortOrder === 'default' ? 'active' : '' %>" href="?price=default">Default</a></li>
-                                            <li><a class="<%= locals.sortOrder === 'lowToHigh' ? 'active' : '' %>" href="?price=lowToHigh">Price: Low to High</a></li>
-                                            <li><a class="<%= locals.sortOrder === 'highToLow' ? 'active' : '' %>" href="?price=highToLow">Price: High to Low</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
 
                         <div class="product-list mb-50">

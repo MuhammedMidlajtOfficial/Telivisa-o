@@ -48,6 +48,9 @@
                                                         </div>
                                                     </div>
                                                 <!-- </form> -->
+                                                <button class="btn btn-brand" style=" cursor: pointer; width: 200px;">
+                                                    <a href="/addAddress?fromCheckout=fromCheckout" style="text-decoration: none; color: white; ">Add address</a>
+                                                </button>
                                             </div>
                                         <% }) %>
                                     <% } else { %>
@@ -219,6 +222,19 @@
                         showConfirmButton : false,
                         timer : 1500
                     })
+                    setTimeout(()=>{
+                        window.location.href = '/cart'
+                    },1500)
+                }else if(data.productNotExist){
+                    console.log('Product not exist');
+                    Swal.fire({
+                        position:"top-center",
+                        icon : 'error',
+                        title : 'Product not exist',
+                        showConfirmButton : false,
+                        timer : 1500
+                    })
+                    
                     setTimeout(()=>{
                         window.location.href = '/cart'
                     },1500)

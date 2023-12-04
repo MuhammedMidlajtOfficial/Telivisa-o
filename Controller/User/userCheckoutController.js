@@ -52,14 +52,18 @@ module.exports.getPlaceOrder = async (req,res,next)=>{
             if(popCart.products[i].productId._id.toString() === cart.products[i].productId.toString() ){
                 const productId = cart.products[i].productId;
                 const productDetails = await productSchema.findOne({ _id : productId })
-                if(cart.products[i].quantity <= productDetails.productStock ){
-                    productsArr.push({
-                        productId : cart.products[i].productId,
-                        productPrice : popCart.products[i].productId.productPrice,
-                        quantity : cart.products[i].quantity
-                    })
+                if( productDetails.productStatus === 'block' ){
+                    return res.status(200).json({ productNotExist : true })
                 }else{
-                    return res.status(200).json({ outOfStock : true })
+                    if( cart.products[i].quantity <= productDetails.productStock ){
+                        productsArr.push({
+                            productId : cart.products[i].productId,
+                            productPrice : popCart.products[i].productId.productPrice,
+                            quantity : cart.products[i].quantity
+                        })
+                    }else{
+                        return res.status(200).json({ outOfStock : true })
+                    }
                 }
             } 
         }

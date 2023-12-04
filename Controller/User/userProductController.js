@@ -1,27 +1,31 @@
 const categorySchema = require('../../Model/categorySchema')
 const ProductSchema = require('../../Model/ProductSchema')
+const userSchema = require('../../Model/userSchema')
 
 module.exports.getAllCategory = async (req,res,next)=>{
     try {
+        const user = await userSchema.findOne({ email : req.session.user })
         const popularBrand = req.query.brand;
         const sortOrder = req.query.price
         const newAddedProducts  = await ProductSchema.aggregate([{$match : { productStatus : "unblock" }} ,{$sort:{createdAt:1}},{$limit:3} ])
-
-        // Filter
-        if(popularBrand){
-            const products = await ProductSchema.find({ productStatus : "unblock" , productBrand : popularBrand }).sort({productPrice:1})
-            res.render('User/user-allCategory',{ products, newAddedProducts ,sortOrder,  })
-        }else{
-            // if(sortOrder === "lowToHigh"){
-            //     const products = await ProductSchema.find({ productStatus : "unblock" }).sort({productPrice:1})
-            //     res.render('User/user-allCategory',{ products, newAddedProducts, sortOrder,  })
-            // }else if(sortOrder === "highToLow"){
-            //     const products = await ProductSchema.find({ productStatus : "unblock" }).sort({productPrice:-1})
-            //     res.render('User/user-allCategory',{ products, newAddedProducts, sortOrder,  })
-            // }else{
+        if(user){
+            // Filter
+            if(popularBrand){
+                const products = await ProductSchema.find({ productStatus : "unblock" , productBrand : popularBrand }).sort({productPrice:1})
+                res.render('User/user-allCategory',{ products, newAddedProducts ,sortOrder, changeLoginToProfile : true })
+            }else{
                 const products = await ProductSchema.find({ productStatus : "unblock" }).sort({productPrice:1})
-                res.render('User/user-allCategory',{ products, newAddedProducts, sortOrder,  })
-            // }
+                res.render('User/user-allCategory',{ products, newAddedProducts, sortOrder, changeLoginToProfile : true })
+            }
+        }else{
+            // Filter
+            if(popularBrand){
+                const products = await ProductSchema.find({ productStatus : "unblock" , productBrand : popularBrand }).sort({productPrice:1})
+                res.render('User/user-allCategory',{ products, newAddedProducts ,sortOrder })
+            }else{
+                const products = await ProductSchema.find({ productStatus : "unblock" }).sort({productPrice:1})
+                res.render('User/user-allCategory',{ products, newAddedProducts, sortOrder })
+            }
         }
     } catch (error) {
         console.log(error);
@@ -32,9 +36,14 @@ module.exports.getAllCategory = async (req,res,next)=>{
 module.exports.getViewProduct = async (req,res,next)=>{
     try {
         const id = req.query.id;
+        const user = await userSchema.findOne({ email : req.session.user })
         const productDetails = await ProductSchema.findOne({ _id : id })
         const products = await ProductSchema.find({$and:[{ _id :{$ne : productDetails.id } }, { productStatus : "unblock"} , { productBrand : productDetails.productBrand }]})
-        res.render('User/user-viewProduct',{ productDetails, products })
+        if(user){
+            res.render('User/user-viewProduct',{ productDetails, products, changeLoginToProfile : true })
+        }else{
+            res.render('User/user-viewProduct',{ productDetails, products })
+        }
     } catch (error) {
         console.log(error);
         next('There is an error occured, Cant\'t display product view page')

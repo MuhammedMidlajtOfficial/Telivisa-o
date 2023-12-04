@@ -77,7 +77,7 @@ module.exports.getAddToCartFromWhilshlist = async (req,res,next)=>{
         const userId = user._id
         const product = await productSchema.findOne({ _id : productId })
         let cart = await cartSchema.findOne({ userId })
-        if(product.productStock <= product.productStock > 0){
+        if(product.productStock <= 0){
             res.status(200).json({ outOfStock : true })
         }else{
             if(!cart){
