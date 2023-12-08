@@ -339,14 +339,14 @@
             document.getElementById('validateProductDescription').style.display = 'none';
         }
 
-        if(productPrice.trim() === ''){
+        if(productPrice.trim() === '' || !productPriceValidation(productPrice)){
             document.getElementById('validateProductPrice').style.display = 'block';
             event.preventDefault();
         }else{
             document.getElementById('validateProductPrice').style.display = 'none';
         }
 
-        if(productPromoPrice.trim() === ''){
+        if(productPromoPrice.trim() === '' || !productPriceValidation(productPromoPrice)){
             document.getElementById('validateProductPromoPrice').style.display = 'block';
             event.preventDefault();
         }else{
@@ -355,7 +355,9 @@
     });
 });
 
-
+function productPriceValidation(price){
+    return price > 0;
+}
 </script>
 
 <!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-form-product-1.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:32 GMT -->

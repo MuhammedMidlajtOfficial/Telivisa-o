@@ -8,7 +8,25 @@ const wallet = mongoose.Schema({
     amount :{
         type:Number,
         required:true
-    }
+    },
+    walletHistory:[{
+        amount:{
+            type:Number,
+            required:true
+        },
+        status:{
+            type:String,
+            required:true
+        },
+        whereFrom:{
+            type:String,
+            required:true
+        },
+        whereFromId:{
+            type:String,
+            required:true
+        }
+    }]
 })
 
 const walletSchema = new mongoose.model( 'wallet', wallet)

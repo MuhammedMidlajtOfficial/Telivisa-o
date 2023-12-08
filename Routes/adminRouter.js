@@ -6,6 +6,8 @@ const adminCategoryController = require('../Controller/Admin/adminCategoryContro
 const adminUserController = require('../Controller/Admin/adminUserController')
 const adminOrderController = require('../Controller/Admin/adminOrderController')
 const reportController = require('../Controller/Admin/reportController')
+const adminCouponConttroller = require('../Controller/Admin/adminCouponController')
+const adminBannerController = require('../Controller/Admin/adminBannerController')
 const productImageUploadMulter = require('../Middleware/multerMiddleware')
 const auth = require('../Middleware/auth')
 
@@ -52,6 +54,25 @@ adminRouter.get('/adminBlockCategories',auth.isAdmin,adminCategoryController.get
 adminRouter.get('/adminUnblockCategories',auth.isAdmin,adminCategoryController.getAdminUnblockCategories)
 
 
+// Coupon View
+adminRouter.get('/adminCoupon', auth.isAdmin, adminCouponConttroller.getAdminCoupon)
+// Coupon Add
+adminRouter.post('/postAdminAddCoupon', auth.isAdmin, adminCouponConttroller.postAdminAddCoupon)
+// Coupon Block & Unblock Status
+adminRouter.get('/adminBlockCoupon', auth.isAdmin, adminCouponConttroller.getAdminBlockCoupon)
+adminRouter.get('/adminUnblockCoupon', auth.isAdmin, adminCouponConttroller.getAdminUnblockCoupon)
+// Coupon Edit
+adminRouter.get('/adminEditCoupon', auth.isAdmin, adminCouponConttroller.getAdminEditCoupon)
+adminRouter.post('/postAdminEditCoupon', auth.isAdmin, adminCouponConttroller.postAdminEditCoupon)
+
+
+
+// Banner View
+adminRouter.get('/adminBanner', adminBannerController.getAdminBanner)
+// Banner Add
+adminRouter.post('/postAdminBanner', productImageUploadMulter.array('adminAddBannerImage'), adminBannerController.postAdminBanner);
+
+
 // User View
 adminRouter.get('/adminUser',auth.isAdmin,adminUserController.getAdminUser)
 // User Block & Unblock
@@ -68,6 +89,16 @@ adminRouter.get('/adminViewOrder', auth.isAdmin, adminOrderController.getAdminVi
 adminRouter.post('/adminUpdateOrderStatus', auth.isAdmin, adminOrderController.postAdminUpdateOrderStatus)
 
 
+
+// Return Req
+adminRouter.get('/adminReturnReq', auth.isAdmin, adminOrderController.getReturnReq)
+// Accept Return Req
+adminRouter.get('/requestAccept', auth.isAdmin, adminOrderController.getRequestAccept)
+adminRouter.get('/requestReject', auth.isAdmin, adminOrderController.getRequestReject)
+
+
+
+// Sales Report
 adminRouter.get('/salesReport', auth.isAdmin, reportController.getSalesReport)
 adminRouter.post('/filterReport', auth.isAdmin, reportController.getFilterReport)
 

@@ -4,7 +4,7 @@ const productSchema = require('../../Model/ProductSchema')
 const cartSchema = require('../../Model/cartSchema')
 const addressSchema = require('../../Model/addressSchema')
 const walletSchema = require('../../Model/walletSchema')
-
+const returnReqSchema = require('../../Model/returnReqSchema')
 
 module.exports.getOrderView = async (req,res,next)=>{
     try {
@@ -29,6 +29,11 @@ module.exports.getCancelOrder = async (req,res,next)=>{
         const user = await userSchema.findOne({ email : req.session.user })
         await orderSchema.updateOne({ _id : id },{ orderStatus : 'Cancelled' })
         const order = await orderSchema.findOne({ _id : id })
+            .populate({
+                path : "products.productId",
+                model : "product"
+            })
+
         order.products.forEach( async (product)=>{
             try {
                 await productSchema.updateOne(
@@ -40,8 +45,18 @@ module.exports.getCancelOrder = async (req,res,next)=>{
             }
         })
 
+
         if(order.paymentStatus === 'Success'){
             const userId = user._id.toString()
+            await walletSchema.updateOne({ userId },{ $push:{
+                walletHistory:{
+                    amount : order.totalAmount,
+                    status : 'Credit',
+                    whereFrom : 'Cancel product - ' + order.products[0].productId.productName,
+                    whereFromId : order._id
+                }
+            }
+            })
             await walletSchema.updateOne({ userId },{ $inc :{ amount : order.totalAmount } })
             await orderSchema.updateOne({ _id : id },{ paymentStatus : 'Refunded' })
         }
@@ -54,27 +69,16 @@ module.exports.getCancelOrder = async (req,res,next)=>{
 
 module.exports.getReturnOrder = async (req,res,next)=>{
     try {
-        const id = req.query.id;
+        const orderId = req.query.id;
         const user = await userSchema.findOne({ email : req.session.user })
-        await orderSchema.updateOne({ _id : id },{ orderStatus : 'Returned' })
-        const order = await orderSchema.findOne({ _id : id })
-        order.products.forEach( async (product)=>{
-            try {
-                await productSchema.updateOne(
-                    { _id : product.productId },{ $inc :{ productStock : product.quantity }}
-                )
-            } catch (error) {
-                console.log(error);
-                next('There is an error occured, Cant\'t add product stock')
-            }
+        const returnReq = await new returnReqSchema({
+            orderId,
+            userId : user._id,
+            reqStatus : 'Pending'
         })
 
-        if(order.paymentStatus === 'Success'){
-            const userId = user._id
-            await walletSchema.updateOne({ userId },{ $inc :{ amount : order.totalAmount } })
-            await orderSchema.updateOne({ _id : id },{ paymentStatus : 'Refunded' })
-        }
-        res.status(200).json('Order Returned')
+        returnReq.save();      
+        res.status(200).json('Order return request send')
     } catch (error) {
         console.log(error);
         next('There is an error occured, Cant\'t return ordered product')

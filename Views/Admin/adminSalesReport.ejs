@@ -81,26 +81,47 @@
             <div class="card mb-4">
                 <header class="card-header">
                     <div class="row gx-3 d-flex">
-                        <div class="col-lg-6 col-md-6 me-auto">
+                        <div class="col-lg-8 col-md-6 me-auto">
                             <form method="post" action="/admin/filterReport">
                                 <div class="row">
-                                    <div class="col-lg-4">
+                                    <div class="col-lg-3">
                                         <label>Start date</label>
                                         <input type="date" name="startDate" class="form-control" />
                                     </div>
-                                    <div class="col-lg-4">
+                                    <div class="col-lg-3">
                                         <label>End date</label>
                                         <input type="date" name="endDate" class="form-control" />
                                     </div>
-                                    <div class="col-lg-4">
+                                    <div class="col-lg-3" style="display: flex;flex-direction: column;">
+                                        <label class="form-label">Status</label>
+                                        <select class="status form-select" name="status">
+                                            <% if(locals.status){ %>
+                                                <option value="All" <% if ( status === 'All') { %>selected<% } %>>All status</option>
+                                                <option value="Cancelled" <% if ( status === 'Cancelled') { %>selected<% } %>>Cancelled</option>
+                                                <option value="Returned" <% if ( status === 'Returned') { %>selected<% } %>>Returned</option>
+                                                <option value="Failed" <% if ( status === 'Failed') { %>selected<% } %>>Failed</option>
+                                                <option value="Delivered" <% if ( status === 'Delivered') { %>selected<% } %>>Delivered</option>
+                                                <option value="Placed" <% if ( status === 'Placed') { %>selected<% } %>>Placed</option>
+                                            <% }else{ %>
+                                                <option value="All">All status</option>
+                                                <option value="Cancelled">Cancelled</option>
+                                                <option value="Returned">Returned</option>
+                                                <option value="Failed">Failed</option>
+                                                <option value="Delivered">Delivered</option>
+                                                <option value="Placed">Placed</option>
+                                            <% } %>
+                                            
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-3">
                                         <br>
                                         <button type="submit" id="filter" class="btn btn-primary"><i class="text-muted material-icons md-tune"></i>Filter</button>
                                     </div>
                                 </div>
                             </form>
                         </div>
-                        <div class="col-lg-2 col-md-6 me-auto"></div>
-                        <div class="col-lg-4 col-md-6 me-auto" style="display: flex; justify-content: flex-end;height: 45px;">
+                        <!-- <div class="col-lg-2 col-md-6 me-auto"></div> -->
+                        <div class="col-lg-4 col-md-6 me-auto mt-20" style="display: flex; justify-content: flex-end;height: 45px;">
                             <a id="createReport" class="btn btn-primary"><i class="text-muted material-icons md-post_add"></i>Create report</a>
                         </div>
                     </div>
@@ -117,7 +138,8 @@
                                     <!-- <th>Product Name</th> -->
                                     <!-- <th>Quantity</th> -->
                                     <th>Total Amount</th>
-                                    <th>Delivered on</th>
+                                    <!-- <th>Delivered on</th> -->
+                                    <th>Order Status</th>
                                     <th>Payment Method</th>
                                     <th><Address></Address></th>
                                 </tr>
@@ -136,7 +158,17 @@
                                             <% } %>
                                         <% }) %> -->
                                         <td><%= order.totalAmount %></td>
-                                        <td><%= order.deliveredAt.toLocaleString('en-US', { day: 'numeric', month: 'numeric', year: 'numeric' }) %></td>
+                                        <% if(order.orderStatus === 'Cancelled'){ %>
+                                            <td style="color: red;"><%= order.orderStatus %></td>
+                                        <% }else if(order.orderStatus === 'Returned'){ %>
+                                            <td style="color: rgb(212, 140, 7);"><%= order.orderStatus %></td>
+                                        <% }else if(order.orderStatus === 'Failed'){ %>
+                                            <td style="color: red;"><%= order.orderStatus %></td>
+                                        <% }else if(order.orderStatus === 'Delivered'){ %>
+                                            <td style="color: green;"><%= order.orderStatus %></td>
+                                        <% }else if(order.orderStatus === 'Placed'){ %>
+                                            <td style="color: rgb(0, 196, 235);"><%= order.orderStatus %></td>
+                                        <% } %>
                                         <td><%= order.paymentMethod %></td>
                                         
                                     </tr>

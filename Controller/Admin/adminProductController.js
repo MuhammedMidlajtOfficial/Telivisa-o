@@ -25,6 +25,7 @@ module.exports.getAdminAddProduct = async (req,res)=>{
 module.exports.postAdminAddProduct = async(req,res)=>{
     try {
         const imageArr = req.files;
+        console.log('imggg',imageArr);
         let imageUrlArray = [];
         
         for (let i = 0; i < imageArr.length; i++) {

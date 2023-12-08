@@ -342,14 +342,14 @@
             document.getElementById('validateProductDescription').style.display = 'none';
         }
 
-        if(productPrice.trim() === ''){
+        if(productPrice.trim() === '' || !productPriceValidation(productPrice) ){
             document.getElementById('validateProductPrice').style.display = 'block';
             event.preventDefault();
         }else{
             document.getElementById('validateProductPrice').style.display = 'none';
         }
 
-        if(productPromoPrice.trim() === ''){
+        if(productPromoPrice.trim() === '' || !productPriceValidation(productPromoPrice)){
             document.getElementById('validateProductPromoPrice').style.display = 'block';
             event.preventDefault();
         }else{
@@ -358,4 +358,8 @@
 
     });
 });
+
+function productPriceValidation(price){
+    return price > 0;
+}
 </script>

@@ -243,23 +243,51 @@
                                     </div>
                                     <!-- Wallets -->
                                     <div class="tab-pane fade" id="wallet" role="tabpanel" aria-labelledby="wallet-tab">
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <h5 class="mb-0 text-brand">Wellets</h5>
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="wallet-box" style="display: flex; align-items: center; flex-direction: column;">
-                                                    <div class="top-bar" style="background-color: #60c4bc; color: black; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: 600; height: 100px;width: 300px; border-radius: 15px 15px 0 0; padding: 10px;">
-                                                        <div class="top-bar-header" style="color: #fff;">Main wallet</div>
-                                                        <div class="top-barprice" style="display: flex;justify-content: center; color: #fff; filter: drop-shadow(0 0 3px #fff); align-items: center; font-size: 25px; margin-top: 15px; font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">
-                                                            <sup>₹</sup><span style="font-size: 35px;"><%= wallet.amount ?? 0 %></span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="bottom-bar" style="background-color: #291d12; height: 80px;width: 300px; border-radius: 0 0 15px 15px; display: flex; align-items: center; justify-content: space-evenly;">
-                                                        <div class="bottom-button-style"><i class="fa-solid fa-circle-plus"></i>Top Up</div>
-                                                        <div class="bottom-button-style"><i class="fa-solid fa-download"></i>Withdrow</div>
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 class="mb-0 text-brand">Wellets</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="wallet-box" style="display: flex; align-items: center; flex-direction: column;">
+                                                <div class="top-bar" style="background-color: #60c4bc; color: black; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: 600; height: 100px;width: 300px; border-radius: 15px 15px 0 0; padding: 10px;">
+                                                    <div class="top-bar-header" style="color: #fff;">Main wallet</div>
+                                                    <div class="top-barprice" style="display: flex;justify-content: center; color: #fff; filter: drop-shadow(0 0 3px #fff); align-items: center; font-size: 25px; margin-top: 15px; font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">
+                                                        <sup>₹</sup><span style="font-size: 35px;"><%= wallet.amount ?? 0 %></span>
                                                     </div>
                                                 </div>
+                                                <div class="bottom-bar" style="background-color: #291d12; height: 80px;width: 300px; border-radius: 0 0 15px 15px; display: flex; align-items: center; justify-content: space-evenly;">
+                                                    <div class="bottom-button-style"><i class="fa-solid fa-circle-plus"></i>Top Up</div>
+                                                    <div class="bottom-button-style"><i class="fa-solid fa-download"></i>Withdrow</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-header">
+                                            <h5 class="mb-0 text-brand">History</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <% if(wallet.walletHistory.length){ %>
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Amount</th>
+                                                                <th>status</th>
+                                                                <th>Where From</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        <% wallet.walletHistory.forEach((order)=>{ %>
+                                                            <tr>
+                                                                <td class="text-brand">₹<%= order.amount %></td>
+                                                                <td><%= order.status %></td>
+                                                                <td><%= order.whereFrom %></td>
+                                                            </tr>
+                                                        <% }) %>
+                                                        </tbody>
+                                                    </table>
+                                                <% }else{ %>
+                                                    <h4 class="text-danger">You don't have wallet history.</h4>
+                                                <% } %>
                                             </div>
                                         </div>
                                     </div>

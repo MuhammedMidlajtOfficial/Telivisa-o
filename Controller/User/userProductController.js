@@ -8,23 +8,30 @@ module.exports.getAllCategory = async (req,res,next)=>{
         const popularBrand = req.query.brand;
         const sortOrder = req.query.price
         const newAddedProducts  = await ProductSchema.aggregate([{$match : { productStatus : "unblock" }} ,{$sort:{createdAt:1}},{$limit:3} ])
+        
+        const page = req.query.page ?? 1;
+        const no_of_docs_each_page = 6;
+        const products = await ProductSchema.find({ productStatus : "unblock" }).sort({productPrice:1})
+        const totalPages = Math.ceil(products.length / no_of_docs_each_page);
+        const skip = (page - 1) * no_of_docs_each_page;
+
         if(user){
             // Filter
             if(popularBrand){
-                const products = await ProductSchema.find({ productStatus : "unblock" , productBrand : popularBrand }).sort({productPrice:1})
-                res.render('User/user-allCategory',{ products, newAddedProducts ,sortOrder, changeLoginToProfile : true })
+                const products = await ProductSchema.find({ productStatus : "unblock" , productBrand : popularBrand }).sort({productPrice:1}).skip(skip).limit(no_of_docs_each_page)
+                res.render('User/user-allCategory',{ products, newAddedProducts ,sortOrder, changeLoginToProfile : true, totalPages, page })
             }else{
-                const products = await ProductSchema.find({ productStatus : "unblock" }).sort({productPrice:1})
-                res.render('User/user-allCategory',{ products, newAddedProducts, sortOrder, changeLoginToProfile : true })
+                const products = await ProductSchema.find({ productStatus : "unblock" }).sort({productPrice:1}).skip(skip).limit(no_of_docs_each_page)
+                res.render('User/user-allCategory',{ products, newAddedProducts, sortOrder, changeLoginToProfile : true, totalPages, page })
             }
         }else{
             // Filter
             if(popularBrand){
-                const products = await ProductSchema.find({ productStatus : "unblock" , productBrand : popularBrand }).sort({productPrice:1})
-                res.render('User/user-allCategory',{ products, newAddedProducts ,sortOrder })
+                const products = await ProductSchema.find({ productStatus : "unblock" , productBrand : popularBrand }).sort({productPrice:1}).skip(skip).limit(no_of_docs_each_page)
+                res.render('User/user-allCategory',{ products, newAddedProducts ,sortOrder, totalPages, page })
             }else{
-                const products = await ProductSchema.find({ productStatus : "unblock" }).sort({productPrice:1})
-                res.render('User/user-allCategory',{ products, newAddedProducts, sortOrder })
+                const products = await ProductSchema.find({ productStatus : "unblock" }).sort({productPrice:1}).skip(skip).limit(no_of_docs_each_page)
+                res.render('User/user-allCategory',{ products, newAddedProducts, sortOrder, totalPages, page })
             }
         }
     } catch (error) {

@@ -1,0 +1,398 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-categories.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:21 GMT -->
+<head>
+    <meta charset="utf-8">
+    <title>Evara Dashboard</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="/adminAsset/imgs/theme/favicon.svg">
+    <!-- Template CSS -->
+    <link href="/adminAsset/css/main.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <div class="screen-overlay"></div>
+
+    <aside class="navbar-aside" id="offcanvas_aside">
+        <div class="aside-top">
+            <a href="/admin" class="brand-wrap">
+                <img src="/adminAsset/imgs/theme/logo.svg" class="logo" alt="Evara Dashboard">
+            </a>
+            <div>
+                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
+            </div>
+        </div>
+        <nav>
+            <div style="height: 645px;">
+            <ul class="menu-aside">
+                <li class="menu-item active">
+                    <a class="menu-link " href="/admin/adminDashboard"> <i class="icon material-icons md-home"></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item  has-submenu">
+                        <a class="menu-link" href="#"> <i class="icon material-icons md-local_mall"></i>
+                            <span class="text">Products</span>
+                        </a>
+                        <div class="submenu">
+                            <a href="/admin/products">Add product</a>
+                            <a href="/admin/productList">List product</a>
+                        </div>
+                    </a>
+                </li>
+            
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin/adminOrders"> <i class="icon material-icons md-shopping_cart"></i>
+                        <span class="text">Orders</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin/adminReturnReq"> <i class="icon material-icons md-request_quote"></i>
+                        <span class="text">Return Request</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin/adminBanner"> <i class="icon material-icons md-ad_units"></i>
+                        <span class="text">Banner</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/adminUser"> <i class="icon material-icons md-account_circle"></i>
+                            <span class="text">User</span></a>
+                    </li>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="#"> <i class="icon material-icons md-add_circle"></i>
+                        <span class="text">ADD</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/adminAddProduct">Add product</a>
+                        <a href="/admin/getAdminCategories">Add Categories</a>
+                        <a href="/admin/adminCoupon">Add Coupon</a>
+                        <a href="/admin/adminCoupon">Add Offers</a>
+                        <a href="/admin/adminAddBanner">Add Banner</a>
+                    </div>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" disabled href="/admin/salesReport"> <i class="icon material-icons md-pie_chart"></i>
+                        <span class="text">Sales report</span>
+                    </a>
+                </li>
+            </ul>
+            </div>
+            <hr>
+                <ul class="menu-aside">
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/adminSettings"> <i class="icon material-icons md-settings"></i>
+                            <span class="text">Settings</span>
+                        </a>
+                    </li>
+                </ul>
+        </nav>
+    </aside>
+
+    <main class="main-wrap">
+        <header class="main-header navbar">
+            <div class="col-search">
+                <form class="searchform">
+                    <div class="input-group">
+                        <input list="search_terms" type="text" class="form-control" placeholder="Search term">
+                        <button class="btn btn-light bg" type="button"> <i class="material-icons md-search"></i></button>
+                    </div>
+                    <datalist id="search_terms">
+                        <option value="Products">
+                        <option value="New orders">
+                        <option value="Apple iphone">
+                        <option value="Ahmed Hassan">
+                    </datalist>
+                </form>
+            </div>
+            <div class="col-nav">
+                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i class="material-icons md-apps"></i> </button>
+                <ul class="nav">
+                    
+                    <li class="nav-item">
+                        <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i> </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="requestfullscreen nav-link btn-icon"><i class="material-icons md-cast"></i></a>
+                    </li>
+                    
+                    <li class="dropdown nav-item">
+                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="/adminAsset/imgs/people/avatar2.jpg" alt="User"></a>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                            <a class="dropdown-item text-danger" href="/admin/adminLogout"><i class="material-icons md-exit_to_app"></i>Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </header>
+
+        <section class="content-main">
+            <div class="content-header row">
+                <div class="col-lg-6">
+                    <h2 class="content-title card-title">Banner </h2>
+                    <p>Add, edit & delete Banner</p>
+                </div>
+                <div class=" col-lg-6 row">
+                    <div class="col-lg-4">
+                        <a href="/admin/getAdminBanner" class="btn btn-primary btn-sm rounded">Create new</a>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" placeholder="Search Banner" class="form-control bg-white">
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="table-responsive">
+                                <% Banners.forEach((banner)=>{ %>
+                                    <div class="order_review mb-10">
+                                        <div style=" font-size: 15px;">
+                                            <div class="row">
+                                                <div class="col-lg-3">Image</div>
+                                                <div class="col-lg-1">:</div>
+                                                <div class="col-lg-6">
+                                                    <img src="<%= banner.image[0].path %>" alt="Banner image">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-3">Main title</div>
+                                                <div class="col-lg-1">:</div>
+                                                <div class="col-lg-6"><%= banner.mainTitle %></div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-3">Sub title</div>
+                                                <div class="col-lg-1">:</div>
+                                                <div class="col-lg-6"><%= banner.subTitle %></div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-3">Offers</div>
+                                                <div class="col-lg-1">:</div>
+                                                <div class="col-lg-6"><%= banner.offers %></div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-3">Offers type</div>
+                                                <div class="col-lg-1">:</div>
+                                                <div class="col-lg-6"><%= banner.offerType %></div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-3">Expiry date</div>
+                                                <div class="col-lg-1">:</div>
+                                                <div class="col-lg-6"><%= banner.expiryDate %></div>
+                                            </div>
+                                            <% if(banner.status === "Inactive") {%>
+                                                <div class="row">
+                                                    <div class="col-lg-3">Status</div>
+                                                    <div class="col-lg-1">:</div>
+                                                    <div class="col-lg-6 text-danger"><%= banner.status %></div>
+                                                </div>                                            
+                                            <% } else {%>
+                                                <div class="row">
+                                                    <div class="col-lg-3">Status</div>
+                                                    <div class="col-lg-1">:</div>
+                                                    <div class="col-lg-3 text-success"><%= banner.status %></div>
+                                                    <div class="col-lg-3 d-flex">
+                                                        <% if(banner.status === "Inactive") {%>
+                                                            <button class="btn btn-success col-lg-6" style="width: 70px; align-items: center; display: flex; justify-content: center;">
+                                                                <a data-userid="<%= banner._id %>" class="blockConfirmation" style="text-decoration: none; color: aliceblue;">Active</a>
+                                                            </button>
+                                                        <% } else { %>
+                                                            <button class="btn btn-danger col-lg-6" style="width: 70px; align-items: center; display: flex; justify-content: center;">
+                                                                <a data-userid="<%= banner._id %>" class="unBlockConfirmation" style="text-decoration: none; color: aliceblue;">Inactive</a>
+                                                            </button>
+                                                        <% } %>
+                                                        <button class="btn btn-primary col-lg-6" style="width: 70px;margin-left: 10px; align-items: center; display: flex; justify-content: center;">
+                                                            <a href="/admin/adminEditBanner<%= banner._id %>" style="text-decoration: none; color: aliceblue;">Edit</a>
+                                                        </button>
+                                                    </div>
+                                                </div>                                            
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                <% }) %>
+
+                            </div>
+                        </div> <!-- .col// -->
+
+                        <% if( locals.editCategory ) {%>
+                            <div class="col-md-4">
+                                <form method="post" action="/admin/postAdminEditCategories?id=<%= selectedCategory._id %>" id="CategoryValidation">
+                                    <div class="mb-3">
+                                        <label for="categoryName" class="form-label">Category Name</label>
+                                        <input value="<%= selectedCategory.categoryName %>" type="text" placeholder="Type here" class="form-control" id="categoryName" name="categoryName"/>
+                                        <div class="text-danger" id="validatecategoryName" style="display: none;">Please add valid category name</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="categoryStatus" class="form-label">Status</label>
+                                        <select class="form-select" name="categoryStatus" id="categoryStatus">
+                                            <option value="Active" <%= selectedCategory.status === 'Active' ? 'selected' : '' %>>Active</option>
+                                            <option value="Inactive" <%= selectedCategory.status === 'Inactive' ? 'selected' : '' %>>Inactive</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="d-grid">
+                                        <button class="btn btn-primary" type="submit">Edit category</button>
+                                    </div>
+                                </form>
+                            </div>
+                        <% } else { %>
+                            <div class="col-md-4">
+                                <form method="post" action="/admin/postAdminBanner" id="BannerValidation" enctype="multipart/form-data">
+                                    <div class="mb-3">
+                                        <label for="mainTitle" class="form-label">Main title</label>
+                                        <input type="text" placeholder="Type here" class="form-control" id="mainTitle" name="mainTitle" />
+                                        <div class="text-danger" id="validateMainTitle" style="display: none;">Please add valid Main title</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="subTitle" class="form-label">Sub title</label>
+                                        <input type="text" placeholder="Type here" class="form-control" id="subTitle" name="subTitle" />
+                                        <div class="text-danger" id="validateSubTitle" style="display: none;">Please add valid Main title</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="Offers" class="form-label">Offers</label>
+                                        <input type="text" placeholder="Type here" class="form-control" id="Offers" name="Offers" />
+                                        <div class="text-danger" id="validateOffers" style="display: none;">Please add valid Main title</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="OffersType" class="form-label">Offers type</label>
+                                        <input type="text" placeholder="Type here" class="form-control" id="OffersType" name="OffersType" />
+                                        <div class="text-danger" id="validateOffersType" style="display: none;">Please add valid Main title</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="ExpiryDate" class="form-label">Expiry date</label>
+                                        <input type="date" placeholder="Type here" class="form-control" id="ExpiryDate" name="ExpiryDate" />
+                                        <div class="text-danger" id="validateExpiryDate" style="display: none;">Please add valid Main title</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="BannerStatus" class="form-label">Status</label>
+                                        <select class="form-select" name="BannerStatus" id="BannerStatus">
+                                            <option>Active</option>
+                                            <option>Inactive</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="">Banner image</label>
+                                        <div class="card-body" style="background-color:#f4f5f9 ; border-radius: 4px;">
+                                            <div class="input-upload">
+                                                <img src="/adminAsset/imgs/theme/upload.svg" alt="">
+                                                <input id="adminAddBannerImage" class="form-control" name="adminAddBannerImage" multiple="multiple" type="file" required>
+                                            </div>
+                                            <div id="preview-container" class="d-flex flex-wrap">
+                                                <!-- Preview images will be added here dynamically -->
+                                            </div>
+                                        </div>                                    
+                                    </div>
+                                    <div class="d-grid">
+                                        <button class="btn btn-primary" type="submit">Create Banner</button>
+                                    </div>
+                                </form>
+                            </div>
+                        <% } %>
+                    </div> <!-- .row // -->
+                </div> <!-- card body .// -->
+            </div> <!-- card .// -->
+        </section> <!-- content-main end// -->
+        <footer class="main-footer font-xs">
+            <div class="row pb-30 pt-15">
+                <div class="col-sm-6">
+                    <script>
+                    document.write(new Date().getFullYear())
+                    </script> ©, Televisão - Ecommerce .
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-sm-end">
+                        All rights reserved
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+    </main>
+    <script src="/adminAsset/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="/adminAsset/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="/adminAsset/js/vendors/select2.min.js"></script>
+    <script src="/adminAsset/js/vendors/perfect-scrollbar.js"></script>
+    <script src="/adminAsset/js/vendors/jquery.fullscreen.min.js"></script>
+    <!-- Main Script -->
+    <script src="/adminAsset/js/main.js" type="text/javascript"></script>
+</body>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function(){
+        document.querySelector('#BannerValidation').addEventListener('submit' , function(event){
+            const existCheck = document.querySelector('.category').getAttribute('data-category')
+            console.log(existCheck);
+            const categoryName = document.getElementById('categoryName').value
+
+            if(categoryName.trim() === ""){
+                document.getElementById('validatecategoryName').style.display = "block";
+                event.preventDefault();
+            }else{
+                document.getElementById('validatecategoryName').style.display = "none";
+            }
+            
+        })
+    })
+//  confirmation
+    function deleteConfirmation(){
+        return confirm("Are you sure?");
+    }
+
+// Block confirmation
+    document.addEventListener("DOMContentLoaded", function () {
+        const blockButton = document.querySelectorAll('.blockConfirmation');
+
+        blockButton.forEach((elem)=>{
+            elem.addEventListener('click',()=>{
+                const queryValue = deleteConfirmation();
+                const userId = elem.dataset.userid;
+
+                if(queryValue){
+                  const url = "/admin/adminBlockBanner?id="+userId+"&confirmation=" + encodeURIComponent(queryValue);
+                  elem.href = url;
+                }else{
+                  console.log('Confirmation : false');
+                }
+            })
+        })
+    })
+
+// Unblock confirmation
+    document.addEventListener("DOMContentLoaded", function () {
+        const blockButton = document.querySelectorAll('.unBlockConfirmation');
+
+        blockButton.forEach((elem)=>{
+            elem.addEventListener('click',()=>{
+                const queryValue = deleteConfirmation();
+                const userId = elem.dataset.userid;
+
+                if(queryValue){
+                  const url = "/admin/adminUnblockBanner?id="+userId+"&confirmation=" + encodeURIComponent(queryValue);
+                  elem.href = url;
+                }else{
+                  console.log('Confirmation : false');
+                }
+            })
+        })
+    })
+
+</script>
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-categories.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:21 GMT -->
+</html>
+

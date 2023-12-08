@@ -3,19 +3,21 @@ const userSchema = require('../../Model/userSchema')
 const ProductSchema = require('../../Model/ProductSchema')
 const categorySchema = require('../../Model/categorySchema')
 const walletSchema = require('../../Model/walletSchema')
+const bannerSchema = require('../../Model/bannerSchema')
 const nodemailer = require('nodemailer')
 const otpGenerator  = require('otp-generator')
 
 module.exports.getHomePage = async (req,res,next)=>{
     try {
         const category = await categorySchema.find({ status : "Active" });
+        const Banners = await bannerSchema.find({ status:'Active' })
         const featuredProducts = await ProductSchema.find({ productStatus : "unblock" })
         const newAddedProducts  = await ProductSchema.aggregate([{$match : { productStatus : "unblock" }} ,{$sort:{createdAt:1}},{$limit:8} ])
         const popularProducts = featuredProducts.filter(product=>product.productPrice >= 50000)
         if(req.session.user){
-            res.render('User/homePage',{ featuredProducts, popularProducts, newAddedProducts, category, changeLoginToProfile : true })
+            res.render('User/homePage',{ featuredProducts, popularProducts, newAddedProducts, category, Banners, changeLoginToProfile : true })
         }else{
-            res.render('User/homePage',{ featuredProducts, popularProducts, newAddedProducts, category, changeLoginToProfile : false})
+            res.render('User/homePage',{ featuredProducts, popularProducts, newAddedProducts, category, Banners, changeLoginToProfile : false})
         }
     } catch (error) {
         console.log(error);
@@ -208,6 +210,7 @@ module.exports.postUserSignup = async (req,res,next)=>{
             let wallet = new walletSchema({
                 userId,
                 amount : 0,
+                walletHistory:[]
             })
             await wallet.save()
 

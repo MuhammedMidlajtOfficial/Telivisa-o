@@ -75,7 +75,7 @@ userRouter.post('/postUserChangeDetails', auth.isUserBlocked, auth.isUser, userP
 
 // Single Order view
 userRouter.get('/orderView', auth.isUserBlocked, auth.isUser, userOrderController.getOrderView)
-// Single Order Cancel
+// Cancel & Return Signle Order 
 userRouter.get('/cancelOrder', auth.isUserBlocked, auth.isUser, userOrderController.getCancelOrder)
 userRouter.get('/returnOrder', auth.isUserBlocked, auth.isUser, userOrderController.getReturnOrder)
 
