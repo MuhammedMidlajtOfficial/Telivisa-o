@@ -71,6 +71,12 @@ adminRouter.post('/postAdminEditCoupon', auth.isAdmin, adminCouponConttroller.po
 adminRouter.get('/adminBanner', adminBannerController.getAdminBanner)
 // Banner Add
 adminRouter.post('/postAdminBanner', productImageUploadMulter.array('adminAddBannerImage'), adminBannerController.postAdminBanner);
+// Banner Edit
+adminRouter.get('/adminEditBanner', adminBannerController.getAdminEditBanner)
+adminRouter.post('/postAdminEditBanner', productImageUploadMulter.array('adminAddBannerImage'), adminBannerController.postAdminEditBanner);
+// Banner Change Status
+adminRouter.get('/adminChangeBannerStatus', adminBannerController.getAdminChangeBannerStatus)
+
 
 
 // User View

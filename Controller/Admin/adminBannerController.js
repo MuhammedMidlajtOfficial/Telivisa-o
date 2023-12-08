@@ -4,7 +4,7 @@ const sharp = require('sharp')
 
 
 module.exports.getAdminBanner = async (req,res)=>{
-    const Banners = await bannerSchema.find({ status:'Active' })
+    const Banners = await bannerSchema.find({ })
     res.render('Admin/adminBanner',{ Banners })
 }
 
@@ -47,4 +47,59 @@ module.exports.postAdminBanner = async (req,res)=>{
     } catch (error) {
         console.log(error);
     }
+}
+
+module.exports.getAdminEditBanner = async(req,res)=>{
+    const _id = req.query.id;
+    const selectedBanner = await bannerSchema.findOne({ _id })
+    const Banners = await bannerSchema.find({ })
+
+    res.render('Admin/adminBanner',{ selectedBanner, Banners, EditBanner:true})
+}
+
+module.exports.postAdminEditBanner = async (req,res) =>{
+    try {
+        const _id = req.query.id
+        const imageArr = req.files;
+        const mainTitle = req.body.mainTitle;
+        const subTitle = req.body.subTitle;
+        const offers = req.body.Offers;
+        const offerType = req.body.OffersType;
+        const expiryDate = req.body.ExpiryDate;
+        const status = req.body.BannerStatus;
+
+        if(imageArr.length){
+            await bannerSchema.updateOne({ _id },{ 
+                mainTitle,
+                subTitle,
+                offers,
+                offerType,
+                expiryDate,
+                status,
+                image : imageArr
+            })
+        }else{
+            await bannerSchema.updateOne({ _id },{ 
+                mainTitle,
+                subTitle,
+                offers,
+                offerType,
+                expiryDate,
+                status,
+            })
+        }
+
+        res.redirect('/admin/adminBanner')
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+module.exports.getAdminChangeBannerStatus = async (req,res)=>{
+    const id = req.query.id;
+    const status = req.query.status;
+
+    await bannerSchema.updateOne({ _id : id },{ $set:{ status }})
+    res.redirect('/admin/adminBanner')
 }

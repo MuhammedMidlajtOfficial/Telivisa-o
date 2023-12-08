@@ -146,7 +146,7 @@
                 </div>
                 <div class=" col-lg-6 row">
                     <div class="col-lg-4">
-                        <a href="/admin/getAdminBanner" class="btn btn-primary btn-sm rounded">Create new</a>
+                        <a href="/admin/adminBanner" class="btn btn-primary btn-sm rounded">Create new</a>
                     </div>
                     <div class="col-lg-8">
                         <input type="text" placeholder="Search Banner" class="form-control bg-white">
@@ -194,33 +194,32 @@
                                                 <div class="col-lg-1">:</div>
                                                 <div class="col-lg-6"><%= banner.expiryDate %></div>
                                             </div>
-                                            <% if(banner.status === "Inactive") {%>
-                                                <div class="row">
-                                                    <div class="col-lg-3">Status</div>
-                                                    <div class="col-lg-1">:</div>
-                                                    <div class="col-lg-6 text-danger"><%= banner.status %></div>
-                                                </div>                                            
-                                            <% } else {%>
-                                                <div class="row">
-                                                    <div class="col-lg-3">Status</div>
-                                                    <div class="col-lg-1">:</div>
+                                            <div class="row">
+                                                <div class="col-lg-3">Status</div>
+                                                <div class="col-lg-1">:</div>
+                                                <% if(banner.status === "Inactive") {%>
+                                                    <div class="col-lg-3 text-danger"><%= banner.status %></div>
+                                                <% } else { %>
                                                     <div class="col-lg-3 text-success"><%= banner.status %></div>
-                                                    <div class="col-lg-3 d-flex">
-                                                        <% if(banner.status === "Inactive") {%>
-                                                            <button class="btn btn-success col-lg-6" style="width: 70px; align-items: center; display: flex; justify-content: center;">
-                                                                <a data-userid="<%= banner._id %>" class="blockConfirmation" style="text-decoration: none; color: aliceblue;">Active</a>
-                                                            </button>
-                                                        <% } else { %>
-                                                            <button class="btn btn-danger col-lg-6" style="width: 70px; align-items: center; display: flex; justify-content: center;">
-                                                                <a data-userid="<%= banner._id %>" class="unBlockConfirmation" style="text-decoration: none; color: aliceblue;">Inactive</a>
-                                                            </button>
-                                                        <% } %>
-                                                        <button class="btn btn-primary col-lg-6" style="width: 70px;margin-left: 10px; align-items: center; display: flex; justify-content: center;">
-                                                            <a href="/admin/adminEditBanner<%= banner._id %>" style="text-decoration: none; color: aliceblue;">Edit</a>
+                                                <% } %>
+                                                <div class="col-lg-3 d-flex ">
+                                                    <% if(banner.status === "Inactive") {%>
+                                                        <button class="btn btn-success col-lg-6" style="width: 70px; align-items: center; display: flex; justify-content: center;">
+                                                            <a data-userid="<%= banner._id %>" class="blockConfirmation" style="text-decoration: none; color: aliceblue;">Active</a>
                                                         </button>
-                                                    </div>
-                                                </div>                                            
-                                            <% } %>
+                                                        <button class="btn btn-primary col-lg-6" style="width: 70px;margin-left: 10px; align-items: center; display: flex; justify-content: center;">
+                                                            <a href="/admin/adminEditBanner?id=<%= banner._id %>" style="text-decoration: none; color: aliceblue;">Edit</a>
+                                                        </button>
+                                                    <% } else { %>
+                                                        <button class="btn btn-danger col-lg-6" style="width: 70px; align-items: center; display: flex; justify-content: center;">
+                                                            <a data-userid="<%= banner._id %>" class="unBlockConfirmation" style="text-decoration: none; color: aliceblue;">Inactive</a>
+                                                        </button>
+                                                        <button class="btn btn-primary col-lg-6" style="width: 70px;margin-left: 10px; align-items: center; display: flex; justify-content: center;">
+                                                            <a href="/admin/adminEditBanner?id=<%= banner._id %>" style="text-decoration: none; color: aliceblue;">Edit</a>
+                                                        </button>
+                                                    <% } %>
+                                                </div>
+                                            </div>                                            
                                         </div>
                                     </div>
                                 <% }) %>
@@ -228,24 +227,55 @@
                             </div>
                         </div> <!-- .col// -->
 
-                        <% if( locals.editCategory ) {%>
+                        <% if( locals.EditBanner ) {%>
                             <div class="col-md-4">
-                                <form method="post" action="/admin/postAdminEditCategories?id=<%= selectedCategory._id %>" id="CategoryValidation">
+                                <form method="post" action="/admin/postAdminEditBanner?id=<%= selectedBanner._id %>" id="BannerValidation" enctype="multipart/form-data">
                                     <div class="mb-3">
-                                        <label for="categoryName" class="form-label">Category Name</label>
-                                        <input value="<%= selectedCategory.categoryName %>" type="text" placeholder="Type here" class="form-control" id="categoryName" name="categoryName"/>
-                                        <div class="text-danger" id="validatecategoryName" style="display: none;">Please add valid category name</div>
+                                        <label for="mainTitle" class="form-label">Main title</label>
+                                        <input type="text" value="<%= selectedBanner.mainTitle %>" placeholder="Type here" class="form-control" id="mainTitle" name="mainTitle" />
+                                        <div class="text-danger" id="validateMainTitle" style="display: none;">Please add valid Main title</div>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="categoryStatus" class="form-label">Status</label>
-                                        <select class="form-select" name="categoryStatus" id="categoryStatus">
-                                            <option value="Active" <%= selectedCategory.status === 'Active' ? 'selected' : '' %>>Active</option>
-                                            <option value="Inactive" <%= selectedCategory.status === 'Inactive' ? 'selected' : '' %>>Inactive</option>
+                                        <label for="subTitle" class="form-label">Sub title</label>
+                                        <input type="text" value="<%= selectedBanner.subTitle %>" placeholder="Type here" class="form-control" id="subTitle" name="subTitle" />
+                                        <div class="text-danger" id="validateSubTitle" style="display: none;">Please add valid Sub title</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="Offers" class="form-label">Offers</label>
+                                        <input type="text" value="<%= selectedBanner.offers %>" placeholder="Type here" class="form-control" id="Offers" name="Offers" />
+                                        <div class="text-danger" id="validateOffers" style="display: none;">Please add valid Offers</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="OffersType" class="form-label">Offers type</label>
+                                        <input type="text" value="<%= selectedBanner.offerType %>" placeholder="Type here" class="form-control" id="OffersType" name="OffersType" />
+                                        <div class="text-danger" id="validateOffersType" style="display: none;">Please add valid Offers type</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="ExpiryDate" class="form-label">Expiry date</label>
+                                        <input type="date" value="<%= selectedBanner.expiryDate %>" placeholder="Type here" class="form-control" id="ExpiryDate" name="ExpiryDate" />
+                                        <div class="text-danger" id="validateExpiryDate" style="display: none;">Please add valid Expiry date</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="BannerStatus" class="form-label">Status</label>
+                                        <select class="form-select" name="BannerStatus" id="BannerStatus">
+                                            <option <%= selectedBanner.status === 'Active' ? 'selected' :'' %>>Active</option>
+                                            <option <%= selectedBanner.status === 'Inactive' ? 'selected' :'' %>>Inactive</option>
                                         </select>
                                     </div>
-
+                                    <div class="mb-3">
+                                        <label for="">Banner image</label>
+                                        <div class="card-body" style="background-color:#f4f5f9 ; border-radius: 4px;">
+                                            <div class="input-upload">
+                                                <img src="<%= selectedBanner.image[0].path %>" alt="">
+                                                <input id="adminAddBannerImage" class="form-control" name="adminAddBannerImage" type="file">
+                                            </div>
+                                            <div id="preview-container" class="d-flex flex-wrap">
+                                                <!-- Preview images will be added here dynamically -->
+                                            </div>
+                                        </div>                                    
+                                    </div>
                                     <div class="d-grid">
-                                        <button class="btn btn-primary" type="submit">Edit category</button>
+                                        <button class="btn btn-primary" type="submit">Edit Banner</button>
                                     </div>
                                 </form>
                             </div>
@@ -260,22 +290,22 @@
                                     <div class="mb-3">
                                         <label for="subTitle" class="form-label">Sub title</label>
                                         <input type="text" placeholder="Type here" class="form-control" id="subTitle" name="subTitle" />
-                                        <div class="text-danger" id="validateSubTitle" style="display: none;">Please add valid Main title</div>
+                                        <div class="text-danger" id="validateSubTitle" style="display: none;">Please add valid Sub title</div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="Offers" class="form-label">Offers</label>
                                         <input type="text" placeholder="Type here" class="form-control" id="Offers" name="Offers" />
-                                        <div class="text-danger" id="validateOffers" style="display: none;">Please add valid Main title</div>
+                                        <div class="text-danger" id="validateOffers" style="display: none;">Please add valid Offers</div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="OffersType" class="form-label">Offers type</label>
                                         <input type="text" placeholder="Type here" class="form-control" id="OffersType" name="OffersType" />
-                                        <div class="text-danger" id="validateOffersType" style="display: none;">Please add valid Main title</div>
+                                        <div class="text-danger" id="validateOffersType" style="display: none;">Please add valid Offers type</div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="ExpiryDate" class="form-label">Expiry date</label>
                                         <input type="date" placeholder="Type here" class="form-control" id="ExpiryDate" name="ExpiryDate" />
-                                        <div class="text-danger" id="validateExpiryDate" style="display: none;">Please add valid Main title</div>
+                                        <div class="text-danger" id="validateExpiryDate" style="display: none;">Please add valid Expiry date</div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="BannerStatus" class="form-label">Status</label>
@@ -289,7 +319,7 @@
                                         <div class="card-body" style="background-color:#f4f5f9 ; border-radius: 4px;">
                                             <div class="input-upload">
                                                 <img src="/adminAsset/imgs/theme/upload.svg" alt="">
-                                                <input id="adminAddBannerImage" class="form-control" name="adminAddBannerImage" multiple="multiple" type="file" required>
+                                                <input id="adminAddBannerImage" class="form-control" name="adminAddBannerImage" type="file" required>
                                             </div>
                                             <div id="preview-container" class="d-flex flex-wrap">
                                                 <!-- Preview images will be added here dynamically -->
@@ -333,21 +363,65 @@
 
 
 <script>
-    document.addEventListener('DOMContentLoaded', function(){
-        document.querySelector('#BannerValidation').addEventListener('submit' , function(event){
-            const existCheck = document.querySelector('.category').getAttribute('data-category')
-            console.log(existCheck);
-            const categoryName = document.getElementById('categoryName').value
+    document.addEventListener('DOMContentLoaded', function () {
+        var mainTitleInput = document.getElementById('mainTitle');
+        var subTitleInput = document.getElementById('subTitle');
+        var offersInput = document.getElementById('Offers');
+        var offersTypeInput = document.getElementById('OffersType');
+        var expiryDateInput = document.getElementById('ExpiryDate');
+        var bannerImageInput = document.getElementById('adminAddBannerImage');
 
-            if(categoryName.trim() === ""){
-                document.getElementById('validatecategoryName').style.display = "block";
+        var validateMainTitle = document.getElementById('validateMainTitle');
+        var validateSubTitle = document.getElementById('validateSubTitle');
+        var validateOffers = document.getElementById('validateOffers');
+        var validateOffersType = document.getElementById('validateOffersType');
+        var validateExpiryDate = document.getElementById('validateExpiryDate');
+
+        document.getElementById('BannerValidation').addEventListener('submit', function (event) {
+            var mainTitle = mainTitleInput.value;
+            var subTitle = subTitleInput.value;
+            var offers = offersInput.value;
+            var offersType = offersTypeInput.value;
+            var expiryDate = expiryDateInput.value;
+            var bannerImage = bannerImageInput.value;
+
+            if (mainTitle.trim() === '') {
                 event.preventDefault();
-            }else{
-                document.getElementById('validatecategoryName').style.display = "none";
+                validateMainTitle.style.display = 'block';
+            } else {
+                validateMainTitle.style.display = 'none';
             }
-            
-        })
-    })
+
+            if (subTitle.trim() === '') {
+                event.preventDefault();
+                validateSubTitle.style.display = 'block';
+            } else {
+                validateSubTitle.style.display = 'none';
+            }
+
+            if (offers.trim() === '') {
+                event.preventDefault();
+                validateOffers.style.display = 'block';
+            } else {
+                validateOffers.style.display = 'none';
+            }
+
+            if (offersType.trim() === '') {
+                event.preventDefault();
+                validateOffersType.style.display = 'block';
+            } else {
+                validateOffersType.style.display = 'none';
+            }
+
+            if (expiryDate.trim() === '') {
+                event.preventDefault();
+                validateExpiryDate.style.display = 'block';
+            } else {
+                validateExpiryDate.style.display = 'none';
+            }
+        });
+    });
+
 //  confirmation
     function deleteConfirmation(){
         return confirm("Are you sure?");
@@ -363,7 +437,7 @@
                 const userId = elem.dataset.userid;
 
                 if(queryValue){
-                  const url = "/admin/adminBlockBanner?id="+userId+"&confirmation=" + encodeURIComponent(queryValue);
+                  const url = "/admin/adminChangeBannerStatus?id="+userId+"&confirmation=" + encodeURIComponent(queryValue)+'&status=Active';
                   elem.href = url;
                 }else{
                   console.log('Confirmation : false');
@@ -382,7 +456,7 @@
                 const userId = elem.dataset.userid;
 
                 if(queryValue){
-                  const url = "/admin/adminUnblockBanner?id="+userId+"&confirmation=" + encodeURIComponent(queryValue);
+                  const url = "/admin/adminChangeBannerStatus?id="+userId+"&confirmation=" + encodeURIComponent(queryValue)+'&status=Inactive';
                   elem.href = url;
                 }else{
                   console.log('Confirmation : false');
