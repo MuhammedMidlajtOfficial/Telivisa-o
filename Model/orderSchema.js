@@ -23,6 +23,10 @@ const order = mongoose.Schema({
         type : Number,
         required:true
     },
+    discount :{
+        type : Number,
+        default:0
+    },
     couponCode :{
         type : String,
     },

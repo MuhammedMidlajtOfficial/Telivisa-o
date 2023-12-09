@@ -92,6 +92,13 @@ userRouter.get('/addToCartFromWhilshlist', auth.isUserBlocked, auth.isUser, user
 userRouter.get('/decreaseCartQuantity', auth.isUserBlocked, auth.isUser, userCartController.getDecreaseCartQuantity)
 userRouter.get('/increaseCartQuantity', auth.isUserBlocked, auth.isUser, userCartController.getIncreaseCartQuantity)
 
+
+
+// Coupon Check
+userRouter.get('/checkCouponCode',  auth.isUserBlocked, auth.isUser, userCartController.getCheckCouponCode )
+
+
+
 // Checkout Display
 userRouter.get('/userCheckout', auth.isUserBlocked, auth.isUser, userCheckoutController.getUserCheckout)
 // Place order

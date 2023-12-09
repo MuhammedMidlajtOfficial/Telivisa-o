@@ -6,7 +6,7 @@
             <div class="container">
                 <div class="breadcrumb">
                     <a href="/" rel="nofollow">Home</a>
-                    <span></span> <a href="/cartt">Cart</a>
+                    <span></span> <a href="/cart">Cart</a>
                     <span></span> Checkout
                 </div>
             </div>
@@ -99,6 +99,14 @@
                                             <td colspan="2"><em>Free Shipping</em></td>
                                         </tr>
                                         <tr>
+                                            <th>Coupon</th>
+                                            <td colspan="2" class="product-subtotal"><span class="font-xl text-danger fw-900">₹</span><span class="font-xl text-danger fw-900" id="couponAmount">0</span></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Offer</th>
+                                            <td colspan="2" class="product-subtotal"><span class="font-xl text-danger fw-900">₹</span><span class="font-xl text-danger fw-900" id="offerAmount">0</span></td>
+                                        </tr>
+                                        <tr>
                                             <th>Total</th>
                                             <td colspan="2" class="product-subtotal"><span class="font-xl text-brand fw-900">₹</span><span class="font-xl text-brand fw-900" id="Total"></span></td>
                                         </tr>
@@ -114,13 +122,14 @@
                                     </div>
                                     <div class="panel-collapse collapse coupon_form " id="coupon">
                                         <div class="panel-body">
-                                            <p class="mb-30 font-sm">If you have a coupon code, please apply it below.</p>
+                                            <p class="mb-10 font-sm">If you have a coupon code, please apply it below.</p>
                                             <form method="post">
                                                 <div class="form-group">
                                                     <input type="text" id="couponCode" placeholder="Enter Coupon Code...">
                                                 </div>
                                                 <div class="form-group">
-                                                    <button class="btn  btn-md" name="login">Apply Coupon</button>
+                                                    <button class="btn btn-md" id="applyCoupon" name="applyCoupon">Apply Coupon</button>
+                                                    <button class="btn btn-md" id="removeCoupon" name="removeCoupon" style="display: none; background-color: red;">Remove Coupon</button>
                                                 </div>
                                             </form>
                                         </div>
@@ -162,6 +171,89 @@
         document.getElementById('Total').innerHTML = grandTotal
         // -end Grand Total
 
+
+        // Error Swal
+        function errorSwal(message){
+            Swal.fire({
+                position:'top-center',
+                icon : 'error',
+                title : message,
+                showConfirmButton : false,
+                timer : 1500
+            })
+        }
+        // Success Swal
+        function successSwal(message){
+            Swal.fire({
+                position:'top-center',
+                icon : 'success',
+                title : message,
+                showConfirmButton : false,
+                timer : 1500
+            })
+        }
+
+
+        // Check Coupon code
+        document.getElementById('applyCoupon').addEventListener('click', function(event) {
+            event.preventDefault();
+            let couponCode = document.getElementById('couponCode').value;
+            if(couponCode.trim() !== ''){
+                fetch(`/checkCouponCode?couponCode=${couponCode}&grandTotal=${grandTotal}`,{
+                    method : 'get',
+                    headers : {
+                        "Content-Type":"application/json",
+                    },
+                })
+
+                .then((response)=>{
+                    if(!response.ok){
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json()
+                })
+
+                .then((data)=>{
+                    if(data.InvalidCouponCode){
+                        errorSwal('Invalid coupon code')
+                    }
+                    if(data.minPrice){
+                        errorSwal('Need more minmum purchase amount')
+                    }
+                    if(data.minPrice){
+                        errorSwal('Need more minmum purchase amount')
+                    }
+                    if(data.alreadyRadeemed){
+                        errorSwal('This coupon already radeemed')
+                    }
+                    if(data.success){
+                        console.log('grandTotal', data.totalAmount);
+                        document.getElementById('Total').innerHTML = data.totalAmount
+                        document.getElementById('couponAmount').innerHTML = data.couponAmount
+                        document.getElementById('couponCode').disabled = true; 
+                        document.getElementById('removeCoupon').style.display = 'block'
+                        document.getElementById('applyCoupon').style.display = 'none'
+                        document.getElementById('couponCode').style.display = 'none'
+                        successSwal('Coupon added')
+                    }
+                })
+            }
+        })
+
+        // Remove Coupon
+        document.getElementById('removeCoupon').addEventListener('click', function(event) {
+            event.preventDefault();
+
+            successSwal('Coupon removed')
+
+            document.getElementById('Total').innerHTML = grandTotal
+            document.getElementById('couponCode').innerHTML = ''
+            document.getElementById('couponCode').disabled = false; 
+            document.getElementById('removeCoupon').style.display = 'none'
+            document.getElementById('applyCoupon').style.display = 'block'
+        })
+
+
         document.getElementById('placeOrder').addEventListener('click', function(event) {
             event.preventDefault();
 
@@ -180,6 +272,7 @@
                     timer : 1500
                 })
             }
+
             // Find Payment Method 
             let selectedPaymentMethod;
             const PaymentMethod = document.querySelector('#paymentMethod:checked')
@@ -196,9 +289,15 @@
                 })
             }
             // Find Coupon code
-            let couponCode = document.getElementById('couponCode').textContent
+            const couponCode = document.getElementById('couponCode').value
+            const couponAmount = document.getElementById('couponAmount').textContent
 
-            fetch(`/placeOrder?addressId=${selectedAddressId}&paymentMethod=${selectedPaymentMethod}&couponCode=${couponCode}&totalAmount=${grandTotal}`,{
+            const offerAmount = document.getElementById('offerAmount').textContent
+            // Find totalAmount
+            const totalAmount = document.getElementById('Total').textContent;
+            // Find Discount
+            const discount =  couponAmount + offerAmount;
+            fetch(`/placeOrder?addressId=${selectedAddressId}&paymentMethod=${selectedPaymentMethod}&couponCode=${couponCode}&totalAmount=${totalAmount}&discount=${discount}`,{
                 method : 'get',
                 headers : {
                     "Content-Type":"application/json",
@@ -227,14 +326,7 @@
                     },1500)
                 }else if(data.productNotExist){
                     console.log('Product not exist');
-                    Swal.fire({
-                        position:"top-center",
-                        icon : 'error',
-                        title : 'Product not exist',
-                        showConfirmButton : false,
-                        timer : 1500
-                    })
-                    
+                    errorSwal('Product not exist')
                     setTimeout(()=>{
                         window.location.href = '/cart'
                     },1500)
@@ -250,7 +342,7 @@
                         })
         
                         setTimeout(()=>{
-                            window.location.href = '/confirmedOrder'
+                            // window.location.href = '/confirmedOrder'
                         },1500)
                     }else{
                         const order = data.order;

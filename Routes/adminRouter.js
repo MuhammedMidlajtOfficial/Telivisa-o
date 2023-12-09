@@ -8,8 +8,10 @@ const adminOrderController = require('../Controller/Admin/adminOrderController')
 const reportController = require('../Controller/Admin/reportController')
 const adminCouponConttroller = require('../Controller/Admin/adminCouponController')
 const adminBannerController = require('../Controller/Admin/adminBannerController')
+const adminOfferController = require('../Controller/Admin/adminOfferController')
 const productImageUploadMulter = require('../Middleware/multerMiddleware')
-const auth = require('../Middleware/auth')
+const auth = require('../Middleware/auth');
+const offerSchema = require('../Model/offerSchema');
 
 adminRouter.use('/uploads', express.static('uploads'))
 adminRouter.use('/Public', express.static('Public'))
@@ -68,15 +70,26 @@ adminRouter.post('/postAdminEditCoupon', auth.isAdmin, adminCouponConttroller.po
 
 
 // Banner View
-adminRouter.get('/adminBanner', adminBannerController.getAdminBanner)
+adminRouter.get('/adminBanner', auth.isAdmin, adminBannerController.getAdminBanner)
 // Banner Add
-adminRouter.post('/postAdminBanner', productImageUploadMulter.array('adminAddBannerImage'), adminBannerController.postAdminBanner);
+adminRouter.post('/postAdminBanner', auth.isAdmin, productImageUploadMulter.array('adminAddBannerImage'), adminBannerController.postAdminBanner);
 // Banner Edit
-adminRouter.get('/adminEditBanner', adminBannerController.getAdminEditBanner)
-adminRouter.post('/postAdminEditBanner', productImageUploadMulter.array('adminAddBannerImage'), adminBannerController.postAdminEditBanner);
+adminRouter.get('/adminEditBanner', auth.isAdmin, adminBannerController.getAdminEditBanner)
+adminRouter.post('/postAdminEditBanner', auth.isAdmin, productImageUploadMulter.array('adminAddBannerImage'), adminBannerController.postAdminEditBanner);
 // Banner Change Status
-adminRouter.get('/adminChangeBannerStatus', adminBannerController.getAdminChangeBannerStatus)
+adminRouter.get('/adminChangeBannerStatus', auth.isAdmin, adminBannerController.getAdminChangeBannerStatus)
 
+
+
+// Offer View
+adminRouter.get('/adminOffers', auth.isAdmin, adminOfferController.getBrandOffer )
+// Offer Add
+adminRouter.post('/postAdminAddBrandOffer', auth.isAdmin, adminOfferController.postAdminAddBrandOffer)
+// Offer Chande Status
+adminRouter.get('/adminChangeOfferStatus', auth.isAdmin, adminOfferController.notAdminChangeOfferStatus)
+// Offer Edit
+adminRouter.get('/adminEditOffer', auth.isAdmin, adminOfferController.getAdminEditOffer)
+adminRouter.post('/postAdminEditOffer', auth.isAdmin, adminOfferController.postAdminEditOffer)
 
 
 // User View

@@ -2,6 +2,7 @@ const cartSchema = require('../../Model/cartSchema');
 const userSchema = require('../../Model/userSchema');
 const wishlistSchema = require('../../Model/wishlistSchema');
 const productSchema = require('../../Model/ProductSchema')
+const couponSchema = require('../../Model/couponSchema')
 
 module.exports.getCart = async (req,res,next)=>{
     try {
@@ -210,3 +211,30 @@ module.exports.getIncreaseCartQuantity = async (req,res,next)=>{
     }
 }
 
+module.exports.getCheckCouponCode = async (req,res,next)=>{
+    try {
+        const couponCode = req.query.couponCode;
+        let grandTotal = req.query.grandTotal;
+        const user =  await userSchema.findOne({ email : req.session.user })
+
+        const coupon = await couponSchema.findOne({ couponCode, status:'Active' })
+        if(!coupon){
+            return res.status(200).json({ InvalidCouponCode:true })
+        }else if(grandTotal < coupon.minPrice){
+            return res.status(200).json({ minPrice:true })
+        }else{
+            coupon.radeemedUsers.forEach((redeemed)=>{
+                if(String(redeemed) === String(user._id)){
+                    return res.status(200).json({ alreadyRadeemed:true })
+                }
+            })
+            const couponAmount = coupon.amount
+            totalAmount = grandTotal - coupon.amount
+            return res.status(200).json({ totalAmount, couponAmount, couponCode, success:true })
+        }
+        
+    } catch (error) {
+        console.log(error);
+        next('There is an error occured, Cant\'t add coupon')
+    }
+}

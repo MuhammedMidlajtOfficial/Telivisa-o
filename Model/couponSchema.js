@@ -24,16 +24,12 @@ const Coupon = mongoose.Schema({
         type : String,
         required:true
     },
-    radeemedUsers :[{
-        userId :{
-            type : String,
-        }
-    }],
-    eligibleUsers :[{
-        userId :{
-            type : String,
-        }
-    }]
+    radeemedUsers :{
+        type:Array
+    },
+    eligibleUsers :{
+        type:Array
+    },
 })
 
 const couponSchema = new mongoose.model('coupon',Coupon)

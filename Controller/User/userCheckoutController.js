@@ -3,6 +3,8 @@ const cartSchema = require('../../Model/cartSchema')
 const addressSchema = require('../../Model/addressSchema')
 const orderSchema = require('../../Model/orderSchema')
 const productSchema = require('../../Model/ProductSchema')
+const couponSchema = require('../../Model/couponSchema')
+const offerSchema = require('../../Model/offerSchema')
 const razorpayHelper = require('../../Helper/razorpayHelper')
 const { response } = require('express')
 
@@ -37,6 +39,7 @@ module.exports.getPlaceOrder = async (req,res,next)=>{
         const paymentMethod = req.query.paymentMethod;
         const couponCode = req.query.couponCode;
         const totalAmount = req.query.totalAmount;
+        const discount = req.query.discount;
 
         const cart = await cartSchema.findOne({ userId : userId })
         const addressObj = await addressSchema.findOne({ userId})
@@ -76,8 +79,9 @@ module.exports.getPlaceOrder = async (req,res,next)=>{
         });
 
         if(paymentMethod === 'Cash on delivery'){
+            
             let order;
-            if(couponCode.length){
+            if(couponCode){
                 order = new orderSchema({
                     userId,
                     products : productsArr,
@@ -85,6 +89,7 @@ module.exports.getPlaceOrder = async (req,res,next)=>{
                     couponCode,
                     paymentMethod,
                     address,
+                    discount,
                     orderStatus : 'Placed',
                     paymentStatus : 'Pending'
                 })
@@ -95,11 +100,19 @@ module.exports.getPlaceOrder = async (req,res,next)=>{
                     totalAmount ,
                     paymentMethod,
                     address,
+                    discount,
                     orderStatus : 'Placed',
                     paymentStatus : 'Pending'
                 })
             }
             await order.save();
+
+            // Add user to Radeemed
+            if(couponCode){
+                console.log('here');
+                await couponSchema.updateOne({ couponCode },{ $push:{ radeemedUsers : userId } })
+            }
+
             // Decrease stock
             cart.products.forEach( async (product)=>{
                 try {
@@ -124,6 +137,7 @@ module.exports.getPlaceOrder = async (req,res,next)=>{
                     couponCode,
                     paymentMethod,
                     address,
+                    discount,
                     orderStatus : 'Failed',
                     paymentStatus : 'Failed'
                 })
@@ -134,6 +148,7 @@ module.exports.getPlaceOrder = async (req,res,next)=>{
                     totalAmount ,
                     paymentMethod,
                     address,
+                    discount,
                     orderStatus : 'Failed',
                     paymentStatus : 'Failed'
                 })
