@@ -258,6 +258,12 @@
                                             <td>₹<%= order.totalAmount %></td>
                                             <td>
                                                 <% if(order.paymentStatus === 'Pending') { %>
+                                                    <span class="badge rounded-pill alert-info"><%= order.paymentStatus %></span>
+                                                <% }else if(order.paymentStatus === 'Success') { %>
+                                                    <span class="badge rounded-pill alert-success"><%= order.paymentStatus %></span>
+                                                <% }else if(order.paymentStatus === 'Failed') { %>
+                                                    <span class="badge rounded-pill alert-danger"><%= order.paymentStatus %></span>
+                                                <% }else if(order.paymentStatus === 'Refunded') { %>
                                                     <span class="badge rounded-pill alert-warning"><%= order.paymentStatus %></span>
                                                 <% } %>
                                             </td>

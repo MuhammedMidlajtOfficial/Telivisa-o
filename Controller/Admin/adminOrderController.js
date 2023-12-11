@@ -7,14 +7,8 @@ const walletSchema = require('../../Model/walletSchema')
 
 module.exports.getAdminOrders = async (req,res) => {
     try{
-        const page = req.query.page ?? 1;
-        const no_of_docs_each_page = 10;
-        const products = await orderSchema.find({ })
-        const totalPages = Math.ceil(products.length / no_of_docs_each_page);
-        const skip = (page - 1) * no_of_docs_each_page;
-
-        const orders = await orderSchema.find({}).sort({ createdAt: -1 }).skip(skip).limit(no_of_docs_each_page)
-        res.render('Admin/adminOrders',{ orders, page, totalPages })
+        const orders = await orderSchema.find({}).sort({ createdAt: -1 })
+        res.render('Admin/adminOrders',{ orders })
     }catch (error) {
         console.log(error);
     }
@@ -63,7 +57,7 @@ module.exports.getReturnReq = async (req,res) =>{
             .populate({
                 path:'userId',
                 model:'userData'
-            })
+            }).sort({ createdAt : -1 })
         res.render('Admin/adminReturnReq',{ returnReq })
     } catch (error) {
         console.log(error);

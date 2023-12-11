@@ -147,16 +147,9 @@
                 </div>
             </div>
             <div class="card mb-4">
-                <header class="card-header">
-                    <div class="row gx-3">
-                        <div class="col-lg-4 col-md-6 me-auto">
-                            <input type="text" placeholder="Search..." class="form-control">
-                        </div>
-                    </div>
-                </header> <!-- card-header end// -->
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-hover">
+                        <table class="table table-hover" id="order">
                             <thead>
                                 <tr>
                                     <th>Date</th>
@@ -208,28 +201,6 @@
                 </div> <!-- card-body end// -->
             </div> <!-- card end// -->
             
-            <!--pagination-->
-            <div class="pagination-area mt-15 mb-sm-5 mb-lg-0">
-                <div aria-label="Page navigation example">
-                    <div class="pagination justify-content-start">
-                        <ul class="pagination justify-content-start">
-                            <% for (let i = 1; i <= totalPages; i++) { %>
-                                <% if (i == page) { %>
-                                <li class="page-item active">
-                                    <a class="page-link"><%= i %></a>
-                                </li>
-                                <% } else { %>
-                                <li class="page-item">
-                                    <a href="?page=<%= i %>" class="page-link">
-                                        <%= i %> 
-                                    </a>
-                                </li>
-                                <% } %>
-                            <% } %>
-                        </ul>
-                    </div>
-                </div>
-            </div>
 
         </section> <!-- content-main end// -->
         <footer class="main-footer font-xs">
@@ -256,6 +227,17 @@
     <script src="/adminAsset/js/main.js" type="text/javascript"></script>
 </body>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            new DataTable('#order', {
+                order: [[0, 'desc']] 
+            });
+        });
+    </script>
+    
 
 <!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-orders-1.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:22 GMT -->
 </html>
