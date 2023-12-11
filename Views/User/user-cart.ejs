@@ -16,6 +16,13 @@
                 <!-- Alert -->
                 <div class="text-danger" id="qtyGtZero" style="font-size: large; display: none;">Quantity must be greater than zero</div>
                 <div class="text-danger" id="outofStock" style="font-size: large;"></div>
+                <% if(locals.outofStock) {%>
+                    <% outOfStockArr.forEach((product)=>{ %>
+                        <div class="text-warning" id="outOfStockArr" style="font-size: large;">
+                            <%= product.productName %> has only <%= product.productStock %> stocks left. Please keep your product stock below or equal to <%= product.productStock %>
+                        </div>
+                    <% }) %>
+                <% } %>
                 
                 <div class="row">
                     <div class="col-12">
@@ -59,6 +66,7 @@
                                 <% }else{ %>
                                     <div class="text-danger" style="font-size: 20px;"> <h3 class="text-warning">Checkout page is waiting for you.....!</h3><br> Please add any products. Otherwise you can't go to checkout page</div>
                                 <% } %>
+                                
                         </div>
                         <div class="divider center_icon mt-20 mb-50"><i class="fi-rs-fingerprint"></i></div>
                         <div class="row mb-50">
@@ -109,6 +117,7 @@
         document.querySelectorAll('.qty-down').forEach((down)=>{
             down.addEventListener('click',function(event){
                 document.getElementById('outofStock').style.display = 'none'
+                document.getElementById('outOfStockArr').style.display = 'none'
 
                 event.preventDefault();
 
@@ -164,7 +173,7 @@
         // Cart Quantity Increase
         document.querySelectorAll('.qty-up').forEach((down)=>{
             down.addEventListener('click',function(event){
-                document.getElementById('outofStock').style.display = 'block'
+                
 
                 event.preventDefault();
                 
@@ -191,6 +200,7 @@
                 .then((data)=>{
                     console.log(data);
                     if(data.currentQty > 0){
+                        document.getElementById('outofStock').style.display = 'block'
                         document.getElementById('outofStock').innerHTML = `${data.currentProduct} has only ${data.currentQty} stocks left. Please keep your product stock below or equal to ${data.currentQty}`
                     }else{
                         console.log("quatity updated", data);

@@ -60,6 +60,10 @@ module.exports.getCancelOrder = async (req,res,next)=>{
             await walletSchema.updateOne({ userId },{ $inc :{ amount : order.totalAmount } })
             await orderSchema.updateOne({ _id : id },{ paymentStatus : 'Refunded' })
         }
+
+        if(order.paymentStatus === 'Pending'){
+            await orderSchema.updateOne({ _id : id },{ paymentStatus : 'Failed' })
+        }
         res.status(200).json('Order cancelled')
     } catch (error) {
         console.log(error);

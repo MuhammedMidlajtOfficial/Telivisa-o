@@ -15,6 +15,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="table-responsive">
+                            <% if(products.length) {%>
                             <table class="table shopping-summery text-center">
                                 <thead>
                                     <tr class="main-heading">
@@ -43,6 +44,9 @@
                                     <% }) %>
                                 </tbody>
                             </table>
+                            <% }else{ %>
+                                <h2 class="text-danger">No products in wishlist</h2>
+                            <% } %>
                         </div>
                     </div>
                 </div>

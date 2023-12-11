@@ -104,7 +104,7 @@
                                         </tr>
                                         <tr>
                                             <th>Offer</th>
-                                            <td colspan="2" class="product-subtotal"><span class="font-xl text-danger fw-900">₹</span><span class="font-xl text-danger fw-900" id="offerAmount">0</span></td>
+                                            <td colspan="2" class="product-subtotal"><span class="font-xl text-danger fw-900">₹</span><span class="font-xl text-danger fw-900" id="offerAmount"><%= offerAmount %></span></td>
                                         </tr>
                                         <tr>
                                             <th>Total</th>
@@ -162,11 +162,15 @@
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+
+        // Find Offer amount
+        const offerAmount = document.getElementById('offerAmount').textContent
+        
         
         // Grand Total
         let grandTotal = 0;
         document.querySelectorAll('#Subtotal').forEach((elem)=>{
-            grandTotal =Number(grandTotal) + Number(elem.textContent)
+            grandTotal =Number(grandTotal) + Number(elem.textContent) - offerAmount
         })
         document.getElementById('Total').innerHTML = grandTotal
         // -end Grand Total
@@ -228,12 +232,12 @@
                     }
                     if(data.success){
                         console.log('grandTotal', data.totalAmount);
-                        document.getElementById('Total').innerHTML = data.totalAmount
+                        const totalAmount = data.totalAmount - offerAmount
+                        document.getElementById('Total').innerHTML = totalAmount
                         document.getElementById('couponAmount').innerHTML = data.couponAmount
                         document.getElementById('couponCode').disabled = true; 
                         document.getElementById('removeCoupon').style.display = 'block'
                         document.getElementById('applyCoupon').style.display = 'none'
-                        document.getElementById('couponCode').style.display = 'none'
                         successSwal('Coupon added')
                     }
                 })
@@ -247,7 +251,8 @@
             successSwal('Coupon removed')
 
             document.getElementById('Total').innerHTML = grandTotal
-            document.getElementById('couponCode').innerHTML = ''
+            document.getElementById('couponAmount').innerHTML = '0'
+            document.getElementById('couponCode').value = ''
             document.getElementById('couponCode').disabled = false; 
             document.getElementById('removeCoupon').style.display = 'none'
             document.getElementById('applyCoupon').style.display = 'block'
@@ -291,12 +296,13 @@
             // Find Coupon code
             const couponCode = document.getElementById('couponCode').value
             const couponAmount = document.getElementById('couponAmount').textContent
-
+            // Find Offer amount
             const offerAmount = document.getElementById('offerAmount').textContent
             // Find totalAmount
             const totalAmount = document.getElementById('Total').textContent;
             // Find Discount
-            const discount =  couponAmount + offerAmount;
+            const discount =  Number(couponAmount) + Number(offerAmount)
+
             fetch(`/placeOrder?addressId=${selectedAddressId}&paymentMethod=${selectedPaymentMethod}&couponCode=${couponCode}&totalAmount=${totalAmount}&discount=${discount}`,{
                 method : 'get',
                 headers : {
@@ -342,7 +348,7 @@
                         })
         
                         setTimeout(()=>{
-                            // window.location.href = '/confirmedOrder'
+                            window.location.href = '/confirmedOrder'
                         },1500)
                     }else{
                         const order = data.order;

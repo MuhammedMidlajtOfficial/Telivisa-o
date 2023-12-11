@@ -11,25 +11,35 @@ module.exports.getAllCategory = async (req,res,next)=>{
         
         const page = req.query.page ?? 1;
         const no_of_docs_each_page = 6;
-        const products = await ProductSchema.find({ productStatus : "unblock" }).sort({productPrice:1})
-        const totalPages = Math.ceil(products.length / no_of_docs_each_page);
-        const skip = (page - 1) * no_of_docs_each_page;
+        
 
         if(user){
             // Filter
             if(popularBrand){
+                const popproducts = await ProductSchema.find({ productStatus : "unblock" , productBrand : popularBrand })
+                const totalPages = Math.ceil(popproducts.length / no_of_docs_each_page);
+                const skip = (page - 1) * no_of_docs_each_page;
                 const products = await ProductSchema.find({ productStatus : "unblock" , productBrand : popularBrand }).sort({productPrice:1}).skip(skip).limit(no_of_docs_each_page)
-                res.render('User/user-allCategory',{ products, newAddedProducts ,sortOrder, changeLoginToProfile : true, totalPages, page })
+                res.render('User/user-allCategory',{ products, newAddedProducts ,sortOrder, popularBrand, changeLoginToProfile : true, totalPages, page })
             }else{
+                const popproducts = await ProductSchema.find({ productStatus : "unblock" })
+                const totalPages = Math.ceil(popproducts.length / no_of_docs_each_page);
+                const skip = (page - 1) * no_of_docs_each_page;
                 const products = await ProductSchema.find({ productStatus : "unblock" }).sort({productPrice:1}).skip(skip).limit(no_of_docs_each_page)
                 res.render('User/user-allCategory',{ products, newAddedProducts, sortOrder, changeLoginToProfile : true, totalPages, page })
             }
         }else{
             // Filter
             if(popularBrand){
+                const popproducts = await ProductSchema.find({ productStatus : "unblock" , productBrand : popularBrand })
+                const totalPages = Math.ceil(popproducts.length / no_of_docs_each_page);
+                const skip = (page - 1) * no_of_docs_each_page;
                 const products = await ProductSchema.find({ productStatus : "unblock" , productBrand : popularBrand }).sort({productPrice:1}).skip(skip).limit(no_of_docs_each_page)
-                res.render('User/user-allCategory',{ products, newAddedProducts ,sortOrder, totalPages, page })
+                res.render('User/user-allCategory',{ products, newAddedProducts , sortOrder, popularBrand, totalPages, page })
             }else{
+                const popproducts = await ProductSchema.find({ productStatus : "unblock" }).sort({productPrice:1})
+                const totalPages = Math.ceil(popproducts.length / no_of_docs_each_page);
+                const skip = (page - 1) * no_of_docs_each_page;
                 const products = await ProductSchema.find({ productStatus : "unblock" }).sort({productPrice:1}).skip(skip).limit(no_of_docs_each_page)
                 res.render('User/user-allCategory',{ products, newAddedProducts, sortOrder, totalPages, page })
             }
@@ -59,12 +69,15 @@ module.exports.getViewProduct = async (req,res,next)=>{
 
 module.exports.postFillter = async (req,res,next)=>{
     const priceRange = req.body.priceRange.split(' - ')
-    const sizeArr = []
+    const popularBrand = req.body.brand;
+
+    const page = req.query.page ?? 1;
+    const no_of_docs_each_page = 6;
 
     const minPrice = priceRange[0].slice(1)
     const maxPrice = priceRange[1].slice(1)
     const checked = req.body
-    console.log(checked);
+    
     let obj = Object.values(checked)
     obj.splice(0,1)
     let size = []
@@ -77,14 +90,51 @@ module.exports.postFillter = async (req,res,next)=>{
         }
     });
     let products;
-    if(size.length > 0 && resolution.length > 0 ){
-        products = await ProductSchema.find({ productSize:{ $in : size }, productResolution :{ $in : resolution }, productPrice: { $gte: minPrice, $lte: maxPrice } }).sort({ productPrice:1 }) 
-    } else if (resolution.length > 0){
-        products = await ProductSchema.find({ productResolution :{ $in : resolution }, productPrice: { $gte: minPrice, $lte: maxPrice } }).sort({ productPrice:1 })
-    }else if(size.length > 0){
-        products = await ProductSchema.find({ productSize:{ $in : size }, productPrice: { $gte: minPrice, $lte: maxPrice } }).sort({ productPrice:1 })
+    let totalPages
+    if (popularBrand) {
+        if(size.length > 0 && resolution.length > 0 ){
+            const popproducts = await ProductSchema.find({ productSize:{ $in : size }, productResolution :{ $in : resolution }, productPrice: { $gte: minPrice, $lte: maxPrice } ,productBrand : popularBrand})
+            totalPages = Math.ceil(popproducts.length / no_of_docs_each_page);
+            const skip = (page - 1) * no_of_docs_each_page;
+            products = await ProductSchema.find({ productSize:{ $in : size }, productResolution :{ $in : resolution }, productPrice: { $gte: minPrice, $lte: maxPrice } ,productBrand : popularBrand}).sort({ productPrice:1 }).skip(skip).limit(no_of_docs_each_page)
+        } else if (resolution.length > 0){
+            const popproducts = await ProductSchema.find({ productResolution :{ $in : resolution }, productPrice: { $gte: minPrice, $lte: maxPrice } ,productBrand : popularBrand})
+            totalPages = Math.ceil(popproducts.length / no_of_docs_each_page);
+            const skip = (page - 1) * no_of_docs_each_page;
+            products = await ProductSchema.find({ productResolution :{ $in : resolution }, productPrice: { $gte: minPrice, $lte: maxPrice } ,productBrand : popularBrand}).sort({ productPrice:1 }).skip(skip).limit(no_of_docs_each_page)
+        }else if(size.length > 0){
+            const popproducts = await ProductSchema.find({ productSize:{ $in : size }, productPrice: { $gte: minPrice, $lte: maxPrice } ,productBrand : popularBrand})
+            totalPages = Math.ceil(popproducts.length / no_of_docs_each_page);
+            const skip = (page - 1) * no_of_docs_each_page;
+            products = await ProductSchema.find({ productSize:{ $in : size }, productPrice: { $gte: minPrice, $lte: maxPrice } ,productBrand : popularBrand}).sort({ productPrice:1 }).skip(skip).limit(no_of_docs_each_page)
+        }else{
+            const popproducts = await ProductSchema.find({ productPrice: { $gte: minPrice, $lte: maxPrice } , productBrand : popularBrand})
+            totalPages = Math.ceil(popproducts.length / no_of_docs_each_page);
+            const skip = (page - 1) * no_of_docs_each_page;
+            products = await ProductSchema.find({ productPrice: { $gte: minPrice, $lte: maxPrice } , productBrand : popularBrand}).sort({ productPrice:1 }).skip(skip).limit(no_of_docs_each_page)
+        }
     }else{
-        products = await ProductSchema.find({ productPrice: { $gte: minPrice, $lte: maxPrice } }).sort({ productPrice:1 })
+        if(size.length > 0 && resolution.length > 0 ){
+            const popproducts = await ProductSchema.find({ productSize:{ $in : size }, productResolution :{ $in : resolution }, productPrice: { $gte: minPrice, $lte: maxPrice } })
+            totalPages = Math.ceil(popproducts.length / no_of_docs_each_page);
+            const skip = (page - 1) * no_of_docs_each_page;
+            products = await ProductSchema.find({ productSize:{ $in : size }, productResolution :{ $in : resolution }, productPrice: { $gte: minPrice, $lte: maxPrice } }).sort({ productPrice:1 }).skip(skip).limit(no_of_docs_each_page)
+        } else if (resolution.length > 0){
+            const popproducts = await ProductSchema.find({ productResolution :{ $in : resolution }, productPrice: { $gte: minPrice, $lte: maxPrice } })
+            totalPages = Math.ceil(popproducts.length / no_of_docs_each_page);
+            const skip = (page - 1) * no_of_docs_each_page;
+            products = await ProductSchema.find({ productResolution :{ $in : resolution }, productPrice: { $gte: minPrice, $lte: maxPrice } }).sort({ productPrice:1 }).skip(skip).limit(no_of_docs_each_page)
+        }else if(size.length > 0){
+            const popproducts = await ProductSchema.find({ productSize:{ $in : size }, productPrice: { $gte: minPrice, $lte: maxPrice } })
+            totalPages = Math.ceil(popproducts.length / no_of_docs_each_page);
+            const skip = (page - 1) * no_of_docs_each_page;
+            products = await ProductSchema.find({ productSize:{ $in : size }, productPrice: { $gte: minPrice, $lte: maxPrice } }).sort({ productPrice:1 }).skip(skip).limit(no_of_docs_each_page)
+        }else{
+            const popproducts = await ProductSchema.find({ productPrice: { $gte: minPrice, $lte: maxPrice } })
+            totalPages = Math.ceil(popproducts.length / no_of_docs_each_page);
+            const skip = (page - 1) * no_of_docs_each_page;
+            products = await ProductSchema.find({ productPrice: { $gte: minPrice, $lte: maxPrice } }).sort({ productPrice:1 }).skip(skip).limit(no_of_docs_each_page)
+        }
     }
 
     // Sort By Price
@@ -93,5 +143,6 @@ module.exports.postFillter = async (req,res,next)=>{
     }
     
     const newAddedProducts  = await ProductSchema.aggregate([{$match : { productStatus : "unblock" }} ,{$sort:{createdAt:1}},{$limit:3} ])
-    res.render('User/user-allCategory',{ products, newAddedProducts })
+
+    res.render('User/user-allCategory',{ products, newAddedProducts, totalPages, page })
 }

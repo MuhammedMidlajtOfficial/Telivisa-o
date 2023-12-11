@@ -70,8 +70,8 @@
                                         <div class="bt-1 border-color-1 mt-30 mb-30"></div>
                                         <div class="detail-extralink">
                                             <div class="product-extra-link2">
-                                                <button type="submit" class="button button-add-to-cart">Add to cart</button>
-                                                <a aria-label="Add To Wishlist" class="action-btn hover-up" href="/addToWishlist?id=<%= productDetails._id %>"><i class="fi-rs-heart"></i></a>
+                                                <button type="submit" class="button button-add-to-cart addToCart" data-productId="<%= productDetails._id %>">Add to cart</button>
+                                                <a aria-label="Add To Wishlist" class="action-btn hover-up" data-productId="<%= productDetails._id %>"><i class="fi-rs-heart"></i></a>
                                             </div>
                                         </div>
                                         <ul class="product-meta font-xs color-grey mt-50">
@@ -172,5 +172,87 @@
         </section>
     </main>
 
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function(){
+
+            // Add to Cart
+            document.querySelectorAll('.addToCart').forEach((element)=>{
+                element.addEventListener('click', function(event){
+                  
+                    event.preventDefault();
+                    const productId = element.getAttribute('data-productId');
+                    fetch(`addToCart?id=${productId}`)
+                    
+                    .then((response)=>{
+                        if(!response.ok){
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        return response.json()
+                    })
+
+                    .then((data)=>{
+                        console.log("Added to cart:", data);
+                        Swal.fire({
+                            position : 'top-center',
+                            icon : 'success',
+                            title : 'Added to cart',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                    })
+
+                    .catch((err)=>{
+                        console.log(err);
+                    })
+
+                })
+            })
+
+            // Add to wishlist 
+            document.querySelectorAll('.addToWishlist').forEach((element)=>{
+                element.addEventListener('click', function(event){
+                  
+                    event.preventDefault();
+                    const productId = element.getAttribute('data-productId');
+                    fetch(`/addToWishlist?id=${productId}`)
+                    
+                    .then((response)=>{
+                        if(!response.ok){
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        return response.json()
+                    })
+
+                    .then((data)=>{
+                        if(data.productExist){
+                            console.log("Product already exist in wishlist:", data);
+                            Swal.fire({
+                                position : 'top-center',
+                                icon : 'error',
+                                title : 'Product already exist in wishlist',
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                        }else{
+                            console.log("Added to wishlist:", data);
+                            Swal.fire({
+                                position : 'top-center',
+                                icon : 'success',
+                                title : 'Added to wishlist',
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                        }
+                    })
+
+                    .catch((err)=>{
+                        console.log(err);
+                    })
+
+                })
+            })
+        })
+    </script>
 
 <%- include('../Partials/userFooter')  -%>

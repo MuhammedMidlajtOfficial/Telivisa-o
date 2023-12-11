@@ -70,6 +70,11 @@
                                                     <div class="col-lg-6 text-danger">₹<%= order.totalAmount %></div>
                                                 </div>
                                                 <div class="row">
+                                                    <div class="col-lg-3">Discount amount</div>
+                                                    <div class="col-lg-1">:</div>
+                                                    <div class="col-lg-6 text-danger">₹<%= order.discount %></div>
+                                                </div>
+                                                <div class="row">
                                                     <div class="col-lg-3">Ordered date</div>
                                                     <div class="col-lg-1">:</div>
                                                     <div class="col-lg-6"><%= order.createdAt.toLocaleDateString('en-US') %></div>

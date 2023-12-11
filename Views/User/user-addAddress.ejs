@@ -190,7 +190,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const state = document.getElementById('addState').value;
         const pinCode = document.getElementById('addPinCode').value;
 
-        if (name.trim() === "") {
+        if (name.trim() === "" || !isNaN(name)) {
             document.getElementById('validateAddName').style.display = 'block';
             event.preventDefault();
         } else {

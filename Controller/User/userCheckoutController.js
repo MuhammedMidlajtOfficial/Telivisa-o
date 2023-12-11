@@ -19,9 +19,36 @@ module.exports.getUserCheckout = async (req,res,next)=>{
                 path : "products.productId",
                 model : "product"
             })
+        
+        let outOfStockArr = []
+        let count = 0;
+        cart.products.forEach((product)=>{
+            if( product.quantity > product.productId.productStock ){
+                outOfStockArr.push(product.productId)
+                count = 1
+            }
+        })
+        
+
         if(cart.products.length){
+            const offers = await offerSchema.find({ status : 'Active' })
+            let offerAmount = 0;
+            for(let i=0;i<cart.products.length;i++){
+                for(let j=0;j<offers.length;j++){
+                    if(cart.products[i].productId.productBrand === offers[j].OfferName){
+                        if(cart.products[i].productId.productPrice * cart.products[i].quantity > offers[j].minPrice ){
+                            offerAmount = offerAmount + offers[j].amount
+                        }
+                    }
+                }
+            }
             const addressObj = await addressSchema.findOne({ userId })
-            res.render('User/user-checkout',{ cart, addressObj , changeLoginToProfile:true })
+
+            if(count){
+                return res.render('User/user-cart',{ cart, offerAmount, addressObj , changeLoginToProfile:true, outOfStockArr , outofStock:true })
+            }else{
+                res.render('User/user-checkout',{ cart, offerAmount, addressObj , changeLoginToProfile:true })
+            }
         }else{
             res.redirect('/cart')
         }

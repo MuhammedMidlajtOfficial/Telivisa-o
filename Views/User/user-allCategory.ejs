@@ -33,7 +33,7 @@
                                                 </div>
                                             </div>
                                             <div class="product-action-1">
-                                                <a aria-label="Add To Wishlist" class="action-btn hover-up" href="/addToWishlist?id=<%= product._id %>"><i class="fi-rs-heart"></i></a>
+                                                <a aria-label="Add To Wishlist" class="action-btn hover-up addToWishlist" data-productId="<%= product._id %>"><i class="fi-rs-heart"></i></a>
                                             </div>
                                         </div>
                                         <div class="product-content-wrap">
@@ -96,6 +96,9 @@
                         </div>
                         <!-- Fillter By Price -->
                         <form method="post" action="/fillter" class="sidebar-widget price_range range mb-30">
+                            <% if(locals.popularBrand) {%>
+                                <input type="text" name="brand" value="<%= popularBrand %>" style="display: none;">
+                            <% } %>
                             <div class="widget-header position-relative mb-20 pb-10">
                                 <h5 class="widget-title mb-10">Fill by price</h5>
                                 <div class="bt-1 border-color-1"></div>
@@ -156,6 +159,7 @@
                                 </div>
                             </div>
                             <button type="submit" class="btn btn-sm btn-default"><i class="fi-rs-filter mr-5"></i> Fillter</button>
+                            <a href="/allCategory" class="btn btn-sm btn-default"><i class="fi-rs-cross mr-5"></i> Clear</a>
                         </form>
                         <!-- Product sidebar Widget -->
                         <div class="sidebar-widget product-sidebar  mb-30 p-30 bg-grey border-radius-10">
@@ -185,7 +189,9 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function(){
-             document.querySelectorAll('.addToCart').forEach((element)=>{
+
+            // Add to Cart
+            document.querySelectorAll('.addToCart').forEach((element)=>{
                 element.addEventListener('click', function(event){
                   
                     event.preventDefault();
@@ -208,6 +214,50 @@
                             showConfirmButton: false,
                             timer: 1500
                         })
+                    })
+
+                    .catch((err)=>{
+                        console.log(err);
+                    })
+
+                })
+            })
+
+            // Add to wishlist 
+            document.querySelectorAll('.addToWishlist').forEach((element)=>{
+                element.addEventListener('click', function(event){
+                  
+                    event.preventDefault();
+                    const productId = element.getAttribute('data-productId');
+                    fetch(`/addToWishlist?id=${productId}`)
+                    
+                    .then((response)=>{
+                        if(!response.ok){
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        return response.json()
+                    })
+
+                    .then((data)=>{
+                        if(data.productExist){
+                            console.log("Product already exist in wishlist:", data);
+                            Swal.fire({
+                                position : 'top-center',
+                                icon : 'error',
+                                title : 'Product already exist in wishlist',
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                        }else{
+                            console.log("Added to wishlist:", data);
+                            Swal.fire({
+                                position : 'top-center',
+                                icon : 'success',
+                                title : 'Added to wishlist',
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                        }
                     })
 
                     .catch((err)=>{
