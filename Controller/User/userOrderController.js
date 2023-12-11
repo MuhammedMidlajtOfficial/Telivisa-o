@@ -5,6 +5,8 @@ const cartSchema = require('../../Model/cartSchema')
 const addressSchema = require('../../Model/addressSchema')
 const walletSchema = require('../../Model/walletSchema')
 const returnReqSchema = require('../../Model/returnReqSchema')
+const moment = require('moment')
+const { sub } = require('date-fns')
 
 module.exports.getOrderView = async (req,res,next)=>{
     try {
@@ -16,7 +18,7 @@ module.exports.getOrderView = async (req,res,next)=>{
                 model : "product"
             })
     
-        res.render('User/user-orderView',{ order, changeLoginToProfile:true })
+        res.render('User/user-orderView',{ order, orderId, changeLoginToProfile:true })
     } catch (error) {
         console.log(error);
         next('There is an error occured, Cant\'t display order view page')
@@ -86,5 +88,29 @@ module.exports.getReturnOrder = async (req,res,next)=>{
     } catch (error) {
         console.log(error);
         next('There is an error occured, Cant\'t return ordered product')
+    }
+}
+
+module.exports.getDownloadInvoice = async (req,res,next)=>{
+    try {
+        const _id = req.query.id
+        const order = await orderSchema.findOne({ _id })
+        .populate({
+            path : "products.productId",
+            model : "product"
+        })
+
+        const mainDate = moment(order.updatedAt)
+        const date = mainDate.format("DD/MM/YYYY"); 
+        const warrantyDate = mainDate.add(1, 'years').format("DD/MM/YYYY"); 
+        let subTotal = 0;
+        order.products.forEach((product)=>{
+            subTotal += product.productPrice * product.quantity
+        })
+
+        res.render('User/user-invoice',{ order, date, warrantyDate, subTotal, _id })
+    } catch (error) {
+        console.log(error);
+        next('There is an error occured, Cant\'t download invoice')
     }
 }

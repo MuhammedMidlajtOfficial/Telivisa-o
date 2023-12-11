@@ -48,10 +48,6 @@ const product = mongoose.Schema({
     productHoarding :{
         type:String,
         required:true
-    },
-    discount :{
-        type:Number,
-        default:0
     }
 }, {timestamps: true})
 

@@ -44,12 +44,16 @@ userRouter.post('/verifyResetOtp', userController.postVerifyResetOtp)
 // Reset Password
 userRouter.post('/resetUserPassword',userController.postResetUserPassword)
 
+
+
 // All category
 userRouter.get('/allCategory', auth.isUserBlocked, userProductController.getAllCategory)
 // View product
 userRouter.get('/viewProduct', auth.isUserBlocked, userProductController.getViewProduct)
 // Fillter
-userRouter.post('/fillter' , userProductController.postFillter)
+userRouter.post('/fillter' , auth.isUserBlocked, userProductController.postFillter)
+// Search
+userRouter.post('/allCategorySearch', userProductController.postAllCategorySearch )
 
 
 // Wishlist view
@@ -78,7 +82,8 @@ userRouter.get('/orderView', auth.isUserBlocked, auth.isUser, userOrderControlle
 // Cancel & Return Signle Order 
 userRouter.get('/cancelOrder', auth.isUserBlocked, auth.isUser, userOrderController.getCancelOrder)
 userRouter.get('/returnOrder', auth.isUserBlocked, auth.isUser, userOrderController.getReturnOrder)
-
+// Invoice Download
+userRouter.get('/downloadInvoice', userOrderController.getDownloadInvoice)
 
 
 // Cart Display

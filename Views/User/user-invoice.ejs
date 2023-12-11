@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html >
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Televisão</title>
+
+
+        <style>
+            * {
+            margin: 0;
+            padding: 0;
+            }
+            body {
+            font: 14px/1.4;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
+            #page-wrap {
+            width: 800px;
+            margin: 0 auto;
+            }
+
+            div {
+            border: 0;
+            font: 14px;
+            overflow: hidden;
+            resize: none;
+            }
+            table {
+            border-collapse: collapse;
+            }
+            table td,
+            table th {
+            border: 1px solid black;
+            padding: 5px;
+            }
+
+            #header {
+            height: 15px;
+            width: 100%;
+            margin: 20px 0;
+            background: #222;
+            text-align: center;
+            color: white;
+            font: bold 15px Helvetica, Sans-Serif;
+            text-decoration: uppercase;
+            letter-spacing: 20px;
+            padding: 8px 0px;
+            }
+
+            #address {
+            /* width: 250px; */
+            /* height: 180px; */
+            float: left;
+            }
+            #customer {
+            overflow: hidden;
+            }
+
+            #logo {
+            text-align: right;
+            float: right;
+            height: 150px;
+            width: 100px;
+            border: 1px solid #fff;
+            max-width: 540px;
+            max-height: 150px;
+            overflow: hidden;
+            }
+
+            #customer-title {
+            font-size: 20px;
+            font-weight: bold;
+            float: left;
+            }
+
+            #meta {
+            margin-top: 1px;
+            /* width: 300px; */
+            float: right;
+            }
+            #meta td {
+            text-align: right;
+            }
+            #meta td.meta-head {
+            text-align: left;
+            background: #eee;
+            }
+            #meta td div {
+            width: 100%;
+            /* height: 20px; */
+            text-align: right;
+            }
+
+            #items {
+            clear: both;
+            width: 100%;
+            margin: 30px 0 0 0;
+            border: 1px solid black;
+            }
+            #items th {
+            background: #eee;
+            }
+            #items tr.item-row td {
+            border: 0;
+            vertical-align: top;
+            }
+            #items td.description div,
+            #items td.item-name div {
+            width: 100%;
+            }
+            #items td.total-line {
+            border-right: 0;
+            text-align: right;
+            }
+            #items td.total-value {
+            border-left: 0;
+            padding: 10px;
+            }
+            #items td.total-value div {
+            height: 20px;
+            background: none;
+            }
+            #items td.balance {
+            background: #eee;
+            }
+            #items td.blank {
+            border: 0;
+            }
+
+            #terms {
+            text-align: center;
+            margin: 20px 0 0 0;
+            }
+            #terms h5 {
+            text-transform: uppercase;
+            font: 13px Helvetica, Sans-Serif;
+            letter-spacing: 10px;
+            border-bottom: 1px solid black;
+            padding: 0 0 8px 0;
+            margin: 0 0 8px 0;
+            }
+            #terms div {
+            width: 100%;
+            text-align: center;
+            }
+            .buttons{
+                background-color: #088178;
+                color: #fff;
+                border-radius: 3px;
+                font-size: 20px;
+                padding: 10px 22px;
+                border: 0;
+            }
+            #address {
+                display: table;
+            }
+
+            #address span {
+                display: table-row;
+            }
+
+            #address span span {
+                display: table-cell;
+                padding-right: 20px;
+            }
+        </style>
+    </head>
+
+    <body>
+       
+        <div id="page-wrap">
+            <div id="header">INVOICE</div>
+
+            <div id="identity">
+                <div id="address">
+                    <span><span>Name :</span> <%= order.address.name %></span>
+                    <span><span>Street :</span> <%= order.address.street %></span>
+                    <span><span>City :</span> <%= order.address.city %></span>
+                    <span><span>State :</span> <%= order.address.state %></span>
+                    <span><span>PinCode :</span> <%= order.address.pinCode %></span>
+                    <span><span>Email Id :</span> <%= order.address.email %></span>
+                    <span><span>Phn No :</span> <%= order.address.phnNumber %></span>
+                    <span><span>Altr Phn No :</span> <%= order.address.alterPhnNumber %></span>
+                </div>
+
+                <div id="logo" >
+                    <img id="image" style="width: 100px;" src="../../Public/userAssets/imgs/Logo/Televisao Logo.png" alt="logo" />
+                </div>
+            </div>
+            <div id="customer">
+                <div id="customer-title" style="margin-top: 20px;">Televisão</div>
+                <table id="meta">
+                    <tr>
+                        <td class="meta-head">Invoice #</td>
+                        <td><div><%= order._id %></div></td>
+                    </tr>
+                    <tr>
+                        <td class="meta-head">Purchase Date</td>
+                        <td><div id="date"><%= date %></div></td>
+                    </tr>
+                    <tr>
+                        <td class="meta-head">Warranty Date</td>
+                        <td id="Warranty" style="background-color: yellow;"><div id="date"><%= warrantyDate %></div></td>
+                    </tr>
+                    <tr>
+                        <td class="meta-head">Amount</td>
+                        <td><div class="due">₹<%= order.totalAmount %></div></td>
+                    </tr>
+                </table>
+        </div>
+
+        <table id="items">
+            <tr>
+                <th>Product Name</th>
+                <th>Unit Cost</th>
+                <th>Quantity</th>
+                <th>Price</th>
+            </tr>
+            <% order.products.forEach((product)=>{ %>
+                <tr class="item-row">
+                    <td class="item-name">
+                        <div><%= product.productId.productName %></div>
+                    </td>
+                    <td><div class="cost">₹<%= product.productPrice %></div></td>
+                    <td><div class="qty"><%= product.quantity %></div></td>
+                    <td><span class="price">₹<%= product.productPrice * product.quantity %></span></td>
+                </tr>
+            <% }) %>
+
+            <tr>
+                <td colspan="2" class="blank"></td>
+                <td colspan="2" class="total-line">Subtotal</td>
+                <td class="total-value"><div id="subtotal">₹<%= subTotal %></div></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="blank"></td>
+                <td colspan="2" class="total-line">Discount</td>
+                <td class="total-value"><div id="total">₹<%= order.discount %></div></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="blank"></td>
+                <td colspan="2" class="total-line balance">Total</td>
+                <td class="total-value balance"><div class="due">₹<%= order.totalAmount %></div></td>
+            </tr>
+        </table>
+
+        <div id="terms">
+            <h5>Televisão</h5>
+        </div>
+        <div style="display: flex;justify-content: center;align-items: center;gap: 100px; margin-bottom: 50px;">
+            <a id="Back" href="orderView?orderId=<%= _id %>" style="text-decoration: none;"><div class="buttons">Back</div></a>
+            <a id="Download" style="text-decoration: none;"><div class="buttons" style="background-color: rgb(30, 30, 173);">Download</div></a>
+        </div>
+    </body>
+
+    <script>
+        document.getElementById('Download').addEventListener('click',(event)=>{
+            document.getElementById('Back').style.display = 'none'
+            document.getElementById('Download').style.display = 'none'
+            document.getElementById('Warranty').setAttribute("backgroundColor", "yellow")
+            window.print()
+            document.getElementById('Back').style.display = 'block'
+            document.getElementById('Download').style.display = 'block'
+        })
+    </script>
+</html>

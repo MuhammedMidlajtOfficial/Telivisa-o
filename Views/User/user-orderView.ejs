@@ -18,8 +18,16 @@
                     <!-- Address -->
                     <div class="col-md-12 ">
                         <div class="order_review">
-                            <div class="mb-20">
-                                <H3 class="text-brand" style="text-align: center; font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">Order view</H3>
+                            <div class="row mb-10" style="display: flex; align-items: center;">
+                                <div class="col-lg-4"></div>
+                                <div class="mb-20 col-lg-4">
+                                    <H3 class="text-brand" style="text-align: center; font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">Order view</H3>
+                                </div>
+                                <% if( order.orderStatus === 'Delivered' ) {%>
+                                    <div class="col-lg-4" style="display: flex;justify-content: flex-end;">
+                                        <a href="/downloadInvoice?id=<%= orderId %>"><div class="btn">Invoice</div></a>
+                                    </div>
+                                <% } %>
                             </div>
                             <div class="OrderDetails row">
                                 <!-- Left -->

@@ -20,6 +20,18 @@
                             <div class="totall-product">
                                 <p> We found <strong class="text-brand"><%= products.length %></strong> items for you!</p>
                             </div>
+                            <div class="search">
+                                <form action="/allCategorySearch" method="post">
+                                    <div class="row">
+                                        <div class="me-auto col-lg-8" style="width: 250px;">
+                                            <input type="text" name="search" placeholder="Search..." class="form-control">
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <a href=""><button class="btn">Search</button></a>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
 
                         <div class="product-list mb-50">
