@@ -8,6 +8,7 @@ const userProfileController = require('../Controller/User/userProfileController'
 const userCartController = require('../Controller/User/userCartController')
 const userCheckoutController = require('../Controller/User/userCheckoutController')
 const userOrderController = require('../Controller/User/userOrderController')
+const userCouponController = require('../Controller/User/userCouponController')
 const auth = require('../Middleware/auth')
 const {errorHandler} =require('../Middleware/error-middleware')
 
@@ -101,7 +102,8 @@ userRouter.get('/increaseCartQuantity', auth.isUserBlocked, auth.isUser, userCar
 
 // Coupon Check
 userRouter.get('/checkCouponCode',  auth.isUserBlocked, auth.isUser, userCartController.getCheckCouponCode )
-
+// Coupon show
+userRouter.get('/coupon', userCouponController.getShowCoupon)
 
 
 // Checkout Display

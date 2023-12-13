@@ -6,7 +6,6 @@ const productSchema = require('../../Model/ProductSchema')
 const couponSchema = require('../../Model/couponSchema')
 const offerSchema = require('../../Model/offerSchema')
 const razorpayHelper = require('../../Helper/razorpayHelper')
-const { response } = require('express')
 
 
 module.exports.getUserCheckout = async (req,res,next)=>{

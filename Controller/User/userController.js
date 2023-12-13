@@ -6,6 +6,7 @@ const walletSchema = require('../../Model/walletSchema')
 const bannerSchema = require('../../Model/bannerSchema')
 const nodemailer = require('nodemailer')
 const otpGenerator  = require('otp-generator')
+const {v4 : uuidv4} = require('uuid');
 
 module.exports.getHomePage = async (req,res,next)=>{
     try {
@@ -195,7 +196,7 @@ module.exports.postUserSignup = async (req,res,next)=>{
        if(data){
             res.render('User/user-signup',{ emailAlreadyExist:true , changeLoginToProfile : false})
        } else {
-            const referralCode = otpGenerator.generate(6, { specialChars: false });
+            const referralCode = uuidv4();
             let userData = new userSchema({
                 name : req.body.USName,
                 email : req.body.email,
@@ -207,13 +208,40 @@ module.exports.postUserSignup = async (req,res,next)=>{
             await userData.save();
             const user = await userSchema.findOne({ email : req.body.email })
             const userId = user._id
-            let wallet = new walletSchema({
-                userId,
-                amount : 0,
-                walletHistory:[]
-            })
-            await wallet.save()
-
+           
+            if(req.body.referral){
+                let referral = await userSchema.findOne({ referralCode : req.body.referral })
+                if (referral) {
+                    
+                    let wallet = new walletSchema({
+                        userId,
+                        amount : 50,
+                        walletHistory:[{
+                            amount : 50,
+                            status : 'Credit',
+                            whereFrom : 'Refferal',
+                            whereFromId : req.body.referral
+                        }]
+                    })
+                    await wallet.save()
+                    
+                    await walletSchema.updateOne({ userId : referral._id },{ $inc :{ amount : 50 },$push:{
+                        walletHistory:{
+                            amount : 50,
+                            status : 'Credit',
+                            whereFrom : 'Refferal',
+                            whereFromId : req.body.referral
+                        }
+                    }})
+                }
+            }else{
+                let wallet = new walletSchema({
+                    userId,
+                    amount : 0,
+                    walletHistory:[]
+                })
+                await wallet.save()
+            }
             
             res.redirect('/userLogin')
        }

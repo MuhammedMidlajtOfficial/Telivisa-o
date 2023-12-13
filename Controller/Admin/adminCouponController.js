@@ -31,8 +31,10 @@ async function addCoupon( couponCode, amount, minPrice, maxPrice, expiryDate, st
 
 module.exports.getAdminCoupon = async (req,res) => {
     try {
+        const timestamp = Date.now();
+        const date = new Date(timestamp).toISOString().split('T')[0];
         const coupons = await couponSchema.find({ })
-        res.render('Admin/adminCoupon',{ coupons })
+        res.render('Admin/adminCoupon',{ coupons, date })
     } catch (error) {
         console.log(error);
     }

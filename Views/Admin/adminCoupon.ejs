@@ -147,11 +147,10 @@
                     <p>Add, edit & delete Coupon</p>
                 </div>
                 <div class=" col-lg-6 row">
+                    <div class="col-lg-4"></div>
+                    <div class="col-lg-4"></div>
                     <div class="col-lg-4">
                         <a href="/admin/adminCoupon" class="btn btn-primary btn-sm rounded">Create new</a>
-                    </div>
-                    <div class="col-lg-8">
-                        <input type="text" placeholder="Search Coupon" class="form-control bg-white">
                     </div>
                 </div>
             </div>
@@ -372,7 +371,7 @@
             }
 
             // Validate Max Price
-            if (isNaN(maxPrice)) {
+            if (isNaN(maxPrice) || minPrice > maxPrice) {
                 document.getElementById('validateMaxPrice').style.display = 'block';
                 event.preventDefault();
             } else {
@@ -380,7 +379,9 @@
             }
 
             // Validate Expiry Date
-            if (expiryDate.trim() === '') {
+            const formatedDate = new Date(JSON.stringify(`<%= date %>`))
+            const date = formatedDate.toISOString().split('T')[0];
+            if (expiryDate.trim() === '' || date > expiryDate) {
                 document.getElementById('validateExpiryDate').style.display = 'block';
                 event.preventDefault();
             } else {

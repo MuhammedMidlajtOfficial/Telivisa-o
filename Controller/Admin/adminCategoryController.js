@@ -2,8 +2,10 @@ const categorySchema = require('../../Model/categorySchema')
     
 const getAdminAddCategories = async (req,res)=>{
     try {
+        const timestamp = Date.now();
+        const date = new Date(timestamp).toISOString().split('T')[0];
         const category = await categorySchema.find({})
-        res.render('Admin/adminCategories' , { category });
+        res.render('Admin/adminCategories' , { category, date });
     } catch (error) {
         console.log(error);
     }

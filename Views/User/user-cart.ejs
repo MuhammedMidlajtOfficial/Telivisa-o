@@ -117,7 +117,10 @@
         document.querySelectorAll('.qty-down').forEach((down)=>{
             down.addEventListener('click',function(event){
                 document.getElementById('outofStock').style.display = 'none'
-                document.getElementById('outOfStockArr').style.display = 'none'
+                const outOfStockArr = document.getElementById('outOfStockArr')
+                if (outOfStockArr) {
+                    outOfStockArr.style.display = 'none'
+                }
 
                 event.preventDefault();
 

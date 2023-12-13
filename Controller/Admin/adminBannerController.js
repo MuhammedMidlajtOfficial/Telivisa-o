@@ -1,11 +1,15 @@
+const { log } = require('console');
 const bannerSchema = require('../../Model/bannerSchema')
 const fs = require('fs')
 const sharp = require('sharp')
 
 
 module.exports.getAdminBanner = async (req,res)=>{
+    const timestamp = Date.now();
+    const date = new Date(timestamp).toISOString().split('T')[0];
     const Banners = await bannerSchema.find({ })
-    res.render('Admin/adminBanner',{ Banners })
+    console.log(date);
+    res.render('Admin/adminBanner',{ Banners, date })
 }
 
 module.exports.postAdminBanner = async (req,res)=>{

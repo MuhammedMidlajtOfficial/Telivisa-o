@@ -1,8 +1,10 @@
 const offerSchema = require('../../Model/offerSchema')
 
 module.exports.getBrandOffer = async (req,res)=>{
+    const timestamp = Date.now();
+    const date = new Date(timestamp).toISOString().split('T')[0];
     const offers = await offerSchema.find({ })
-    res.render('Admin/adminOffers',{ offers })
+    res.render('Admin/adminOffers',{ offers, date })
 }
 
 module.exports.postAdminAddBrandOffer = async (req,res)=>{

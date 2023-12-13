@@ -142,17 +142,12 @@
 
         <section class="content-main">
             <div class="content-header row">
-                <div class="col-lg-6">
+                <div class="col-lg-10">
                     <h2 class="content-title card-title">Offers</h2>
                     <p>Add, edit & delete Offers</p>
                 </div>
-                <div class=" col-lg-6 row">
-                    <div class="col-lg-4">
-                        <a href="/admin/adminBrandOffers" class="btn btn-primary btn-sm rounded">Create new</a>
-                    </div>
-                    <div class="col-lg-8">
-                        <input type="text" placeholder="Search Coupon" class="form-control bg-white">
-                    </div>
+                <div class=" col-lg-2">
+                    <a href="/admin/adminOffers" class="btn btn-primary btn-sm rounded">Create new</a>
                 </div>
             </div>
 
@@ -354,14 +349,14 @@
     document.addEventListener('DOMContentLoaded', function(){
         document.querySelector('#couponValidation').addEventListener('submit', function (event) {
             console.log('here');
-            let couponCode = document.getElementById('couponCode').value;
-            let couponAmount = document.getElementById('couponAmount').value;
+            let OfferName = document.getElementById('OfferName').value;
+            let Amount = document.getElementById('Amount').value;
             let minPrice = document.getElementById('minPrice').value;
             let maxPrice = document.getElementById('maxPrice').value;
             let expiryDate = document.getElementById('expiryDate').value;
 
             // Validate Coupon Code
-            if (couponCode.trim() === '') {
+            if (OfferName.trim() === '') {
                 document.getElementById('validateCouponCode').style.display = 'block';
                 event.preventDefault();
             } else {
@@ -369,7 +364,7 @@
             }
 
             // Validate Coupon Amount
-            if (couponAmount.trim() === '' || isNaN(couponAmount)) {
+            if (Amount.trim() === '' || isNaN(Amount)) {
                 document.getElementById('validateCouponAmount').style.display = 'block';
                 event.preventDefault();
             } else {
@@ -385,7 +380,7 @@
             }
 
             // Validate Max Price
-            if (isNaN(maxPrice)) {
+            if (isNaN(maxPrice) || minPrice > maxPrice) {
                 document.getElementById('validateMaxPrice').style.display = 'block';
                 event.preventDefault();
             } else {
@@ -393,7 +388,9 @@
             }
 
             // Validate Expiry Date
-            if (expiryDate.trim() === '') {
+            const formatedDate = new Date(JSON.stringify(`<%= date %>`))
+            const date = formatedDate.toISOString().split('T')[0];
+            if (expiryDate.trim() === '' || date > expiryDate) {
                 document.getElementById('validateExpiryDate').style.display = 'block';
                 event.preventDefault();
             } else {

@@ -1,7 +1,6 @@
 const categorySchema = require('../../Model/categorySchema')
 const ProductSchema = require('../../Model/ProductSchema')
 const userSchema = require('../../Model/userSchema')
-const { search } = require('../../Routes/userRouter')
 
 module.exports.getAllCategory = async (req,res,next)=>{
     try {

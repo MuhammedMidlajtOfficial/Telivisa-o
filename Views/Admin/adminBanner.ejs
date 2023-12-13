@@ -80,7 +80,7 @@
                         <span class="text">Categories</span>
                     </a>
                 </li>
-                <li class="menu-item active">
+                <li class="menu-item">
                     <a class="menu-link" href="/admin/adminUser"> <i class="icon material-icons md-account_circle"></i>
                         <span class="text">User</span>
                     </a>
@@ -415,7 +415,9 @@
                 validateOffersType.style.display = 'none';
             }
 
-            if (expiryDate.trim() === '') {
+            const formatedDate = new Date(JSON.stringify(`<%= date %>`))
+            const date = formatedDate.toISOString().split('T')[0];
+            if (expiryDate.trim() === '' || date > expiryDate) {
                 event.preventDefault();
                 validateExpiryDate.style.display = 'block';
             } else {
