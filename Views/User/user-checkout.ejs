@@ -337,6 +337,16 @@
                     setTimeout(()=>{
                         window.location.href = '/cart'
                     },1500)
+                }else if(data.couponBlocked){
+                    console.log('loo',data.couponBlocked);
+                    console.log('Coupon Blocked');
+                    Swal.fire({
+                        position:"top-center",
+                        icon : 'error',
+                        title : 'Coupon Blocked',
+                        showConfirmButton : false,
+                        timer : 1500
+                    })
                 }else{
                     if(data.codSuccess){
                         console.log('Order placed successfully');

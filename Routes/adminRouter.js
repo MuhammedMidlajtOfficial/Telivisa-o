@@ -106,8 +106,8 @@ adminRouter.get('/adminOrders', auth.isAdmin, adminOrderController.getAdminOrder
 adminRouter.get('/adminViewOrder', auth.isAdmin, adminOrderController.getAdminViewOrder )
 // Change Status
 adminRouter.post('/adminUpdateOrderStatus', auth.isAdmin, adminOrderController.postAdminUpdateOrderStatus)
-
-
+// Order Cancel
+adminRouter.get('/adminOrderCancel', auth.isAdmin, adminOrderController.getAdminOrderCancel)
 
 // Return Req
 adminRouter.get('/adminReturnReq', auth.isAdmin, adminOrderController.getReturnReq)

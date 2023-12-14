@@ -7,8 +7,9 @@ const walletSchema = require('../../Model/walletSchema')
 
 module.exports.getAdminOrders = async (req,res) => {
     try{
-        const orders = await orderSchema.find({}).sort({ createdAt: -1 })
-        res.render('Admin/adminOrders',{ orders })
+        const orders = await orderSchema.find({}).sort({ createdAt: -1 });
+        res.render('Admin/adminOrders', { orders });
+
     }catch (error) {
         console.log(error);
     }
@@ -49,6 +50,36 @@ module.exports.postAdminUpdateOrderStatus = async (req,res) => {
     }catch (error) {
         console.log(error);
     }
+}
+
+module.exports.getAdminOrderCancel = async (req,res) =>{
+    const orderId = req.query.id;
+    const order = await orderSchema.findOne(
+        { _id : orderId })
+        .populate({
+            path : "products.productId",
+            model : "product"
+        })
+    if (order.orderStatus === 'Pending' || order.orderStatus === 'Shipped') {
+        if(order.paymentStatus === 'Success'){
+            await walletSchema.updateOne({ userId : order.userId },{ $push:{
+                walletHistory:{
+                    amount : order.totalAmount,
+                    status : 'Credit',
+                    whereFrom : 'Cancell product - ' + order.products[0].productId.productName,
+                    whereFromId : order._id
+                }
+             }, $inc :{ 
+                amount : order.totalAmount
+             } })
+
+            await orderSchema.updateOne({ _id : orderId },{ orderStatus : 'Cancelled', paymentStatus : 'Refunded' })
+
+        }else{
+            await orderSchema.updateOne({ _id : orderId },{ orderStatus : 'Cancelled', paymentStatus : 'Failed' })
+        }
+    }
+    return res.render('Admin/adminViewOrder',{ order })
 }
 
 module.exports.getReturnReq = async (req,res) =>{

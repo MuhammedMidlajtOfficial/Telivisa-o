@@ -76,6 +76,14 @@ module.exports.getPlaceOrder = async (req,res,next)=>{
                 model : "product"
             })
 
+        if(couponCode){
+            // checkExistCoupon
+            const checkExistCoupon = await couponSchema.findOne({ couponCode,status:'Active' })
+            if(!checkExistCoupon){
+                return res.status(200).json({ couponBlocked:true })
+            }
+        }
+
         let productsArr = [];
         for(let i=0;i<cart.products.length;i++){
             if(popCart.products[i].productId._id.toString() === cart.products[i].productId.toString() ){

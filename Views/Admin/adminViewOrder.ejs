@@ -202,6 +202,11 @@
                                                     <div class="col-lg-6 text-danger">₹<%= order.totalAmount %></div>
                                                 </div>
                                                 <div class="row">
+                                                    <div class="col-lg-3">Discount</div>
+                                                    <div class="col-lg-1">:</div>
+                                                    <div class="col-lg-6 text-danger">₹<%= order.discount %></div>
+                                                </div>
+                                                <div class="row">
                                                     <div class="col-lg-3">Ordered date</div>
                                                     <div class="col-lg-1">:</div>
                                                     <div class="col-lg-6"><%= order.createdAt.toLocaleDateString('en-US') %></div>
@@ -227,18 +232,21 @@
                                     <!-- Change status -->
                                     <div class="mt-10"  style="padding: 20px; border: 1px solid rgb(175, 166, 166); border-radius: 10px;">
                                         <div class="text-secondary mb-10" style=" font-size: 20px; font-weight: bold;"><u>Change order status</u></div>
-                                        <% if( order.orderStatus !== 'Cancelled' && order.orderStatus !== 'Returned') { %>
-                                                <form action="/admin/adminUpdateOrderStatus?id=<%= order._id %>" method="post">
-                                                    <div class="mb-4">
-                                                        <select class="form-select" name="productStatus" style="border: 1px solid #000;;">
-                                                            <option value="Delivered"> Delivered </option>
-                                                            <option value="Shipped"> Shipped </option>
-                                                        </select>                                             
-                                                    </div>
-                                                    <button type="submit" class="btn m-auto updateBtn" style="color:#fff; background-color: rgb(36, 143, 12);"><a>Update order status</a></button>
-                                                </form>
+                                        <% if( order.orderStatus !== 'Cancelled' && order.orderStatus !== 'Returned' && order.orderStatus !== 'Delivered' && order.orderStatus !== 'Failed' ) { %>
+                                            <form action="/admin/adminUpdateOrderStatus?id=<%= order._id %>" method="post" class="mb-10">
+                                                <div class="mb-4">
+                                                    <select class="form-select" name="productStatus" style="border: 1px solid #000;;">
+                                                        <option value="Delivered"> Delivered </option>
+                                                        <option value="Shipped"> Shipped </option>
+                                                    </select>                                             
+                                                </div>
+                                                <button type="submit" class="btn m-auto updateBtn" style="color:#fff; background-color: rgb(36, 143, 12);"><a>Update order status</a></button>
+                                            </form>
+                                            <% if( order.orderStatus === 'Placed' || order.orderStatus === 'Shipped' ) { %>
+                                                <a href="/admin/adminOrderCancel?id=<%= order._id %>"><button class="btn m-auto updateBtn btn-danger">Cancel Order</button></a>
+                                            <% } %>
                                         <% }else{ %>
-                                            <h5 style="color: red;">You can't change order status , Becuase user Cancelled or Returned the item</h5>
+                                            <h5 style="color: red;">You can't change order status !!!</h5>
                                         <% } %>
                                     </div>
                                 </div>

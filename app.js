@@ -31,5 +31,5 @@ app.use('/',userRouter)
 app.use('/admin',adminRouter)
 
 app.listen(port ,'127.0.0.1',()=>{
-    console.log('Server connected\nhttp://127.0.0.1:3000');
+    console.log('Server runnig on port ' + port);
 })

@@ -71,7 +71,7 @@
                                         <div class="detail-extralink">
                                             <div class="product-extra-link2">
                                                 <button type="submit" class="button button-add-to-cart addToCart" data-productId="<%= productDetails._id %>">Add to cart</button>
-                                                <a aria-label="Add To Wishlist" class="action-btn hover-up" data-productId="<%= productDetails._id %>"><i class="fi-rs-heart"></i></a>
+                                                <a aria-label="Add To Wishlist" class="action-btn hover-up addToWishlist" data-productId="<%= productDetails._id %>"><i class="fi-rs-heart"></i></a>
                                             </div>
                                         </div>
                                         <ul class="product-meta font-xs color-grey mt-50">
@@ -141,7 +141,7 @@
                                                             </a>
                                                         </div>
                                                         <div class="product-action-1">
-                                                            <a aria-label="Add To Wishlist" class="action-btn small hover-up" href="/addToWishlist?id=<%= product._id %>" tabindex="0"><i class="fi-rs-heart"></i></a>
+                                                            <a aria-label="Add To Wishlist" class="action-btn small hover-up addToWishlist" data-productId="<%= product._id %>" tabindex="0"><i class="fi-rs-heart"></i></a>
                                                         </div>
                                                         
                                                     </div>

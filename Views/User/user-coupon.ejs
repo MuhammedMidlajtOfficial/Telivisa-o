@@ -129,7 +129,7 @@
                             <section id="labels">
                                 <div class="container">
                                     <div class="row">
-                                        <% coupons.forEach((coupon)=>{ %>
+                                        <% coupons.forEach((coupon,index)=>{ %>
                                             <div class="col-sm-6 col-md-3 mb-30">
                                                 <div class="dl">
                                                     <div class="brand">
@@ -146,8 +146,8 @@
                                                         <small>*Expairy date : <%= moment(coupon.expiryDate).format('DD/MM/YYYY') %></small>
                                                     </div>
                                                     <div class="coupon midnight-blue">
-                                                        <a data-toggle="collapse" href="#code-1" class="open-code">Get a code</a>
-                                                        <div id="code-1" class="collapse code"><%= coupon.couponCode %></div>
+                                                        <a data-toggle="collapse" href="#code-<%= index %>" class="open-code">Get a code</a>
+                                                        <div id="code-<%= index %>" class="collapse code"><%= coupon.couponCode %></div>
                                                     </div>
                                                 </div>
                                             </div>

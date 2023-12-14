@@ -77,14 +77,19 @@ module.exports.getReturnOrder = async (req,res,next)=>{
     try {
         const orderId = req.query.id;
         const user = await userSchema.findOne({ email : req.session.user })
-        const returnReq = await new returnReqSchema({
-            orderId,
-            userId : user._id,
-            reqStatus : 'Pending'
-        })
-
-        returnReq.save();      
-        res.status(200).json('Order return request send')
+        const existReturnRequest = await returnReqSchema.findOne({ orderId })
+        if(existReturnRequest){
+            return res.status(200).json({reqAlreadySend : true})
+        }else{
+            const returnReq = await new returnReqSchema({
+                orderId,
+                userId : user._id,
+                reqStatus : 'Pending'
+            })
+    
+            returnReq.save();      
+            res.status(200).json('Order return request send')
+        }
     } catch (error) {
         console.log(error);
         next('There is an error occured, Cant\'t return ordered product')
